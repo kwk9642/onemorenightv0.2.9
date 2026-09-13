@@ -1,0 +1,36 @@
+{
+  "url": "http://127.0.0.1:8080/",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "灰州 ASH STATE",
+      "hasCanvas": false,
+      "bodyTextLen": 91,
+      "bodyTextHash": "c311acb792c19de00ed465de16961a4b4a4f620dd9edd7e99487862044074ecd",
+      "bodyTextPrefix": "KENTUCKY — THE MIDWEST ASH STATE 灰州 選一個人活下去。經營庇護所，派人進入美國廢土搜刮。倖存者",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-preview.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "灰州 ASH STATE",
+      "hasCanvas": false,
+      "bodyTextLen": 91,
+      "bodyTextHash": "c311acb792c19de00ed465de16961a4b4a4f620dd9edd7e99487862044074ecd",
+      "bodyTextPrefix": "KENTUCKY — THE MIDWEST ASH STATE 灰州 選一個人活下去。經營庇護所，派人進入美國廢土搜刮。倖存者",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-preview-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/app-builder-preview.json"
+}
