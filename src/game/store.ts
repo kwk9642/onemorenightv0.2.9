@@ -3,30 +3,62 @@ import {
   assignJob,
   createNewGame,
   declineOccupy,
+  discardItem as applyDiscard,
+  equipItem,
+  extractMission,
+  failMission,
+  forceEncounter,
+  grantMissionLoot,
   kickSurvivor,
   missionChoice,
+  missionKill,
+  missionStrike,
   occupyHere,
   resolveEncounter,
   restNight,
+  repairWall as applyRepairWall,
   startMission,
+  unequipSlot,
   upgradeFacility,
 } from "./engine";
+import { canMission } from "./growth";
+import { canStartDispatch, isAway, startDispatch } from "./dispatch";
 import { clearSave, loadSave, writeSave } from "./save";
-import { click, ok, setMuted, unlockAudio, warn } from "./audio";
-import type { CreateInput, FacilityId, GameState, JobId } from "./types";
+import { click, ok, setBgm, setMuted, unlockAudio, warn } from "./audio";
+import { useShop } from "./shop";
+import type { CreateInput, DispatchTask, EquipSlot, FacilityId, GameState, GearItem, JobId, Resources } from "./types";
 
 function persist(s: GameState): GameState {
-  writeSave(s);
-  return s;
+  const log = s.log ?? [];
+  const next = log.length > 80 ? { ...s, log: log.slice(-80) } : s;
+  writeSave(next);
+  return next;
+}
+
+function peekOf(saved: GameState | null): { day: number; loc: string } | null {
+  if (!saved?.shelter) return null;
+  return { day: saved.day, loc: saved.shelter.locationId };
 }
 
 interface GameStore {
   run: GameState | null;
   hasSave: boolean;
-  menu: "title" | "create";
+  savePeek: { day: number; loc: string } | null;
+  help: boolean;
+  dispatchOpen: boolean;
+  menu: "title" | "create" | "shop";
+  muted: boolean;
   boot: () => void;
   openCreate: () => void;
   openTitle: () => void;
+  parkTitle: () => void;
+  openShop: () => void;
+  closeShop: () => void;
+  openHelp: () => void;
+  closeHelp: () => void;
+  openDispatch: () => void;
+  closeDispatch: () => void;
+  sendDispatch: (ids: string[], task: DispatchTask) => void;
   newGame: (input: CreateInput) => void;
   continueGame: () => void;
   abandon: () => void;
@@ -41,17 +73,42 @@ interface GameStore {
   job: (id: string, job: JobId) => void;
   kick: (id: string) => void;
   upgrade: (id: FacilityId) => void;
+  repairWall: () => void;
   sleep: () => void;
   toggleMute: () => void;
+  simKill: (killerId?: string) => void;
+  simHurt: (id: string, dmg: number, infect: boolean) => void;
+  clearNotices: () => void;
+  simLoot: (got: Partial<Resources>, gear?: GearItem[], rng?: number) => void;
+  simEncounter: () => void;
+  simExtract: () => void;
+  simFail: () => void;
+  equip: (survivorId: string, uid: string) => void;
+  unequip: (survivorId: string, slot: EquipSlot) => void;
+  discard: (uid: string) => void;
 }
 
 export const useGame = create<GameStore>((set, get) => ({
   run: null,
   hasSave: false,
+  savePeek: null,
+  help: false,
+  dispatchOpen: false,
   menu: "title",
+  muted: false,
   boot: () => {
+    useShop.getState().boot();
     const saved = loadSave();
-    set({ hasSave: !!saved });
+    const { run, menu } = get();
+    if (run) {
+      set({ hasSave: !!saved, savePeek: peekOf(run) });
+      return;
+    }
+    if (menu === "create" || menu === "shop") {
+      set({ hasSave: !!saved, savePeek: peekOf(saved) });
+      return;
+    }
+    set({ hasSave: !!saved, savePeek: peekOf(saved), muted: !!saved?.muted });
   },
   openCreate: () => {
     unlockAudio();
@@ -59,21 +116,56 @@ export const useGame = create<GameStore>((set, get) => ({
     set({ menu: "create" });
   },
   openTitle: () => set({ menu: "title" }),
+  parkTitle: () => {
+    const run = get().run;
+    if (run) writeSave(run);
+    set({ run: null, menu: "title", dispatchOpen: false, hasSave: !!run || get().hasSave, savePeek: peekOf(run) ?? get().savePeek });
+  },
+  openShop: () => {
+    unlockAudio();
+    click();
+    set({ menu: "shop" });
+  },
+  closeShop: () => {
+    click();
+    set({ menu: "title" });
+  },
+  openHelp: () => {
+    click();
+    set({ help: true });
+  },
+  closeHelp: () => set({ help: false }),
+  openDispatch: () => {
+    click();
+    set({ dispatchOpen: true });
+  },
+  closeDispatch: () => set({ dispatchOpen: false }),
+  sendDispatch: (ids, task) => {
+    const run = get().run;
+    if (!run) return;
+    if (!canStartDispatch(run, ids).ok) {
+      warn();
+      return;
+    }
+    ok();
+    set({ run: persist(startDispatch(run, ids, task)), dispatchOpen: false });
+  },
   newGame: (input) => {
     unlockAudio();
     ok();
     const run = persist(createNewGame(input));
-    set({ run, hasSave: true, menu: "title" });
+    set({ run, hasSave: true, savePeek: peekOf(run), menu: "title", muted: run.muted, help: false });
   },
   continueGame: () => {
     unlockAudio();
     click();
     const run = loadSave();
-    if (run) set({ run, hasSave: true });
+    if (run) set({ run, hasSave: true, savePeek: peekOf(run), muted: !!run.muted, help: false, dispatchOpen: false });
+    else set({ hasSave: false, savePeek: null });
   },
   abandon: () => {
     clearSave();
-    set({ run: null, hasSave: false, menu: "title" });
+    set({ run: null, hasSave: false, savePeek: null, menu: "title", help: false });
   },
   setScreen: (screen) => {
     const run = get().run;
@@ -90,28 +182,37 @@ export const useGame = create<GameStore>((set, get) => ({
     const run = get().run;
     if (!run) return;
     click();
-    const kept = run.squadPick.filter((x) => run.survivors.find((s) => s.id === x && s.alive));
+    const kept = run.squadPick.filter((x) => {
+      const s = run.survivors.find((p) => p.id === x && p.alive);
+      return s && canMission(s) && !isAway(run, x);
+    });
+    const fallback = run.survivors.find((s) => canMission(s) && !isAway(run, s.id)) ?? run.survivors.find((s) => s.alive && !isAway(run, s.id));
     set({
       run: persist({
         ...run,
         mapTarget: id,
         screen: "squad",
-        squadPick: kept.length ? kept : [run.survivors.find((s) => s.alive)!.id],
+        squadPick: kept.length ? kept : fallback ? [fallback.id] : [],
       }),
     });
   },
   goMission: () => {
     const run = get().run;
     if (!run || !run.mapTarget) return;
+    const ids = run.squadPick.filter((id) => {
+      const s = run.survivors.find((p) => p.id === id);
+      return s && canMission(s) && !isAway(run, id);
+    });
+    if (!ids.length) return;
     ok();
-    set({ run: persist(startMission(run, run.mapTarget, run.squadPick)) });
+    set({ run: persist(startMission(run, run.mapTarget, ids)) });
   },
   choose: (id) => {
     const run = get().run;
     if (!run) return;
-    click();
     const next = missionChoice(run, id);
     if (next.ended) warn();
+    else click();
     set({ run: persist(next) });
   },
   encounter: (a) => {
@@ -151,19 +252,90 @@ export const useGame = create<GameStore>((set, get) => ({
     ok();
     set({ run: persist(upgradeFacility(run, id)) });
   },
+  repairWall: () => {
+    const run = get().run;
+    if (!run) return;
+    ok();
+    set({ run: persist(applyRepairWall(run)) });
+  },
   sleep: () => {
     const run = get().run;
     if (!run) return;
     const next = restNight(run, true);
+    if (!next.ended) useShop.getState().grantNight();
     if (next.ended) warn();
     else click();
     set({ run: persist(next) });
   },
   toggleMute: () => {
     const run = get().run;
-    const next = !(run?.muted ?? false);
+    const next = !get().muted;
     setMuted(next);
-    if (run) set({ run: persist({ ...run, muted: next }) });
+    if (next) setBgm("off");
+    else unlockAudio();
+    set({
+      muted: next,
+      run: run ? persist({ ...run, muted: next }) : run,
+    });
+  },
+  simKill: (killerId?: string) => {
+    const run = get().run;
+    if (!run) return;
+    set({ run: persist(missionKill(run, 1, killerId)) });
+  },
+  clearNotices: () => {
+    const run = get().run;
+    if (!run) return;
+    set({ run: persist({ ...run, notices: [] }) });
+  },
+  simHurt: (id, dmg, infect) => {
+    const run = get().run;
+    if (!run) return;
+    const next = missionStrike(run, id, dmg, infect);
+    if (next.ended) warn();
+    set({ run: persist(next) });
+  },
+  simLoot: (got, gear, rng) => {
+    const run = get().run;
+    if (!run) return;
+    let next = grantMissionLoot(run, got, gear);
+    if (rng != null) next = { ...next, rng };
+    set({ run: persist(next) });
+  },
+  simEncounter: () => {
+    const run = get().run;
+    if (!run) return;
+    set({ run: persist(forceEncounter(run)) });
+  },
+  simExtract: () => {
+    const run = get().run;
+    if (!run) return;
+    ok();
+    set({ run: persist(extractMission(run)) });
+  },
+  simFail: () => {
+    const run = get().run;
+    if (!run) return;
+    warn();
+    set({ run: persist(failMission(run)) });
+  },
+  equip: (survivorId, uid) => {
+    const run = get().run;
+    if (!run) return;
+    click();
+    set({ run: persist(equipItem(run, survivorId, uid)) });
+  },
+  unequip: (survivorId, slot) => {
+    const run = get().run;
+    if (!run) return;
+    click();
+    set({ run: persist(unequipSlot(run, survivorId, slot)) });
+  },
+  discard: (uid) => {
+    const run = get().run;
+    if (!run) return;
+    click();
+    set({ run: persist(applyDiscard(run, uid)) });
   },
 }));
 

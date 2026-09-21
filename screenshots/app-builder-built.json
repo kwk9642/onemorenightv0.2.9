@@ -1,0 +1,40 @@
+{
+  "url": "http://127.0.0.1:8081/",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "再活一晚 One More Night",
+      "hasCanvas": false,
+      "bodyTextLen": 90,
+      "bodyTextHash": "c7f136288e70d5d13465e27e42d2c439be8f99c37f38b8cb9a0ae1d7048dea65",
+      "bodyTextPrefix": "中 日 EN 한 V0.3 · 一天六格行動 再活一晚 ONE MORE NIGHT 提示 情緒沉到地板，人就出不了門。先過夜，",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-built.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "再活一晚 One More Night",
+      "hasCanvas": false,
+      "bodyTextLen": 90,
+      "bodyTextHash": "c7f136288e70d5d13465e27e42d2c439be8f99c37f38b8cb9a0ae1d7048dea65",
+      "bodyTextPrefix": "中 日 EN 한 V0.3 · 一天六格行動 再活一晚 ONE MORE NIGHT 提示 情緒沉到地板，人就出不了門。先過夜，",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-built-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/app-builder-built.json",
+  "divergesFromBaseline": true,
+  "baselineReasons": [
+    "mobile: body text collapsed (187 -> 90 chars)"
+  ]
+}

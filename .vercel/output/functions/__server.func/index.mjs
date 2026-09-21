@@ -12,10 +12,10 @@ var install_page_default = "<!DOCTYPE html>\n<html lang=\"en\" class=\"device-de
 //#endregion
 //#region \0virtual:grok-og-identity
 var grokOgIdentity = { "site": {
-	"title": "灰州 ASH STATE",
+	"title": "再活一晚 One More Night",
 	"type": "x:game",
 	"card": "custom",
-	"description": "American wasteland colony sim. Run a shelter, scavenge the states, recruit or fight — permadeath.",
+	"description": "v0.1 free prototype. Overnight permadeath shelter sim. No paywall.",
 	"image": "/og.jpg",
 	"banner": "/x-banner.jpg"
 } };

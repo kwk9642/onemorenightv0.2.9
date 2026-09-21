@@ -23,15 +23,63 @@ export type OccupationId =
 
 export type TraitId =
   | "strong"
-  | "quiet"
-  | "leader"
-  | "firstaid"
+  | "athletic"
+  | "stout"
   | "handy"
+  | "hunter"
+  | "thickskinned"
+  | "fastlearner"
+  | "keenhearing"
+  | "brawler"
+  | "gymnast"
   | "brave"
+  | "lucky"
+  | "organized"
+  | "quiet"
+  | "inconspicuous"
+  | "adrenaline"
+  | "wakeful"
+  | "catseyes"
+  | "firstaid"
+  | "dextrous"
+  | "lighteater"
+  | "lowthirst"
+  | "outdoorsman"
+  | "gardener"
+  | "irongut"
+  | "leader"
   | "coward"
   | "weak"
+  | "unfit"
+  | "thinskinned"
   | "insomnia"
-  | "selfish";
+  | "slowlearner"
+  | "slowhealer"
+  | "underweight"
+  | "overweight"
+  | "highthirst"
+  | "hemophobic"
+  | "asthmatic"
+  | "smoker"
+  | "pacifist"
+  | "conspicuous"
+  | "heartyappetite"
+  | "agoraphobic"
+  | "depressed"
+  | "selfish"
+  | "proneillness"
+  | "unlucky"
+  | "weakstomach"
+  | "clumsy"
+  | "allthumbs"
+  | "shortsighted"
+  | "sleepyhead"
+  | "desensitized"
+  | "keencook"
+  | "burglarhands"
+  | "vehicleknow";
+
+export type SkillId = "combat" | "stealth" | "scavenge" | "medical" | "build" | "farm" | "cook";
 
 export type JobId = "rest" | "cook" | "farm" | "guard" | "repair" | "tend" | "radio" | "craft";
 
@@ -45,13 +93,45 @@ export type FacilityId =
   | "radio"
   | "watch";
 
-export type WeaponId = "fists" | "knife" | "axe" | "bat" | "pistol" | "rifle";
+export type WeaponId =
+  | "fists"
+  | "knife"
+  | "huntingknife"
+  | "cleaver"
+  | "machete"
+  | "crowbar"
+  | "bat"
+  | "nailbat"
+  | "nightstick"
+  | "hammer"
+  | "wrench"
+  | "golf"
+  | "pan"
+  | "woodaxe"
+  | "axe"
+  | "sledge"
+  | "spear"
+  | "katana"
+  | "pistol"
+  | "revolver"
+  | "shotgun"
+  | "rifle"
+  | "assault"
+  | "smg";
+
+export type EquipSlot = "weapon" | "head" | "body" | "hands" | "legs" | "feet" | "back";
+
+export type Rarity = "common" | "uncommon" | "rare" | "epic" | "legendary";
 
 export type Size = "outpost" | "town" | "city" | "metro";
 
 export type Stance = "leader" | "friend" | "neutral" | "rival" | "hostile";
 
+export type Relation = "stranger" | "known" | "friend" | "lover";
+
 export type ResourceId = "food" | "water" | "materials" | "medicine" | "ammo" | "fuel";
+
+export type LayoutId = "house" | "shop" | "ward" | "city";
 
 export interface Skills {
   combat: number;
@@ -72,6 +152,14 @@ export interface Resources {
   fuel: number;
 }
 
+export interface GearItem {
+  uid: string;
+  defId: string;
+  cond: number;
+}
+
+export type Worn = Partial<Record<EquipSlot, GearItem>>;
+
 export interface Survivor {
   id: string;
   name: string;
@@ -79,6 +167,9 @@ export interface Survivor {
   traits: TraitId[];
   portrait: string;
   skills: Skills;
+  skillXp: Skills;
+  skillBase: Skills;
+  lastSkillUp: { skill: SkillId; level: number; day: number } | null;
   hp: number;
   maxHp: number;
   hunger: number;
@@ -87,11 +178,13 @@ export interface Survivor {
   fatigue: number;
   infected: boolean;
   weapon: WeaponId;
+  worn: Worn;
   stance: Stance;
   job: JobId;
   alive: boolean;
   death: string;
   daysIn: number;
+  kills: number;
 }
 
 export interface ShelterState {
@@ -108,6 +201,10 @@ export interface LocationState {
   occupied: boolean;
   visited: boolean;
   survivorOpen: boolean;
+  lootRemaining: Resources;
+  threat: number;
+  noiseToday: number;
+  alertLevel: number;
 }
 
 export interface Choice {
@@ -126,6 +223,7 @@ export interface MissionState {
   zoneName: string;
   searched: boolean;
   bag: Resources;
+  finds: GearItem[];
   noise: number;
   promptTitle: string;
   promptBody: string;
@@ -133,6 +231,7 @@ export interface MissionState {
   choices: Choice[];
   phase: "zone" | "fight" | "loot";
   fightStyle: "melee" | "gun" | "flank" | null;
+  kills: number;
 }
 
 export interface EncounterState {
@@ -159,9 +258,32 @@ export interface EndState {
 export interface CreateInput {
   name: string;
   occupation: OccupationId;
-  posTrait: TraitId;
-  negTrait: TraitId;
+  portrait: string;
+  traits: TraitId[];
+  alloc: Partial<Skills>;
   shelterId: string;
+}
+
+export type SkillNotice = {
+  kind: "skill";
+  name: string;
+  skill: SkillId;
+  level: number;
+};
+
+export type DispatchTask = "herbs" | "supplies" | "forage" | "auto";
+
+export type DispatchFocus = "herbs" | "supplies" | "forage";
+
+export interface DispatchParty {
+  id: string;
+  memberIds: string[];
+  task: DispatchTask;
+  sentDay: number;
+  returnDay: number;
+  destId: string;
+  hungry: boolean;
+  delayed?: boolean;
 }
 
 export interface GameState {
@@ -170,6 +292,8 @@ export interface GameState {
   seed: number;
   rng: number;
   day: number;
+  dayAP: number;
+  maxAP: number;
   survivors: Survivor[];
   shelter: ShelterState;
   resources: Resources;
@@ -182,4 +306,8 @@ export interface GameState {
   ended: EndState | null;
   muted: boolean;
   occupiedCount: number;
+  bonds: Record<string, number>;
+  stash: GearItem[];
+  notices: SkillNotice[];
+  dispatches: DispatchParty[];
 }

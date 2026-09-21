@@ -1,0 +1,2670 @@
+{
+  "version": "0.1",
+  "counts": {
+    "startShelters": 3,
+    "locations": 17,
+    "occupations": 8,
+    "traits": 56,
+    "facilities": 8,
+    "jobs": 8,
+    "weapons": 24,
+    "gear": 77,
+    "resources": 6
+  },
+  "shelters": [
+    {
+      "id": "farmhouse",
+      "zh": "莫卓農舍",
+      "en": "Muldraugh Farmhouse",
+      "locationId": "muldraugh_farm",
+      "capacity": 4,
+      "wall": 55,
+      "facilities": {
+        "beds": 1,
+        "kitchen": 1,
+        "garden": 1,
+        "water": 1
+      },
+      "extras": {
+        "food": 6,
+        "water": 8,
+        "materials": 4
+      },
+      "blurb": "肯塔基鄉下。安靜，但離補給遠。"
+    },
+    {
+      "id": "hardware",
+      "zh": "西點五金",
+      "en": "West Point Hardware",
+      "locationId": "westpoint_shop",
+      "capacity": 3,
+      "wall": 40,
+      "facilities": {
+        "beds": 1,
+        "workshop": 1,
+        "kitchen": 1
+      },
+      "extras": {
+        "materials": 14,
+        "fuel": 3,
+        "food": 3
+      },
+      "blurb": "工具齊，街上不安靜。"
+    },
+    {
+      "id": "highrise",
+      "zh": "路易斯維爾頂樓",
+      "en": "Louisville Walk-up",
+      "locationId": "louisville_apt",
+      "capacity": 5,
+      "wall": 35,
+      "facilities": {
+        "beds": 1,
+        "kitchen": 1,
+        "radio": 1,
+        "water": 1
+      },
+      "extras": {
+        "food": 4,
+        "water": 5,
+        "ammo": 4,
+        "fuel": 2
+      },
+      "blurb": "城裡視野好，下樓就要付錢。"
+    }
+  ],
+  "locations": [
+    {
+      "id": "muldraugh_farm",
+      "zh": "莫卓農舍",
+      "en": "Muldraugh Farm",
+      "region": "ky",
+      "size": "outpost",
+      "zombies": 4,
+      "occupyCapacity": 4,
+      "occupyWall": 50,
+      "survivorChance": 0.15,
+      "start": true,
+      "loot": {
+        "food": [
+          1,
+          3
+        ],
+        "materials": [
+          1,
+          3
+        ]
+      },
+      "neighbors": [
+        "muldraugh_wh",
+        "rosewood_pd",
+        "riverside_mart"
+      ]
+    },
+    {
+      "id": "westpoint_shop",
+      "zh": "西點五金",
+      "en": "West Point Hardware",
+      "region": "ky",
+      "size": "outpost",
+      "zombies": 8,
+      "occupyCapacity": 3,
+      "occupyWall": 40,
+      "survivorChance": 0.2,
+      "start": true,
+      "loot": {
+        "materials": [
+          3,
+          8
+        ],
+        "fuel": [
+          0,
+          2
+        ]
+      },
+      "neighbors": [
+        "westpoint_town",
+        "louisville_apt"
+      ]
+    },
+    {
+      "id": "louisville_apt",
+      "zh": "路易斯維爾頂樓",
+      "en": "Louisville Walk-up",
+      "region": "ky",
+      "size": "town",
+      "zombies": 12,
+      "occupyCapacity": 5,
+      "occupyWall": 35,
+      "survivorChance": 0.25,
+      "start": true,
+      "loot": {
+        "water": [
+          2,
+          5
+        ],
+        "food": [
+          1,
+          3
+        ],
+        "ammo": [
+          0,
+          3
+        ]
+      },
+      "neighbors": [
+        "louisville_er",
+        "louisville_mall",
+        "westpoint_town"
+      ]
+    },
+    {
+      "id": "rosewood_pd",
+      "zh": "玫瑰鎮警局",
+      "en": "Rosewood PD",
+      "region": "ky",
+      "size": "outpost",
+      "zombies": 9,
+      "occupyCapacity": 4,
+      "occupyWall": 60,
+      "survivorChance": 0.35,
+      "start": false,
+      "loot": {
+        "ammo": [
+          4,
+          10
+        ],
+        "materials": [
+          1,
+          3
+        ],
+        "medicine": [
+          0,
+          2
+        ]
+      },
+      "neighbors": [
+        "muldraugh_farm",
+        "muldraugh_wh",
+        "march_ridge"
+      ]
+    },
+    {
+      "id": "muldraugh_wh",
+      "zh": "莫卓倉庫",
+      "en": "Muldraugh Depot",
+      "region": "ky",
+      "size": "town",
+      "zombies": 16,
+      "occupyCapacity": 6,
+      "occupyWall": 45,
+      "survivorChance": 0.25,
+      "start": false,
+      "loot": {
+        "food": [
+          4,
+          10
+        ],
+        "materials": [
+          4,
+          8
+        ],
+        "fuel": [
+          1,
+          3
+        ]
+      },
+      "neighbors": [
+        "muldraugh_farm",
+        "westpoint_town",
+        "rosewood_pd"
+      ]
+    },
+    {
+      "id": "riverside_mart",
+      "zh": "河畔雜貨",
+      "en": "Riverside Mart",
+      "region": "ky",
+      "size": "outpost",
+      "zombies": 6,
+      "occupyCapacity": 3,
+      "occupyWall": 30,
+      "survivorChance": 0.55,
+      "start": false,
+      "loot": {
+        "food": [
+          3,
+          7
+        ],
+        "water": [
+          2,
+          5
+        ],
+        "medicine": [
+          0,
+          2
+        ]
+      },
+      "neighbors": [
+        "muldraugh_farm",
+        "westpoint_town"
+      ]
+    },
+    {
+      "id": "westpoint_town",
+      "zh": "西點市區",
+      "en": "West Point",
+      "region": "ky",
+      "size": "town",
+      "zombies": 18,
+      "occupyCapacity": 6,
+      "occupyWall": 40,
+      "survivorChance": 0.3,
+      "start": false,
+      "loot": {
+        "ammo": [
+          3,
+          8
+        ],
+        "fuel": [
+          2,
+          5
+        ],
+        "food": [
+          2,
+          5
+        ],
+        "materials": [
+          2,
+          5
+        ]
+      },
+      "neighbors": [
+        "westpoint_shop",
+        "louisville_er",
+        "muldraugh_wh",
+        "riverside_mart"
+      ]
+    },
+    {
+      "id": "march_ridge",
+      "zh": "三月嶺",
+      "en": "March Ridge",
+      "region": "ky",
+      "size": "town",
+      "zombies": 14,
+      "occupyCapacity": 7,
+      "occupyWall": 55,
+      "survivorChance": 0.4,
+      "start": false,
+      "loot": {
+        "food": [
+          3,
+          6
+        ],
+        "materials": [
+          3,
+          7
+        ],
+        "ammo": [
+          1,
+          4
+        ],
+        "medicine": [
+          1,
+          3
+        ]
+      },
+      "neighbors": [
+        "rosewood_pd",
+        "louisville_mall"
+      ]
+    },
+    {
+      "id": "louisville_er",
+      "zh": "路易斯維爾醫院",
+      "en": "Louisville General",
+      "region": "ky",
+      "size": "city",
+      "zombies": 28,
+      "occupyCapacity": 8,
+      "occupyWall": 40,
+      "survivorChance": 0.45,
+      "start": false,
+      "loot": {
+        "medicine": [
+          6,
+          14
+        ],
+        "food": [
+          2,
+          5
+        ],
+        "materials": [
+          2,
+          4
+        ]
+      },
+      "neighbors": [
+        "louisville_apt",
+        "louisville_mall",
+        "westpoint_town",
+        "cincinnati"
+      ]
+    },
+    {
+      "id": "louisville_mall",
+      "zh": "路易斯維爾商場",
+      "en": "Louisville Mall",
+      "region": "ky",
+      "size": "city",
+      "zombies": 32,
+      "occupyCapacity": 10,
+      "occupyWall": 35,
+      "survivorChance": 0.35,
+      "start": false,
+      "loot": {
+        "food": [
+          6,
+          12
+        ],
+        "materials": [
+          3,
+          6
+        ],
+        "ammo": [
+          1,
+          4
+        ],
+        "fuel": [
+          1,
+          3
+        ]
+      },
+      "neighbors": [
+        "louisville_er",
+        "louisville_apt",
+        "fort_knox",
+        "nashville"
+      ]
+    },
+    {
+      "id": "fort_knox",
+      "zh": "諾克斯堡",
+      "en": "Fort Knox",
+      "region": "ky",
+      "size": "city",
+      "zombies": 36,
+      "occupyCapacity": 10,
+      "occupyWall": 70,
+      "survivorChance": 0.2,
+      "start": false,
+      "loot": {
+        "ammo": [
+          10,
+          20
+        ],
+        "fuel": [
+          3,
+          6
+        ],
+        "medicine": [
+          2,
+          5
+        ],
+        "food": [
+          2,
+          5
+        ]
+      },
+      "neighbors": [
+        "louisville_mall",
+        "nashville"
+      ]
+    },
+    {
+      "id": "cincinnati",
+      "zh": "辛辛那提",
+      "en": "Cincinnati",
+      "region": "oh",
+      "size": "city",
+      "zombies": 40,
+      "occupyCapacity": 12,
+      "occupyWall": 45,
+      "survivorChance": 0.4,
+      "start": false,
+      "loot": {
+        "food": [
+          4,
+          9
+        ],
+        "medicine": [
+          3,
+          7
+        ],
+        "materials": [
+          4,
+          8
+        ],
+        "ammo": [
+          2,
+          6
+        ]
+      },
+      "neighbors": [
+        "louisville_er",
+        "indianapolis",
+        "chicago"
+      ]
+    },
+    {
+      "id": "indianapolis",
+      "zh": "印第安納波利斯",
+      "en": "Indianapolis",
+      "region": "in",
+      "size": "city",
+      "zombies": 38,
+      "occupyCapacity": 12,
+      "occupyWall": 50,
+      "survivorChance": 0.35,
+      "start": false,
+      "loot": {
+        "fuel": [
+          4,
+          10
+        ],
+        "food": [
+          3,
+          8
+        ],
+        "materials": [
+          3,
+          7
+        ],
+        "ammo": [
+          2,
+          6
+        ]
+      },
+      "neighbors": [
+        "cincinnati",
+        "chicago",
+        "stlouis"
+      ]
+    },
+    {
+      "id": "nashville",
+      "zh": "納什維爾",
+      "en": "Nashville",
+      "region": "tn",
+      "size": "city",
+      "zombies": 34,
+      "occupyCapacity": 11,
+      "occupyWall": 40,
+      "survivorChance": 0.4,
+      "start": false,
+      "loot": {
+        "food": [
+          4,
+          8
+        ],
+        "medicine": [
+          2,
+          6
+        ],
+        "ammo": [
+          2,
+          5
+        ],
+        "fuel": [
+          2,
+          4
+        ]
+      },
+      "neighbors": [
+        "louisville_mall",
+        "fort_knox",
+        "memphis",
+        "stlouis"
+      ]
+    },
+    {
+      "id": "memphis",
+      "zh": "孟菲斯",
+      "en": "Memphis",
+      "region": "tn",
+      "size": "city",
+      "zombies": 36,
+      "occupyCapacity": 11,
+      "occupyWall": 42,
+      "survivorChance": 0.3,
+      "start": false,
+      "loot": {
+        "food": [
+          5,
+          10
+        ],
+        "fuel": [
+          3,
+          7
+        ],
+        "materials": [
+          4,
+          8
+        ],
+        "medicine": [
+          1,
+          4
+        ]
+      },
+      "neighbors": [
+        "nashville",
+        "stlouis"
+      ]
+    },
+    {
+      "id": "stlouis",
+      "zh": "聖路易斯",
+      "en": "St. Louis",
+      "region": "mo",
+      "size": "city",
+      "zombies": 42,
+      "occupyCapacity": 14,
+      "occupyWall": 48,
+      "survivorChance": 0.5,
+      "start": false,
+      "loot": {
+        "food": [
+          5,
+          9
+        ],
+        "materials": [
+          5,
+          10
+        ],
+        "ammo": [
+          3,
+          7
+        ],
+        "medicine": [
+          2,
+          5
+        ]
+      },
+      "neighbors": [
+        "indianapolis",
+        "nashville",
+        "memphis",
+        "chicago"
+      ]
+    },
+    {
+      "id": "chicago",
+      "zh": "芝加哥",
+      "en": "Chicago",
+      "region": "il",
+      "size": "metro",
+      "zombies": 55,
+      "occupyCapacity": 18,
+      "occupyWall": 55,
+      "survivorChance": 0.45,
+      "start": false,
+      "loot": {
+        "food": [
+          8,
+          14
+        ],
+        "medicine": [
+          4,
+          10
+        ],
+        "ammo": [
+          6,
+          12
+        ],
+        "materials": [
+          6,
+          12
+        ],
+        "fuel": [
+          3,
+          6
+        ]
+      },
+      "neighbors": [
+        "cincinnati",
+        "indianapolis",
+        "stlouis"
+      ]
+    }
+  ],
+  "weapons": [
+    {
+      "id": "fists",
+      "zh": "徒手",
+      "en": "Fists",
+      "rarity": "—",
+      "melee": 0,
+      "gun": false,
+      "extra": ""
+    },
+    {
+      "id": "knife",
+      "zh": "菜刀",
+      "en": "Kitchen Knife",
+      "rarity": "common",
+      "melee": 6,
+      "gun": false,
+      "extra": ""
+    },
+    {
+      "id": "huntingknife",
+      "zh": "獵刀",
+      "en": "Hunting Knife",
+      "rarity": "uncommon",
+      "melee": 8,
+      "gun": false,
+      "extra": "stealth:1"
+    },
+    {
+      "id": "cleaver",
+      "zh": "砍骨刀",
+      "en": "Meat Cleaver",
+      "rarity": "uncommon",
+      "melee": 9,
+      "gun": false,
+      "extra": "cook:1"
+    },
+    {
+      "id": "machete",
+      "zh": "開山刀",
+      "en": "Machete",
+      "rarity": "rare",
+      "melee": 13,
+      "gun": false,
+      "extra": ""
+    },
+    {
+      "id": "crowbar",
+      "zh": "撬棍",
+      "en": "Crowbar",
+      "rarity": "uncommon",
+      "melee": 10,
+      "gun": false,
+      "extra": "build:1"
+    },
+    {
+      "id": "bat",
+      "zh": "球棒",
+      "en": "Baseball Bat",
+      "rarity": "common",
+      "melee": 8,
+      "gun": false,
+      "extra": ""
+    },
+    {
+      "id": "nailbat",
+      "zh": "釘棒",
+      "en": "Nailed Bat",
+      "rarity": "uncommon",
+      "melee": 11,
+      "gun": false,
+      "extra": ""
+    },
+    {
+      "id": "nightstick",
+      "zh": "警棍",
+      "en": "Nightstick",
+      "rarity": "uncommon",
+      "melee": 8,
+      "gun": false,
+      "extra": "combat:1"
+    },
+    {
+      "id": "hammer",
+      "zh": "鐵鎚",
+      "en": "Hammer",
+      "rarity": "common",
+      "melee": 7,
+      "gun": false,
+      "extra": "build:1"
+    },
+    {
+      "id": "wrench",
+      "zh": "扳手",
+      "en": "Pipe Wrench",
+      "rarity": "common",
+      "melee": 7,
+      "gun": false,
+      "extra": "build:1"
+    },
+    {
+      "id": "golf",
+      "zh": "高爾夫桿",
+      "en": "Golf Club",
+      "rarity": "common",
+      "melee": 6,
+      "gun": false,
+      "extra": ""
+    },
+    {
+      "id": "pan",
+      "zh": "平底鍋",
+      "en": "Frying Pan",
+      "rarity": "common",
+      "melee": 5,
+      "gun": false,
+      "extra": "cook:1"
+    },
+    {
+      "id": "woodaxe",
+      "zh": "柴斧",
+      "en": "Wood Axe",
+      "rarity": "uncommon",
+      "melee": 11,
+      "gun": false,
+      "extra": ""
+    },
+    {
+      "id": "axe",
+      "zh": "消防斧",
+      "en": "Fire Axe",
+      "rarity": "rare",
+      "melee": 14,
+      "gun": false,
+      "extra": ""
+    },
+    {
+      "id": "sledge",
+      "zh": "大鎚",
+      "en": "Sledgehammer",
+      "rarity": "rare",
+      "melee": 16,
+      "gun": false,
+      "extra": "fatigue:8 noise:2"
+    },
+    {
+      "id": "spear",
+      "zh": "長矛",
+      "en": "Spear",
+      "rarity": "rare",
+      "melee": 12,
+      "gun": false,
+      "extra": "stealth:1"
+    },
+    {
+      "id": "katana",
+      "zh": "武士刀",
+      "en": "Katana",
+      "rarity": "legendary",
+      "melee": 18,
+      "gun": false,
+      "extra": "stealth:1 combat:1"
+    },
+    {
+      "id": "pistol",
+      "zh": "半自動手槍",
+      "en": "Pistol",
+      "rarity": "uncommon",
+      "melee": 2,
+      "gun": true,
+      "extra": "combat:1"
+    },
+    {
+      "id": "revolver",
+      "zh": "左輪",
+      "en": "Revolver",
+      "rarity": "rare",
+      "melee": 3,
+      "gun": true,
+      "extra": "combat:1"
+    },
+    {
+      "id": "shotgun",
+      "zh": "霰彈槍",
+      "en": "Shotgun",
+      "rarity": "rare",
+      "melee": 4,
+      "gun": true,
+      "extra": "combat:2 noise:3"
+    },
+    {
+      "id": "rifle",
+      "zh": "獵槍",
+      "en": "Hunting Rifle",
+      "rarity": "rare",
+      "melee": 3,
+      "gun": true,
+      "extra": "combat:2"
+    },
+    {
+      "id": "assault",
+      "zh": "突擊步槍",
+      "en": "Assault Rifle",
+      "rarity": "epic",
+      "melee": 4,
+      "gun": true,
+      "extra": "combat:3 noise:2"
+    },
+    {
+      "id": "smg",
+      "zh": "衝鋒槍",
+      "en": "SMG",
+      "rarity": "epic",
+      "melee": 3,
+      "gun": true,
+      "extra": "combat:2 noise:2"
+    }
+  ],
+  "gear": [
+    {
+      "id": "knife",
+      "zh": "菜刀",
+      "en": "Kitchen Knife",
+      "slot": "weapon",
+      "rarity": "common",
+      "melee": 6,
+      "gun": "",
+      "armor": "",
+      "bite": "",
+      "extra": ""
+    },
+    {
+      "id": "huntingknife",
+      "zh": "獵刀",
+      "en": "Hunting Knife",
+      "slot": "weapon",
+      "rarity": "uncommon",
+      "melee": 8,
+      "gun": "",
+      "armor": "",
+      "bite": "",
+      "extra": "stealth:1"
+    },
+    {
+      "id": "cleaver",
+      "zh": "砍骨刀",
+      "en": "Meat Cleaver",
+      "slot": "weapon",
+      "rarity": "uncommon",
+      "melee": 9,
+      "gun": "",
+      "armor": "",
+      "bite": "",
+      "extra": "cook:1"
+    },
+    {
+      "id": "machete",
+      "zh": "開山刀",
+      "en": "Machete",
+      "slot": "weapon",
+      "rarity": "rare",
+      "melee": 13,
+      "gun": "",
+      "armor": "",
+      "bite": "",
+      "extra": ""
+    },
+    {
+      "id": "crowbar",
+      "zh": "撬棍",
+      "en": "Crowbar",
+      "slot": "weapon",
+      "rarity": "uncommon",
+      "melee": 10,
+      "gun": "",
+      "armor": "",
+      "bite": "",
+      "extra": "build:1"
+    },
+    {
+      "id": "bat",
+      "zh": "球棒",
+      "en": "Baseball Bat",
+      "slot": "weapon",
+      "rarity": "common",
+      "melee": 8,
+      "gun": "",
+      "armor": "",
+      "bite": "",
+      "extra": ""
+    },
+    {
+      "id": "nailbat",
+      "zh": "釘棒",
+      "en": "Nailed Bat",
+      "slot": "weapon",
+      "rarity": "uncommon",
+      "melee": 11,
+      "gun": "",
+      "armor": "",
+      "bite": "",
+      "extra": ""
+    },
+    {
+      "id": "nightstick",
+      "zh": "警棍",
+      "en": "Nightstick",
+      "slot": "weapon",
+      "rarity": "uncommon",
+      "melee": 8,
+      "gun": "",
+      "armor": "",
+      "bite": "",
+      "extra": "combat:1"
+    },
+    {
+      "id": "hammer",
+      "zh": "鐵鎚",
+      "en": "Hammer",
+      "slot": "weapon",
+      "rarity": "common",
+      "melee": 7,
+      "gun": "",
+      "armor": "",
+      "bite": "",
+      "extra": "build:1"
+    },
+    {
+      "id": "wrench",
+      "zh": "扳手",
+      "en": "Pipe Wrench",
+      "slot": "weapon",
+      "rarity": "common",
+      "melee": 7,
+      "gun": "",
+      "armor": "",
+      "bite": "",
+      "extra": "build:1"
+    },
+    {
+      "id": "golf",
+      "zh": "高爾夫桿",
+      "en": "Golf Club",
+      "slot": "weapon",
+      "rarity": "common",
+      "melee": 6,
+      "gun": "",
+      "armor": "",
+      "bite": "",
+      "extra": ""
+    },
+    {
+      "id": "pan",
+      "zh": "平底鍋",
+      "en": "Frying Pan",
+      "slot": "weapon",
+      "rarity": "common",
+      "melee": 5,
+      "gun": "",
+      "armor": "",
+      "bite": "",
+      "extra": "cook:1"
+    },
+    {
+      "id": "woodaxe",
+      "zh": "柴斧",
+      "en": "Wood Axe",
+      "slot": "weapon",
+      "rarity": "uncommon",
+      "melee": 11,
+      "gun": "",
+      "armor": "",
+      "bite": "",
+      "extra": ""
+    },
+    {
+      "id": "axe",
+      "zh": "消防斧",
+      "en": "Fire Axe",
+      "slot": "weapon",
+      "rarity": "rare",
+      "melee": 14,
+      "gun": "",
+      "armor": "",
+      "bite": "",
+      "extra": ""
+    },
+    {
+      "id": "sledge",
+      "zh": "大鎚",
+      "en": "Sledgehammer",
+      "slot": "weapon",
+      "rarity": "rare",
+      "melee": 16,
+      "gun": "",
+      "armor": "",
+      "bite": "",
+      "extra": "fatigue:8 noise:2"
+    },
+    {
+      "id": "spear",
+      "zh": "長矛",
+      "en": "Spear",
+      "slot": "weapon",
+      "rarity": "rare",
+      "melee": 12,
+      "gun": "",
+      "armor": "",
+      "bite": "",
+      "extra": "stealth:1"
+    },
+    {
+      "id": "katana",
+      "zh": "武士刀",
+      "en": "Katana",
+      "slot": "weapon",
+      "rarity": "legendary",
+      "melee": 18,
+      "gun": "",
+      "armor": "",
+      "bite": "",
+      "extra": "stealth:1 combat:1"
+    },
+    {
+      "id": "pistol",
+      "zh": "半自動手槍",
+      "en": "Pistol",
+      "slot": "weapon",
+      "rarity": "uncommon",
+      "melee": 2,
+      "gun": "Y",
+      "armor": "",
+      "bite": "",
+      "extra": "combat:1"
+    },
+    {
+      "id": "revolver",
+      "zh": "左輪",
+      "en": "Revolver",
+      "slot": "weapon",
+      "rarity": "rare",
+      "melee": 3,
+      "gun": "Y",
+      "armor": "",
+      "bite": "",
+      "extra": "combat:1"
+    },
+    {
+      "id": "shotgun",
+      "zh": "霰彈槍",
+      "en": "Shotgun",
+      "slot": "weapon",
+      "rarity": "rare",
+      "melee": 4,
+      "gun": "Y",
+      "armor": "",
+      "bite": "",
+      "extra": "combat:2 noise:3"
+    },
+    {
+      "id": "rifle",
+      "zh": "獵槍",
+      "en": "Hunting Rifle",
+      "slot": "weapon",
+      "rarity": "rare",
+      "melee": 3,
+      "gun": "Y",
+      "armor": "",
+      "bite": "",
+      "extra": "combat:2"
+    },
+    {
+      "id": "assault",
+      "zh": "突擊步槍",
+      "en": "Assault Rifle",
+      "slot": "weapon",
+      "rarity": "epic",
+      "melee": 4,
+      "gun": "Y",
+      "armor": "",
+      "bite": "",
+      "extra": "combat:3 noise:2"
+    },
+    {
+      "id": "smg",
+      "zh": "衝鋒槍",
+      "en": "SMG",
+      "slot": "weapon",
+      "rarity": "epic",
+      "melee": 3,
+      "gun": "Y",
+      "armor": "",
+      "bite": "",
+      "extra": "combat:2 noise:2"
+    },
+    {
+      "id": "cap",
+      "zh": "棒球帽",
+      "en": "Baseball Cap",
+      "slot": "head",
+      "rarity": "common",
+      "melee": "",
+      "gun": "",
+      "armor": "",
+      "bite": "",
+      "extra": "morale:2"
+    },
+    {
+      "id": "beanie",
+      "zh": "毛帽",
+      "en": "Beanie",
+      "slot": "head",
+      "rarity": "common",
+      "melee": "",
+      "gun": "",
+      "armor": "",
+      "bite": "",
+      "extra": "stealth:1"
+    },
+    {
+      "id": "cowboyhat",
+      "zh": "牛仔帽",
+      "en": "Cowboy Hat",
+      "slot": "head",
+      "rarity": "uncommon",
+      "melee": "",
+      "gun": "",
+      "armor": "",
+      "bite": "",
+      "extra": "farm:1 morale:2"
+    },
+    {
+      "id": "glasses",
+      "zh": "眼鏡",
+      "en": "Glasses",
+      "slot": "head",
+      "rarity": "uncommon",
+      "melee": "",
+      "gun": "",
+      "armor": "",
+      "bite": "",
+      "extra": "scavenge:1 medical:1"
+    },
+    {
+      "id": "hardhat",
+      "zh": "工程盔",
+      "en": "Hard Hat",
+      "slot": "head",
+      "rarity": "common",
+      "melee": "",
+      "gun": "",
+      "armor": 8,
+      "bite": "",
+      "extra": "armor:8"
+    },
+    {
+      "id": "weldmask",
+      "zh": "焊罩",
+      "en": "Welding Mask",
+      "slot": "head",
+      "rarity": "uncommon",
+      "melee": "",
+      "gun": "",
+      "armor": 10,
+      "bite": "",
+      "extra": "armor:10 build:1 stealth:-1"
+    },
+    {
+      "id": "bikehelm",
+      "zh": "安全帽",
+      "en": "Motorcycle Helmet",
+      "slot": "head",
+      "rarity": "uncommon",
+      "melee": "",
+      "gun": "",
+      "armor": 12,
+      "bite": 8,
+      "extra": "armor:12 bite:8"
+    },
+    {
+      "id": "gasmask",
+      "zh": "防毒面具",
+      "en": "Gas Mask",
+      "slot": "head",
+      "rarity": "rare",
+      "melee": "",
+      "gun": "",
+      "armor": 8,
+      "bite": 22,
+      "extra": "armor:8 bite:22 medical:1 stealth:-1"
+    },
+    {
+      "id": "firehelm",
+      "zh": "消防盔",
+      "en": "Firefighter Helmet",
+      "slot": "head",
+      "rarity": "rare",
+      "melee": "",
+      "gun": "",
+      "armor": 16,
+      "bite": 10,
+      "extra": "armor:16 bite:10"
+    },
+    {
+      "id": "riothelm",
+      "zh": "鎮暴盔",
+      "en": "Riot Helmet",
+      "slot": "head",
+      "rarity": "rare",
+      "melee": "",
+      "gun": "",
+      "armor": 18,
+      "bite": 12,
+      "extra": "armor:18 bite:12 stealth:-1"
+    },
+    {
+      "id": "armyhelm",
+      "zh": "軍盔",
+      "en": "Combat Helmet",
+      "slot": "head",
+      "rarity": "epic",
+      "melee": "",
+      "gun": "",
+      "armor": 22,
+      "bite": 14,
+      "extra": "armor:22 bite:14 combat:1"
+    },
+    {
+      "id": "nvg",
+      "zh": "夜視鏡",
+      "en": "Night Vision",
+      "slot": "head",
+      "rarity": "legendary",
+      "melee": "",
+      "gun": "",
+      "armor": "",
+      "bite": "",
+      "extra": "stealth:2 combat:1 scavenge:1"
+    },
+    {
+      "id": "tshirt",
+      "zh": "T恤",
+      "en": "T-Shirt",
+      "slot": "body",
+      "rarity": "common",
+      "melee": "",
+      "gun": "",
+      "armor": "",
+      "bite": "",
+      "extra": ""
+    },
+    {
+      "id": "hoodie",
+      "zh": "帽T",
+      "en": "Hoodie",
+      "slot": "body",
+      "rarity": "common",
+      "melee": "",
+      "gun": "",
+      "armor": "",
+      "bite": "",
+      "extra": "stealth:1"
+    },
+    {
+      "id": "apron",
+      "zh": "圍裙",
+      "en": "Apron",
+      "slot": "body",
+      "rarity": "common",
+      "melee": "",
+      "gun": "",
+      "armor": "",
+      "bite": "",
+      "extra": "cook:1"
+    },
+    {
+      "id": "denim",
+      "zh": "牛仔外套",
+      "en": "Denim Jacket",
+      "slot": "body",
+      "rarity": "uncommon",
+      "melee": "",
+      "gun": "",
+      "armor": 6,
+      "bite": "",
+      "extra": "armor:6"
+    },
+    {
+      "id": "leather",
+      "zh": "皮衣",
+      "en": "Leather Jacket",
+      "slot": "body",
+      "rarity": "uncommon",
+      "melee": "",
+      "gun": "",
+      "armor": 10,
+      "bite": 6,
+      "extra": "armor:10 bite:6 stealth:-1"
+    },
+    {
+      "id": "raincoat",
+      "zh": "雨衣",
+      "en": "Raincoat",
+      "slot": "body",
+      "rarity": "uncommon",
+      "melee": "",
+      "gun": "",
+      "armor": "",
+      "bite": "",
+      "extra": "stealth:1"
+    },
+    {
+      "id": "labcoat",
+      "zh": "實驗衣",
+      "en": "Lab Coat",
+      "slot": "body",
+      "rarity": "uncommon",
+      "melee": "",
+      "gun": "",
+      "armor": "",
+      "bite": "",
+      "extra": "medical:2"
+    },
+    {
+      "id": "huntervest",
+      "zh": "狩獵背心",
+      "en": "Hunter Vest",
+      "slot": "body",
+      "rarity": "uncommon",
+      "melee": "",
+      "gun": "",
+      "armor": "",
+      "bite": "",
+      "extra": "scavenge:1 stealth:1"
+    },
+    {
+      "id": "policevest",
+      "zh": "警用防彈",
+      "en": "Police Vest",
+      "slot": "body",
+      "rarity": "rare",
+      "melee": "",
+      "gun": "",
+      "armor": 18,
+      "bite": 10,
+      "extra": "armor:18 bite:10"
+    },
+    {
+      "id": "turnout",
+      "zh": "消防戰鬥服",
+      "en": "Turnout Coat",
+      "slot": "body",
+      "rarity": "rare",
+      "melee": "",
+      "gun": "",
+      "armor": 16,
+      "bite": 8,
+      "extra": "armor:16 bite:8 fatigue:4"
+    },
+    {
+      "id": "military",
+      "zh": "軍用夾克",
+      "en": "Military Jacket",
+      "slot": "body",
+      "rarity": "epic",
+      "melee": "",
+      "gun": "",
+      "armor": 14,
+      "bite": "",
+      "extra": "armor:14 combat:1 stealth:1"
+    },
+    {
+      "id": "plate",
+      "zh": "插板背心",
+      "en": "Plate Carrier",
+      "slot": "body",
+      "rarity": "epic",
+      "melee": "",
+      "gun": "",
+      "armor": 26,
+      "bite": 16,
+      "extra": "armor:26 bite:16 fatigue:8 stealth:-2 noise:1"
+    },
+    {
+      "id": "riotarmor",
+      "zh": "鎮暴甲",
+      "en": "Riot Armor",
+      "slot": "body",
+      "rarity": "legendary",
+      "melee": "",
+      "gun": "",
+      "armor": 32,
+      "bite": 20,
+      "extra": "armor:32 bite:20 fatigue:10 stealth:-2 noise:2"
+    },
+    {
+      "id": "ghillie",
+      "zh": "吉利服",
+      "en": "Ghillie Suit",
+      "slot": "body",
+      "rarity": "legendary",
+      "melee": "",
+      "gun": "",
+      "armor": "",
+      "bite": "",
+      "extra": "stealth:3 scavenge:1"
+    },
+    {
+      "id": "latex",
+      "zh": "乳膠手套",
+      "en": "Latex Gloves",
+      "slot": "hands",
+      "rarity": "common",
+      "melee": "",
+      "gun": "",
+      "armor": "",
+      "bite": "",
+      "extra": "medical:1"
+    },
+    {
+      "id": "workgloves",
+      "zh": "工作手套",
+      "en": "Work Gloves",
+      "slot": "hands",
+      "rarity": "common",
+      "melee": "",
+      "gun": "",
+      "armor": "",
+      "bite": "",
+      "extra": "build:1"
+    },
+    {
+      "id": "leathergloves",
+      "zh": "皮手套",
+      "en": "Leather Gloves",
+      "slot": "hands",
+      "rarity": "uncommon",
+      "melee": "",
+      "gun": "",
+      "armor": 4,
+      "bite": "",
+      "extra": "combat:1 armor:4"
+    },
+    {
+      "id": "mechanicgl",
+      "zh": "機修手套",
+      "en": "Mechanic Gloves",
+      "slot": "hands",
+      "rarity": "uncommon",
+      "melee": "",
+      "gun": "",
+      "armor": "",
+      "bite": "",
+      "extra": "build:2"
+    },
+    {
+      "id": "tacticalgl",
+      "zh": "戰術手套",
+      "en": "Tactical Gloves",
+      "slot": "hands",
+      "rarity": "rare",
+      "melee": "",
+      "gun": "",
+      "armor": "",
+      "bite": "",
+      "extra": "combat:1 stealth:1"
+    },
+    {
+      "id": "weldglove",
+      "zh": "焊工手套",
+      "en": "Welding Gloves",
+      "slot": "hands",
+      "rarity": "rare",
+      "melee": "",
+      "gun": "",
+      "armor": 6,
+      "bite": "",
+      "extra": "build:2 armor:6"
+    },
+    {
+      "id": "shorts",
+      "zh": "短褲",
+      "en": "Shorts",
+      "slot": "legs",
+      "rarity": "common",
+      "melee": "",
+      "gun": "",
+      "armor": "",
+      "bite": "",
+      "extra": "stealth:1 fatigue:-2"
+    },
+    {
+      "id": "jeans",
+      "zh": "牛仔褲",
+      "en": "Jeans",
+      "slot": "legs",
+      "rarity": "common",
+      "melee": "",
+      "gun": "",
+      "armor": 4,
+      "bite": "",
+      "extra": "armor:4"
+    },
+    {
+      "id": "cargo",
+      "zh": "工裝褲",
+      "en": "Cargo Pants",
+      "slot": "legs",
+      "rarity": "uncommon",
+      "melee": "",
+      "gun": "",
+      "armor": "",
+      "bite": "",
+      "extra": "scavenge:1 carry:1"
+    },
+    {
+      "id": "overalls",
+      "zh": "吊帶工作服",
+      "en": "Overalls",
+      "slot": "legs",
+      "rarity": "uncommon",
+      "melee": "",
+      "gun": "",
+      "armor": "",
+      "bite": "",
+      "extra": "farm:1 build:1"
+    },
+    {
+      "id": "leatherpants",
+      "zh": "皮褲",
+      "en": "Leather Pants",
+      "slot": "legs",
+      "rarity": "rare",
+      "melee": "",
+      "gun": "",
+      "armor": 10,
+      "bite": 6,
+      "extra": "armor:10 bite:6"
+    },
+    {
+      "id": "firepants",
+      "zh": "消防褲",
+      "en": "Firefighter Pants",
+      "slot": "legs",
+      "rarity": "rare",
+      "melee": "",
+      "gun": "",
+      "armor": 12,
+      "bite": 6,
+      "extra": "armor:12 bite:6"
+    },
+    {
+      "id": "milpants",
+      "zh": "軍褲",
+      "en": "Combat Pants",
+      "slot": "legs",
+      "rarity": "epic",
+      "melee": "",
+      "gun": "",
+      "armor": 12,
+      "bite": "",
+      "extra": "armor:12 stealth:1 combat:1"
+    },
+    {
+      "id": "slippers",
+      "zh": "拖鞋",
+      "en": "Slippers",
+      "slot": "feet",
+      "rarity": "common",
+      "melee": "",
+      "gun": "",
+      "armor": "",
+      "bite": "",
+      "extra": "stealth:1 fatigue:-2"
+    },
+    {
+      "id": "sneakers",
+      "zh": "球鞋",
+      "en": "Sneakers",
+      "slot": "feet",
+      "rarity": "common",
+      "melee": "",
+      "gun": "",
+      "armor": "",
+      "bite": "",
+      "extra": "stealth:1"
+    },
+    {
+      "id": "cowboyboots",
+      "zh": "牛仔靴",
+      "en": "Cowboy Boots",
+      "slot": "feet",
+      "rarity": "uncommon",
+      "melee": "",
+      "gun": "",
+      "armor": 4,
+      "bite": "",
+      "extra": "farm:1 armor:4"
+    },
+    {
+      "id": "workboots",
+      "zh": "工作靴",
+      "en": "Work Boots",
+      "slot": "feet",
+      "rarity": "uncommon",
+      "melee": "",
+      "gun": "",
+      "armor": 6,
+      "bite": "",
+      "extra": "armor:6 stealth:-1"
+    },
+    {
+      "id": "hiking",
+      "zh": "登山鞋",
+      "en": "Hiking Boots",
+      "slot": "feet",
+      "rarity": "uncommon",
+      "melee": "",
+      "gun": "",
+      "armor": "",
+      "bite": "",
+      "extra": "fatigue:-6 stealth:1"
+    },
+    {
+      "id": "steeltoe",
+      "zh": "鋼頭靴",
+      "en": "Steel-Toe Boots",
+      "slot": "feet",
+      "rarity": "rare",
+      "melee": "",
+      "gun": "",
+      "armor": 10,
+      "bite": "",
+      "extra": "armor:10 build:1 stealth:-1"
+    },
+    {
+      "id": "combatboots",
+      "zh": "戰鬥靴",
+      "en": "Combat Boots",
+      "slot": "feet",
+      "rarity": "rare",
+      "melee": "",
+      "gun": "",
+      "armor": 8,
+      "bite": "",
+      "extra": "armor:8 combat:1"
+    },
+    {
+      "id": "fanny",
+      "zh": "腰包",
+      "en": "Fanny Pack",
+      "slot": "back",
+      "rarity": "common",
+      "melee": "",
+      "gun": "",
+      "armor": "",
+      "bite": "",
+      "extra": "carry:1 stealth:1"
+    },
+    {
+      "id": "tote",
+      "zh": "手提袋",
+      "en": "Tote Bag",
+      "slot": "back",
+      "rarity": "common",
+      "melee": "",
+      "gun": "",
+      "armor": "",
+      "bite": "",
+      "extra": "carry:1"
+    },
+    {
+      "id": "school",
+      "zh": "書包",
+      "en": "School Backpack",
+      "slot": "back",
+      "rarity": "uncommon",
+      "melee": "",
+      "gun": "",
+      "armor": "",
+      "bite": "",
+      "extra": "carry:2"
+    },
+    {
+      "id": "duffel",
+      "zh": "行李袋",
+      "en": "Duffel Bag",
+      "slot": "back",
+      "rarity": "uncommon",
+      "melee": "",
+      "gun": "",
+      "armor": "",
+      "bite": "",
+      "extra": "carry:2"
+    },
+    {
+      "id": "hikingpack",
+      "zh": "登山包",
+      "en": "Hiking Pack",
+      "slot": "back",
+      "rarity": "rare",
+      "melee": "",
+      "gun": "",
+      "armor": "",
+      "bite": "",
+      "extra": "carry:3 fatigue:2"
+    },
+    {
+      "id": "rucksack",
+      "zh": "軍用背包",
+      "en": "Rucksack",
+      "slot": "back",
+      "rarity": "rare",
+      "melee": "",
+      "gun": "",
+      "armor": "",
+      "bite": "",
+      "extra": "carry:4"
+    },
+    {
+      "id": "alice",
+      "zh": "ALICE 背包",
+      "en": "ALICE Pack",
+      "slot": "back",
+      "rarity": "epic",
+      "melee": "",
+      "gun": "",
+      "armor": "",
+      "bite": "",
+      "extra": "carry:5 scavenge:1"
+    },
+    {
+      "id": "survivorpack",
+      "zh": "倖存者背包",
+      "en": "Survivor Pack",
+      "slot": "back",
+      "rarity": "legendary",
+      "melee": "",
+      "gun": "",
+      "armor": "",
+      "bite": "",
+      "extra": "carry:6 scavenge:1 stealth:1"
+    }
+  ],
+  "occupations": [
+    {
+      "id": "firefighter",
+      "zh": "消防員",
+      "en": "Firefighter",
+      "hp": 110,
+      "pool": 0,
+      "weapon": "axe",
+      "start": {
+        "materials": 6,
+        "medicine": 2,
+        "food": 4,
+        "water": 4,
+        "fuel": 2
+      },
+      "granted": [],
+      "combat": 1,
+      "stealth": 0,
+      "medical": 0,
+      "build": 0,
+      "farm": 0,
+      "cook": 0,
+      "scavenge": 0
+    },
+    {
+      "id": "doctor",
+      "zh": "醫生",
+      "en": "Doctor",
+      "hp": 90,
+      "pool": 0,
+      "weapon": "knife",
+      "start": {
+        "medicine": 10,
+        "food": 4,
+        "water": 5,
+        "materials": 2
+      },
+      "granted": [],
+      "combat": 1,
+      "stealth": 0,
+      "medical": 6,
+      "build": 0,
+      "farm": 0,
+      "cook": 0,
+      "scavenge": 0
+    },
+    {
+      "id": "officer",
+      "zh": "警員",
+      "en": "Police Officer",
+      "hp": 100,
+      "pool": -4,
+      "weapon": "pistol",
+      "start": {
+        "ammo": 14,
+        "food": 3,
+        "water": 3,
+        "materials": 3,
+        "fuel": 2
+      },
+      "granted": [],
+      "combat": 4,
+      "stealth": 1,
+      "medical": 0,
+      "build": 0,
+      "farm": 0,
+      "cook": 0,
+      "scavenge": 0
+    },
+    {
+      "id": "chef",
+      "zh": "廚師",
+      "en": "Chef",
+      "hp": 95,
+      "pool": -2,
+      "weapon": "knife",
+      "start": {
+        "food": 12,
+        "water": 6,
+        "materials": 2
+      },
+      "granted": [
+        "keencook"
+      ],
+      "combat": 1,
+      "stealth": 0,
+      "medical": 0,
+      "build": 1,
+      "farm": 0,
+      "cook": 4,
+      "scavenge": 0
+    },
+    {
+      "id": "mechanic",
+      "zh": "技工",
+      "en": "Mechanic",
+      "hp": 100,
+      "pool": -4,
+      "weapon": "bat",
+      "start": {
+        "materials": 12,
+        "fuel": 6,
+        "food": 3,
+        "water": 3
+      },
+      "granted": [
+        "vehicleknow"
+      ],
+      "combat": 0,
+      "stealth": 0,
+      "medical": 0,
+      "build": 4,
+      "farm": 0,
+      "cook": 0,
+      "scavenge": 1
+    },
+    {
+      "id": "farmer",
+      "zh": "農夫",
+      "en": "Farmer",
+      "hp": 105,
+      "pool": 0,
+      "weapon": "bat",
+      "start": {
+        "food": 8,
+        "water": 8,
+        "materials": 4
+      },
+      "granted": [],
+      "combat": 0,
+      "stealth": 0,
+      "medical": 0,
+      "build": 0,
+      "farm": 4,
+      "cook": 0,
+      "scavenge": 0
+    },
+    {
+      "id": "veteran",
+      "zh": "退伍軍人",
+      "en": "Veteran",
+      "hp": 105,
+      "pool": -8,
+      "weapon": "pistol",
+      "start": {
+        "ammo": 12,
+        "food": 3,
+        "water": 3,
+        "medicine": 2,
+        "fuel": 2
+      },
+      "granted": [
+        "desensitized"
+      ],
+      "combat": 2,
+      "stealth": 0,
+      "medical": 0,
+      "build": 0,
+      "farm": 0,
+      "cook": 0,
+      "scavenge": 0
+    },
+    {
+      "id": "burglar",
+      "zh": "竊賊",
+      "en": "Burglar",
+      "hp": 90,
+      "pool": -6,
+      "weapon": "knife",
+      "start": {
+        "food": 3,
+        "water": 3,
+        "materials": 4,
+        "ammo": 4
+      },
+      "granted": [
+        "burglarhands"
+      ],
+      "combat": 0,
+      "stealth": 3,
+      "medical": 0,
+      "build": 0,
+      "farm": 0,
+      "cook": 0,
+      "scavenge": 1
+    }
+  ],
+  "traits": [
+    {
+      "id": "athletic",
+      "zh": "運動健將",
+      "kind": "pos",
+      "points": -10,
+      "blurb": "跑得久、打得穩。",
+      "combat": 1,
+      "hp": 12
+    },
+    {
+      "id": "strong",
+      "zh": "強壯",
+      "kind": "pos",
+      "points": -10,
+      "blurb": "近戰多一次餘裕。",
+      "combat": 2,
+      "hp": 18
+    },
+    {
+      "id": "handy",
+      "zh": "巧手",
+      "kind": "pos",
+      "points": -8,
+      "blurb": "釘子與木板聽他的。",
+      "combat": "",
+      "hp": ""
+    },
+    {
+      "id": "thickskinned",
+      "zh": "皮厚",
+      "kind": "pos",
+      "points": -8,
+      "blurb": "抓傷咬傷比較難進。",
+      "combat": "",
+      "hp": 6
+    },
+    {
+      "id": "hunter",
+      "zh": "獵人",
+      "kind": "pos",
+      "points": -8,
+      "blurb": "瞄、潛、拆獵物，都算過。",
+      "combat": 1,
+      "hp": ""
+    },
+    {
+      "id": "brawler",
+      "zh": "鬥士",
+      "kind": "pos",
+      "points": -6,
+      "blurb": "斧與棍是手的延伸。",
+      "combat": 2,
+      "hp": ""
+    },
+    {
+      "id": "fastlearner",
+      "zh": "聰穎",
+      "kind": "pos",
+      "points": -6,
+      "blurb": "用過就記住。成長較快。",
+      "combat": "",
+      "hp": ""
+    },
+    {
+      "id": "stout",
+      "zh": "結實",
+      "kind": "pos",
+      "points": -6,
+      "blurb": "力氣夠用，不必練到極限。",
+      "combat": 1,
+      "hp": 10
+    },
+    {
+      "id": "keenhearing",
+      "zh": "聽覺敏銳",
+      "kind": "pos",
+      "points": -6,
+      "blurb": "還沒看見，就先聽見。",
+      "combat": "",
+      "hp": ""
+    },
+    {
+      "id": "gymnast",
+      "zh": "體操",
+      "kind": "pos",
+      "points": -5,
+      "blurb": "腳步與閃身是同一件事。",
+      "combat": "",
+      "hp": ""
+    },
+    {
+      "id": "brave",
+      "zh": "無畏",
+      "kind": "pos",
+      "points": -4,
+      "blurb": "往前衝，不太會蹲。",
+      "combat": 1,
+      "hp": ""
+    },
+    {
+      "id": "organized",
+      "zh": "有條理",
+      "kind": "pos",
+      "points": -4,
+      "blurb": "袋子裡永遠多一格。",
+      "combat": "",
+      "hp": ""
+    },
+    {
+      "id": "quiet",
+      "zh": "輕手",
+      "kind": "pos",
+      "points": -4,
+      "blurb": "走路像貓。",
+      "combat": "",
+      "hp": ""
+    },
+    {
+      "id": "inconspicuous",
+      "zh": "不起眼",
+      "kind": "pos",
+      "points": -4,
+      "blurb": "它們比較不容易看見你。",
+      "combat": "",
+      "hp": ""
+    },
+    {
+      "id": "adrenaline",
+      "zh": "腎上腺素",
+      "kind": "pos",
+      "points": -4,
+      "blurb": "血少的時候反而更快。",
+      "combat": "",
+      "hp": ""
+    },
+    {
+      "id": "lucky",
+      "zh": "好運",
+      "kind": "pos",
+      "points": -4,
+      "blurb": "抽屜裡總多一樣東西。",
+      "combat": "",
+      "hp": ""
+    },
+    {
+      "id": "leader",
+      "zh": "領導",
+      "kind": "pos",
+      "points": -4,
+      "blurb": "別人比較願意聽。",
+      "combat": "",
+      "hp": ""
+    },
+    {
+      "id": "wakeful",
+      "zh": "少眠",
+      "kind": "pos",
+      "points": -3,
+      "blurb": "睡得少，醒得快。",
+      "combat": "",
+      "hp": ""
+    },
+    {
+      "id": "catseyes",
+      "zh": "貓眼",
+      "kind": "pos",
+      "points": -3,
+      "blurb": "夜裡也看得清抽屜。",
+      "combat": "",
+      "hp": ""
+    },
+    {
+      "id": "firstaid",
+      "zh": "急救",
+      "kind": "pos",
+      "points": -2,
+      "blurb": "會包紮，也會判斷誰先死。",
+      "combat": "",
+      "hp": ""
+    },
+    {
+      "id": "dextrous",
+      "zh": "靈巧",
+      "kind": "pos",
+      "points": -2,
+      "blurb": "東西進出袋子很快。",
+      "combat": "",
+      "hp": ""
+    },
+    {
+      "id": "lighteater",
+      "zh": "少食",
+      "kind": "pos",
+      "points": -2,
+      "blurb": "吃得少，也能撐。",
+      "combat": "",
+      "hp": ""
+    },
+    {
+      "id": "lowthirst",
+      "zh": "少渴",
+      "kind": "pos",
+      "points": -2,
+      "blurb": "水可以省著喝。",
+      "combat": "",
+      "hp": ""
+    },
+    {
+      "id": "outdoorsman",
+      "zh": "戶外",
+      "kind": "pos",
+      "points": -2,
+      "blurb": "風與雨不太能打敗他。",
+      "combat": "",
+      "hp": ""
+    },
+    {
+      "id": "gardener",
+      "zh": "園丁",
+      "kind": "pos",
+      "points": -2,
+      "blurb": "認得種子什麼時候該下。",
+      "combat": "",
+      "hp": ""
+    },
+    {
+      "id": "irongut",
+      "zh": "鐵胃",
+      "kind": "pos",
+      "points": -2,
+      "blurb": "過期的東西，比較不容易出事。",
+      "combat": "",
+      "hp": ""
+    },
+    {
+      "id": "highthirst",
+      "zh": "易渴",
+      "kind": "neg",
+      "points": 2,
+      "blurb": "水要多帶。只值兩點。",
+      "combat": "",
+      "hp": ""
+    },
+    {
+      "id": "weakstomach",
+      "zh": "腸胃弱",
+      "kind": "neg",
+      "points": 2,
+      "blurb": "不熟的東西別碰。",
+      "combat": "",
+      "hp": ""
+    },
+    {
+      "id": "shortsighted",
+      "zh": "近視",
+      "kind": "neg",
+      "points": 2,
+      "blurb": "遠的東西糊成一團。",
+      "combat": "",
+      "hp": ""
+    },
+    {
+      "id": "clumsy",
+      "zh": "笨拙",
+      "kind": "neg",
+      "points": 2,
+      "blurb": "東西會響。",
+      "combat": "",
+      "hp": ""
+    },
+    {
+      "id": "allthumbs",
+      "zh": "笨手",
+      "kind": "neg",
+      "points": 2,
+      "blurb": "袋子裡的東西永遠卡住。",
+      "combat": "",
+      "hp": ""
+    },
+    {
+      "id": "coward",
+      "zh": "懼屍",
+      "kind": "neg",
+      "points": 2,
+      "blurb": "看到那東西，手會抖。",
+      "combat": -1,
+      "hp": ""
+    },
+    {
+      "id": "smoker",
+      "zh": "煙癮",
+      "kind": "neg",
+      "points": 3,
+      "blurb": "沒煙的時候，脾氣與肚子一起壞。",
+      "combat": "",
+      "hp": ""
+    },
+    {
+      "id": "slowhealer",
+      "zh": "癒合慢",
+      "kind": "neg",
+      "points": 3,
+      "blurb": "傷口不肯結痂。",
+      "combat": "",
+      "hp": ""
+    },
+    {
+      "id": "heartyappetite",
+      "zh": "大胃",
+      "kind": "neg",
+      "points": 4,
+      "blurb": "吃得比別人多。",
+      "combat": "",
+      "hp": ""
+    },
+    {
+      "id": "conspicuous",
+      "zh": "顯眼",
+      "kind": "neg",
+      "points": 4,
+      "blurb": "它們先看見你。",
+      "combat": "",
+      "hp": ""
+    },
+    {
+      "id": "proneillness",
+      "zh": "易病",
+      "kind": "neg",
+      "points": 4,
+      "blurb": "感染走得比較快。",
+      "combat": "",
+      "hp": ""
+    },
+    {
+      "id": "sleepyhead",
+      "zh": "貪睡",
+      "kind": "neg",
+      "points": 4,
+      "blurb": "怎麼睡都不夠。",
+      "combat": "",
+      "hp": ""
+    },
+    {
+      "id": "unlucky",
+      "zh": "倒霉",
+      "kind": "neg",
+      "points": 4,
+      "blurb": "抽屜總是空的。",
+      "combat": "",
+      "hp": ""
+    },
+    {
+      "id": "agoraphobic",
+      "zh": "廣場恐懼",
+      "kind": "neg",
+      "points": 4,
+      "blurb": "出門本身就是刑罰。",
+      "combat": "",
+      "hp": ""
+    },
+    {
+      "id": "depressed",
+      "zh": "抑鬱",
+      "kind": "neg",
+      "points": 4,
+      "blurb": "起床已經用掉一天的力氣。",
+      "combat": "",
+      "hp": ""
+    },
+    {
+      "id": "selfish",
+      "zh": "自私",
+      "kind": "neg",
+      "points": 4,
+      "blurb": "口袋裡的東西，不一定拿出來分。",
+      "combat": "",
+      "hp": ""
+    },
+    {
+      "id": "underweight",
+      "zh": "過輕",
+      "kind": "neg",
+      "points": 4,
+      "blurb": "風一吹就晃。",
+      "combat": "",
+      "hp": -10
+    },
+    {
+      "id": "overweight",
+      "zh": "過重",
+      "kind": "neg",
+      "points": 4,
+      "blurb": "跑起來費力。",
+      "combat": -1,
+      "hp": -6
+    },
+    {
+      "id": "hemophobic",
+      "zh": "見血恐懼",
+      "kind": "neg",
+      "points": 5,
+      "blurb": "自己的血也會讓手停。",
+      "combat": "",
+      "hp": ""
+    },
+    {
+      "id": "asthmatic",
+      "zh": "氣喘",
+      "kind": "neg",
+      "points": 5,
+      "blurb": "一口氣還沒喘完，下一拳就來了。",
+      "combat": "",
+      "hp": ""
+    },
+    {
+      "id": "pacifist",
+      "zh": "厭戰",
+      "kind": "neg",
+      "points": 5,
+      "blurb": "殺太多會惡心。戰鬥不順手。",
+      "combat": -1,
+      "hp": ""
+    },
+    {
+      "id": "insomnia",
+      "zh": "失眠",
+      "kind": "neg",
+      "points": 6,
+      "blurb": "夜裡總在聽門外。",
+      "combat": "",
+      "hp": ""
+    },
+    {
+      "id": "slowlearner",
+      "zh": "愚鈍",
+      "kind": "neg",
+      "points": 6,
+      "blurb": "同樣的傷要犯第二次。成長較慢。",
+      "combat": "",
+      "hp": ""
+    },
+    {
+      "id": "weak",
+      "zh": "體弱",
+      "kind": "neg",
+      "points": 6,
+      "blurb": "一場感冒就能躺平。",
+      "combat": -1,
+      "hp": -16
+    },
+    {
+      "id": "thinskinned",
+      "zh": "皮薄",
+      "kind": "neg",
+      "points": 8,
+      "blurb": "抓一下就破。大筆點數，大筆風險。",
+      "combat": "",
+      "hp": -8
+    },
+    {
+      "id": "unfit",
+      "zh": "體能差",
+      "kind": "neg",
+      "points": 10,
+      "blurb": "跑兩步就垮。十點很甜，命很薄。",
+      "combat": -1,
+      "hp": -12
+    },
+    {
+      "id": "desensitized",
+      "zh": "脫敏",
+      "kind": "occ",
+      "points": 0,
+      "blurb": "幾乎不恐慌。退伍軍人的職業病。",
+      "combat": "",
+      "hp": ""
+    },
+    {
+      "id": "keencook",
+      "zh": "精通烹飪",
+      "kind": "occ",
+      "points": 0,
+      "blurb": "過期的東西，到他手上還能成熱食。",
+      "combat": "",
+      "hp": ""
+    },
+    {
+      "id": "burglarhands",
+      "zh": "竊賊",
+      "kind": "occ",
+      "points": 0,
+      "blurb": "撬窗較安靜，搜刮較俐落。",
+      "combat": "",
+      "hp": ""
+    },
+    {
+      "id": "vehicleknow",
+      "zh": "車輛知識",
+      "kind": "occ",
+      "points": 0,
+      "blurb": "引擎與鐵皮聽得懂。",
+      "combat": "",
+      "hp": ""
+    }
+  ],
+  "facilities": [
+    {
+      "id": "beds",
+      "zh": "寢室",
+      "max": 4,
+      "materials": 8,
+      "extra": {},
+      "effect": "容量 +1",
+      "blurb": "多一張床，就能多留一個人。"
+    },
+    {
+      "id": "kitchen",
+      "zh": "廚房",
+      "max": 3,
+      "materials": 6,
+      "extra": {},
+      "effect": "食物消耗降低",
+      "blurb": "熱食讓食物更耐吃，也讓人比較不像要散。"
+    },
+    {
+      "id": "water",
+      "zh": "集水器",
+      "max": 3,
+      "materials": 5,
+      "extra": {},
+      "effect": "每日產水",
+      "blurb": "屋頂接雨。沒有它，你得到河裡冒險。"
+    },
+    {
+      "id": "workshop",
+      "zh": "工坊",
+      "max": 3,
+      "materials": 8,
+      "extra": {},
+      "effect": "建造與圍牆",
+      "blurb": "鋸子、釘子、能修的都在這。"
+    },
+    {
+      "id": "infirmary",
+      "zh": "醫務室",
+      "max": 3,
+      "materials": 7,
+      "extra": {
+        "medicine": 1
+      },
+      "effect": "治療與清感染",
+      "blurb": "一張乾淨的桌子，勝過在地板上縫。"
+    },
+    {
+      "id": "garden",
+      "zh": "菜園",
+      "max": 3,
+      "materials": 6,
+      "extra": {},
+      "effect": "每日產糧",
+      "blurb": "種子比子彈值錢，只是慢。"
+    },
+    {
+      "id": "radio",
+      "zh": "無線電",
+      "max": 2,
+      "materials": 6,
+      "extra": {
+        "fuel": 1
+      },
+      "effect": "發現地點／倖存者",
+      "blurb": "廢頻裡有人在呼救，也有人在設局。"
+    },
+    {
+      "id": "watch",
+      "zh": "哨塔",
+      "max": 2,
+      "materials": 10,
+      "extra": {},
+      "effect": "降低夜襲",
+      "blurb": "先看到，才有機會不擋。"
+    }
+  ],
+  "jobs": [
+    {
+      "id": "rest",
+      "zh": "休息",
+      "need": "—",
+      "blurb": "回血、降疲勞、回情緒。"
+    },
+    {
+      "id": "cook",
+      "zh": "炊事",
+      "need": "kitchen",
+      "blurb": "把存糧做成熱食。"
+    },
+    {
+      "id": "farm",
+      "zh": "耕作",
+      "need": "garden",
+      "blurb": "菜園產出。"
+    },
+    {
+      "id": "guard",
+      "zh": "警戒",
+      "need": "—",
+      "blurb": "守夜，擋襲擊。"
+    },
+    {
+      "id": "repair",
+      "zh": "修繕",
+      "need": "—",
+      "blurb": "補圍牆。"
+    },
+    {
+      "id": "tend",
+      "zh": "看護",
+      "need": "infirmary",
+      "blurb": "治療傷患。"
+    },
+    {
+      "id": "radio",
+      "zh": "監聽",
+      "need": "radio",
+      "blurb": "搜頻道。"
+    },
+    {
+      "id": "craft",
+      "zh": "打造",
+      "need": "workshop",
+      "blurb": "耗材換圍牆與武器。"
+    }
+  ],
+  "resources": [
+    {
+      "id": "food",
+      "name": "食物"
+    },
+    {
+      "id": "water",
+      "name": "水"
+    },
+    {
+      "id": "materials",
+      "name": "建材"
+    },
+    {
+      "id": "medicine",
+      "name": "藥品"
+    },
+    {
+      "id": "ammo",
+      "name": "彈藥"
+    },
+    {
+      "id": "fuel",
+      "name": "燃油"
+    }
+  ],
+  "rules": [
+    {
+      "id": "fight-power",
+      "name": "文字戰鬥火力",
+      "formula": "power = (戰鬥技能×8 + 武器攻擊×2) × 狀態修正",
+      "note": "近戰／開槍／側翼再加權。槍：+18+耗彈×6，耗彈=min(庫存, 2+僵屍/8)。側翼：+潛行×4。"
+    },
+    {
+      "id": "fight-score",
+      "name": "勝負",
+      "formula": "score = power×(0.8~1.2) − (該地僵屍×7 + 噪音)×(0.8~1.2)",
+      "note": "score>25 多殺2；>0 多殺1。槍保底殺 2+耗彈/2。失敗近戰感染 35%/18%，開槍較低。"
+    },
+    {
+      "id": "sim-hit",
+      "name": "2.5D 揮擊（研發，未進 v0.1）",
+      "formula": "傷害 = 10 + 戰鬥技能 + 武器攻擊",
+      "note": "只在出征模擬畫布。v0.1 出征仍走上面文字戰鬥。"
+    },
+    {
+      "id": "raid",
+      "name": "夜襲",
+      "formula": "機率 = clamp((100−圍牆)/220 − 警戒人數×0.08 − 哨塔等級×0.06, 0, 0.45)",
+      "note": "中了：隨機在家的人傷 10–28、感染 20%、食物−2、圍牆−8。修繕過夜約+8牆，打造耗1建材約+6牆。"
+    },
+    {
+      "id": "upgrade",
+      "name": "建造花費",
+      "formula": "建材 = 基價×(現有等級+1)；額外資源同樣乘級",
+      "note": "醫務室額外要藥；無線電額外要燃油。按鈕會列出全部，不夠寫「缺xx」。"
+    },
+    {
+      "id": "weapon-cond",
+      "name": "武器耐久",
+      "formula": "實際攻擊 = round(面板攻擊 × 耐久係數)",
+      "note": "耐久 0 當徒手（攻擊 0）。槍沒子彈在文字戰不能選開槍。"
+    }
+  ]
+}

@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
+@source "./**/*.{ts,tsx}";
 
 @theme {
   --color-bg: #0d0c0a;
@@ -16,6 +18,7 @@
   --color-stamina: #6a8a5a;
   --color-hp: #9a3b32;
   --font-sans: "IBM Plex Sans", "Noto Sans TC", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Source Serif 4", "Noto Serif TC", "Noto Serif", Georgia, serif;
   --font-display: "Oswald", "Noto Sans TC", ui-sans-serif, system-ui, sans-serif;
   --radius-sm: 6px;
   --radius-md: 10px;
@@ -54,6 +57,84 @@
   p {
     text-wrap: pretty;
   }
+}
+
+.leaflet-container {
+  background: var(--color-bg);
+  font-family: var(--font-sans);
+}
+
+.leaflet-control-attribution {
+  background: color-mix(in oklab, var(--color-bg) 80%, transparent) !important;
+  color: var(--color-muted) !important;
+  font-size: 9px !important;
+}
+
+.leaflet-control-zoom a {
+  background: var(--color-surface) !important;
+  color: var(--color-fg) !important;
+  border-color: var(--color-border) !important;
+}
+
+.ash-prose {
+  animation: rise 400ms var(--ease-out) both;
+}
+
+.portrait-tape {
+  outline: 2px dashed var(--color-muted);
+  outline-offset: 2px;
+}
+.portrait-rust {
+  outline: 2px solid color-mix(in oklab, var(--color-hp) 70%, var(--color-border));
+  outline-offset: 1px;
+}
+.portrait-brass {
+  outline: 2px solid var(--color-hunger);
+  outline-offset: 1px;
+}
+
+[data-paper="carbon"] {
+  --color-bg: #10100e;
+  --color-surface: #18170f;
+  --color-surface-2: #222018;
+  --color-fg: #d8d4c4;
+  --font-serif: "IBM Plex Sans", "Noto Sans TC", ui-sans-serif, system-ui, sans-serif;
+}
+[data-paper="ledger"] {
+  --color-bg: #0c1012;
+  --color-surface: #14181c;
+  --color-surface-2: #1c2228;
+  --color-fg: #d4dce4;
+  --color-muted: #7a8894;
+  --color-accent: #b8c4cc;
+}
+[data-paper="ash"] {
+  --color-bg: #140e0c;
+  --color-surface: #1c1410;
+  --color-surface-2: #261c16;
+  --color-fg: #ecd8c4;
+  --color-accent: #d4b48a;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ash-prose,
+  .stagger-in > * {
+    animation: none;
+  }
+}
+
+.ash-map-tip {
+  background: var(--color-bg) !important;
+  color: var(--color-fg) !important;
+  border: 1px solid var(--color-border) !important;
+  border-radius: var(--radius-sm) !important;
+  box-shadow: none !important;
+  font-family: var(--font-sans);
+  font-size: 11px;
+}
+
+.ash-map-tip::before {
+  border-top-color: var(--color-bg) !important;
 }
 
 @layer utilities {

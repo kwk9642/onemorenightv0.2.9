@@ -35,3 +35,16 @@ export function uid(r: number): { r: number; id: string } {
   const b = stepRng(a.r);
   return { r: b.r, id: (a.n * 1e9 + b.n * 1e6).toString(36).slice(0, 8) };
 }
+
+export function shuffle<T>(r: number, arr: readonly T[]): { r: number; items: T[] } {
+  const items = [...arr];
+  let rr = r;
+  for (let i = items.length - 1; i > 0; i--) {
+    const s = range(rr, 0, i);
+    rr = s.r;
+    const tmp = items[i];
+    items[i] = items[s.n];
+    items[s.n] = tmp;
+  }
+  return { r: rr, items };
+}

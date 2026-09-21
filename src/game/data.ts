@@ -1,3 +1,4 @@
+import { t } from "./i18n";
 import type {
   FacilityId,
   JobId,
@@ -9,8 +10,9 @@ import type {
   WeaponId,
 } from "./types";
 
-export const SAVE_KEY = "ash-state-v1";
-export const SAVE_VERSION = 1;
+export const SAVE_KEY = "ash-state-v5";
+export const SAVE_VERSION = 5;
+export const GAME_VERSION = "0.3";
 
 export const OCCUPATIONS: {
   id: OccupationId;
@@ -19,140 +21,293 @@ export const OCCUPATIONS: {
   blurb: string;
   desc: string;
   skills: Skills;
+  pool: number;
   hp: number;
   weapon: WeaponId;
   start: Partial<Record<ResourceId, number>>;
   portrait: string;
   tone: string;
+  granted: TraitId[];
 }[] = [
   {
     id: "firefighter",
     name: "消防員",
     nameEn: "Firefighter",
-    blurb: "火場出來的人，扛得住末日。",
-    desc: "破門、近戰、把人從廢墟裡拖出來。斧頭在手，很少退。",
-    skills: { combat: 7, stealth: 3, scavenge: 5, medical: 4, build: 5, farm: 2, cook: 2 },
+    blurb: "斧、體能、奔跑、力氣。起手 0 點。",
+    desc: "PZ：Axe / Fitness / Sprinting / Strength 各 +1。沒有免費特質。要強，得自己拿缺點換。",
+    skills: { combat: 1, stealth: 0, scavenge: 0, medical: 0, build: 0, farm: 0, cook: 0 },
+    pool: 0,
     hp: 110,
     weapon: "axe",
     start: { materials: 6, medicine: 2, food: 4, water: 4, fuel: 2 },
     portrait: "fire",
     tone: "#8a4a3a",
+    granted: [],
   },
   {
     id: "doctor",
     name: "醫生",
     nameEn: "Doctor",
-    blurb: "還有人懂怎麼把血止住。",
-    desc: "感染、骨折、槍傷——醫院沒了，但手還在。醫藥是硬通貨。",
-    skills: { combat: 3, stealth: 4, scavenge: 4, medical: 9, build: 3, farm: 2, cook: 3 },
+    blurb: "急救拉滿。起手 0 點。",
+    desc: "PZ：First Aid +6、短刃 +1。戰鬥要另外學。醫院沒了，手還在。",
+    skills: { combat: 1, stealth: 0, scavenge: 0, medical: 6, build: 0, farm: 0, cook: 0 },
+    pool: 0,
     hp: 90,
-    weapon: "fists",
+    weapon: "knife",
     start: { medicine: 10, food: 4, water: 5, materials: 2 },
     portrait: "doc",
     tone: "#4a5a6a",
+    granted: [],
   },
   {
     id: "officer",
     name: "警員",
-    nameEn: "Officer",
-    blurb: "槍聲以後，法律只剩彈匣。",
-    desc: "受過射擊與壓制訓練。彈藥用完之前，還算有秩序。",
-    skills: { combat: 8, stealth: 5, scavenge: 4, medical: 3, build: 3, farm: 2, cook: 2 },
+    nameEn: "Police Officer",
+    blurb: "射擊與換彈。起手 −4。",
+    desc: "PZ：Aiming +4、Nimble +1、Reloading +1。槍是職業病，種菜沒有。",
+    skills: { combat: 4, stealth: 1, scavenge: 0, medical: 0, build: 0, farm: 0, cook: 0 },
+    pool: -4,
     hp: 100,
     weapon: "pistol",
     start: { ammo: 14, food: 3, water: 3, materials: 3, fuel: 2 },
     portrait: "cop",
     tone: "#3a4450",
+    granted: [],
   },
   {
     id: "chef",
     name: "廚師",
     nameEn: "Chef",
-    blurb: "能把過期罐頭變成熱食的人，能留住人。",
-    desc: "廚藝讓食物多撐一天，也讓士氣不那麼快垮。",
-    skills: { combat: 3, stealth: 4, scavenge: 5, medical: 2, build: 3, farm: 3, cook: 9 },
+    blurb: "廚藝 + 烹飪特質。起手 −2。",
+    desc: "PZ：Cooking +4、短刃 +1。免費 Keen Cook——能把過期的東西變成熱食。",
+    skills: { combat: 1, stealth: 0, scavenge: 0, medical: 0, build: 1, farm: 0, cook: 4 },
+    pool: -2,
     hp: 95,
     weapon: "knife",
     start: { food: 12, water: 6, materials: 2 },
     portrait: "chef",
     tone: "#6a5a4a",
+    granted: ["keencook"],
   },
   {
     id: "mechanic",
     name: "技工",
     nameEn: "Mechanic",
-    blurb: "東西壞了，總有人能焊回去。",
-    desc: "圍牆、引擎、無線電——手裡有工具，庇護所才像家。",
-    skills: { combat: 4, stealth: 3, scavenge: 6, medical: 2, build: 9, farm: 2, cook: 2 },
+    blurb: "機械與焊接。起手 −4。",
+    desc: "PZ：Mechanics +4、Welding +1。免費 Vehicle Knowledge。圍牆與引擎聽他的。",
+    skills: { combat: 0, stealth: 0, scavenge: 1, medical: 0, build: 4, farm: 0, cook: 0 },
+    pool: -4,
     hp: 100,
     weapon: "bat",
-    start: { materials: 12, fuel: 5, food: 3, water: 3 },
+    start: { materials: 12, fuel: 6, food: 3, water: 3 },
     portrait: "mech",
     tone: "#4a5a42",
+    granted: ["vehicleknow"],
   },
   {
     id: "farmer",
     name: "農夫",
     nameEn: "Farmer",
-    blurb: "土地還在，種子就還有用。",
-    desc: "懂土壤與季節。菜園升級後，是整座庇護所能活過冬天的理由。",
-    skills: { combat: 4, stealth: 4, scavenge: 5, medical: 3, build: 5, farm: 9, cook: 4 },
+    blurb: "農耕。起手 0 點。",
+    desc: "PZ：Agriculture +4、力氣 +1。沒有免費特質。土地還在，種子就還有用。",
+    skills: { combat: 0, stealth: 0, scavenge: 0, medical: 0, build: 0, farm: 4, cook: 0 },
+    pool: 0,
     hp: 105,
     weapon: "bat",
     start: { food: 8, water: 8, materials: 4 },
     portrait: "farm",
     tone: "#5a4a38",
+    granted: [],
   },
   {
     id: "veteran",
     name: "退伍軍人",
     nameEn: "Veteran",
-    blurb: "戰爭沒結束，只是換了敵人。",
-    desc: "戰場直覺還在。近戰與槍法都狠，只是夜裡不太睡。",
-    skills: { combat: 9, stealth: 6, scavenge: 4, medical: 4, build: 4, farm: 2, cook: 2 },
+    blurb: "射擊 + 脫敏。起手 −8。",
+    desc: "PZ 最貴職業。Aiming +2、Reloading +2。免費 Desensitized：幾乎不恐慌。缺點必須補滿。",
+    skills: { combat: 2, stealth: 0, scavenge: 0, medical: 0, build: 0, farm: 0, cook: 0 },
+    pool: -8,
     hp: 105,
     weapon: "pistol",
-    start: { ammo: 10, food: 3, water: 3, medicine: 2, fuel: 2 },
+    start: { ammo: 12, food: 3, water: 3, medicine: 2, fuel: 2 },
     portrait: "vet",
     tone: "#3d4a3a",
+    granted: ["desensitized"],
   },
   {
     id: "burglar",
     name: "竊賊",
     nameEn: "Burglar",
-    blurb: "以前進別人家是罪，現在是班表。",
-    desc: "開鎖、潛行、聽到腳步就消失。搜刮時很少驚動整條街。",
-    skills: { combat: 4, stealth: 9, scavenge: 8, medical: 2, build: 3, farm: 1, cook: 2 },
+    blurb: "潛行三項。起手 −6。",
+    desc: "PZ：Lightfooted / Nimble / Sneaking 各 +2。免費 Burglar：撬窗較安靜，搜刮較俐落。",
+    skills: { combat: 0, stealth: 3, scavenge: 1, medical: 0, build: 0, farm: 0, cook: 0 },
+    pool: -6,
     hp: 90,
     weapon: "knife",
     start: { food: 3, water: 3, materials: 4, ammo: 4 },
     portrait: "thief",
     tone: "#3a3a3c",
+    granted: ["burglarhands"],
   },
 ];
+
+export const FACES: { id: string; src: string; tone: string }[] = [
+  { id: "fire", src: "/art/p-fire.jpg", tone: "#8a4a3a" },
+  { id: "doc", src: "/art/p-doc.jpg", tone: "#4a5a6a" },
+  { id: "cop", src: "/art/p-cop.jpg", tone: "#3a4450" },
+  { id: "chef", src: "/art/p-chef.jpg", tone: "#6a5a4a" },
+  { id: "mech", src: "/art/p-mech.jpg", tone: "#4a5a42" },
+  { id: "farm", src: "/art/p-farm.jpg", tone: "#5a4a38" },
+  { id: "vet", src: "/art/p-vet.jpg", tone: "#3d4a3a" },
+  { id: "thief", src: "/art/p-thief.jpg", tone: "#3a3a3c" },
+  { id: "river", src: "/art/p-river.jpg", tone: "#4a4038" },
+  { id: "hayes", src: "/art/p-hayes.jpg", tone: "#3a3834" },
+  { id: "nora", src: "/art/p-nora.jpg", tone: "#4a4440" },
+  { id: "kim", src: "/art/p-kim.jpg", tone: "#3e3c40" },
+  { id: "diaz", src: "/art/p-diaz.jpg", tone: "#4a3c38" },
+  { id: "cole", src: "/art/p-cole.jpg", tone: "#383838" },
+  { id: "amari", src: "/art/p-amari.jpg", tone: "#403830" },
+  { id: "wren", src: "/art/p-wren.jpg", tone: "#3c403c" },
+];
+
+export function faceById(id: string) {
+  return FACES.find((f) => f.id === id) ?? FACES[0];
+}
 
 export const TRAITS: {
   id: TraitId;
   name: string;
-  kind: "pos" | "neg";
+  kind: "pos" | "neg" | "occ";
+  points: number;
   blurb: string;
   combat?: number;
   stealth?: number;
+  scavenge?: number;
   medical?: number;
   build?: number;
+  farm?: number;
+  cook?: number;
   hp?: number;
   morale?: number;
+  excludes?: TraitId[];
 }[] = [
-  { id: "strong", name: "強壯", kind: "pos", blurb: "近戰多一次餘裕。", combat: 1, hp: 15 },
-  { id: "quiet", name: "輕手", kind: "pos", blurb: "走路像貓。", stealth: 2 },
-  { id: "leader", name: "領導", kind: "pos", blurb: "別人比較願意聽。", morale: 12 },
-  { id: "firstaid", name: "急救", kind: "pos", blurb: "會包紮，也會判斷誰先死。", medical: 2 },
-  { id: "handy", name: "巧手", kind: "pos", blurb: "釘子與木板聽他的。", build: 2 },
-  { id: "brave", name: "無畏", kind: "pos", blurb: "往前衝，不太會蹲。", combat: 1, stealth: -1 },
-  { id: "coward", name: "懼屍", kind: "neg", blurb: "看到那東西，手會抖。", combat: -2 },
-  { id: "weak", name: "體弱", kind: "neg", blurb: "一場感冒就能躺平。", hp: -20 },
-  { id: "insomnia", name: "失眠", kind: "neg", blurb: "夜裡總在聽門外。", morale: -8 },
-  { id: "selfish", name: "自私", kind: "neg", blurb: "口袋裡的東西，不一定拿出來分。", morale: -6 },
+  { id: "athletic", name: "運動健將", kind: "pos", points: -10, blurb: "跑得久、打得穩。", combat: 1, hp: 12, excludes: ["unfit", "smoker", "overweight", "underweight"] },
+  { id: "strong", name: "強壯", kind: "pos", points: -10, blurb: "近戰多一次餘裕。", combat: 2, hp: 18, excludes: ["weak", "stout"] },
+  { id: "handy", name: "巧手", kind: "pos", points: -8, blurb: "釘子與木板聽他的。", build: 2, excludes: ["allthumbs"] },
+  { id: "thickskinned", name: "皮厚", kind: "pos", points: -8, blurb: "抓傷咬傷比較難進。", hp: 6, excludes: ["thinskinned"] },
+  { id: "hunter", name: "獵人", kind: "pos", points: -8, blurb: "瞄、潛、拆獵物，都算過。", combat: 1, stealth: 1, scavenge: 1 },
+  { id: "brawler", name: "鬥士", kind: "pos", points: -6, blurb: "斧與棍是手的延伸。", combat: 2 },
+  { id: "fastlearner", name: "聰穎", kind: "pos", points: -6, blurb: "用過就記住。成長較快。", excludes: ["slowlearner"] },
+  { id: "stout", name: "結實", kind: "pos", points: -6, blurb: "力氣夠用，不必練到極限。", combat: 1, hp: 10, excludes: ["strong", "weak"] },
+  { id: "keenhearing", name: "聽覺敏銳", kind: "pos", points: -6, blurb: "還沒看見，就先聽見。", stealth: 1 },
+  { id: "gymnast", name: "體操", kind: "pos", points: -5, blurb: "腳步與閃身是同一件事。", stealth: 2 },
+  { id: "brave", name: "無畏", kind: "pos", points: -4, blurb: "往前衝，不太會蹲。", combat: 1, morale: 10, excludes: ["coward", "agoraphobic", "desensitized"] },
+  { id: "organized", name: "有條理", kind: "pos", points: -4, blurb: "袋子裡永遠多一格。", scavenge: 1 },
+  { id: "quiet", name: "輕手", kind: "pos", points: -4, blurb: "走路像貓。", stealth: 2, excludes: ["clumsy"] },
+  { id: "inconspicuous", name: "不起眼", kind: "pos", points: -4, blurb: "它們比較不容易看見你。", stealth: 1, excludes: ["conspicuous"] },
+  { id: "adrenaline", name: "腎上腺素", kind: "pos", points: -4, blurb: "血少的時候反而更快。", excludes: ["coward", "agoraphobic", "desensitized"] },
+  { id: "lucky", name: "好運", kind: "pos", points: -4, blurb: "抽屜裡總多一樣東西。", scavenge: 1, excludes: ["unlucky"] },
+  { id: "leader", name: "領導", kind: "pos", points: -4, blurb: "別人比較願意聽。", morale: 12, excludes: ["selfish"] },
+  { id: "wakeful", name: "少眠", kind: "pos", points: -3, blurb: "睡得少，醒得快。", excludes: ["sleepyhead", "insomnia"] },
+  { id: "catseyes", name: "貓眼", kind: "pos", points: -3, blurb: "夜裡也看得清抽屜。", stealth: 1 },
+  { id: "firstaid", name: "急救", kind: "pos", points: -2, blurb: "會包紮，也會判斷誰先死。", medical: 1 },
+  { id: "dextrous", name: "靈巧", kind: "pos", points: -2, blurb: "東西進出袋子很快。", scavenge: 1, excludes: ["allthumbs"] },
+  { id: "lighteater", name: "少食", kind: "pos", points: -2, blurb: "吃得少，也能撐。", excludes: ["heartyappetite"] },
+  { id: "lowthirst", name: "少渴", kind: "pos", points: -2, blurb: "水可以省著喝。", excludes: ["highthirst"] },
+  { id: "outdoorsman", name: "戶外", kind: "pos", points: -2, blurb: "風與雨不太能打敗他。", morale: 6 },
+  { id: "gardener", name: "園丁", kind: "pos", points: -2, blurb: "認得種子什麼時候該下。", farm: 1 },
+  { id: "irongut", name: "鐵胃", kind: "pos", points: -2, blurb: "過期的東西，比較不容易出事。", cook: 1, excludes: ["weakstomach"] },
+  { id: "highthirst", name: "易渴", kind: "neg", points: 2, blurb: "水要多帶。只值兩點。", excludes: ["lowthirst"] },
+  { id: "weakstomach", name: "腸胃弱", kind: "neg", points: 2, blurb: "不熟的東西別碰。", excludes: ["irongut"] },
+  { id: "shortsighted", name: "近視", kind: "neg", points: 2, blurb: "遠的東西糊成一團。" },
+  { id: "clumsy", name: "笨拙", kind: "neg", points: 2, blurb: "東西會響。", stealth: -1, excludes: ["quiet"] },
+  { id: "allthumbs", name: "笨手", kind: "neg", points: 2, blurb: "袋子裡的東西永遠卡住。", build: -1, excludes: ["dextrous", "handy"] },
+  { id: "coward", name: "懼屍", kind: "neg", points: 2, blurb: "看到那東西，手會抖。", combat: -1, excludes: ["brave", "adrenaline", "desensitized"] },
+  { id: "smoker", name: "煙癮", kind: "neg", points: 3, blurb: "沒煙的時候，脾氣與肚子一起壞。", excludes: ["athletic"] },
+  { id: "slowhealer", name: "癒合慢", kind: "neg", points: 3, blurb: "傷口不肯結痂。" },
+  { id: "heartyappetite", name: "大胃", kind: "neg", points: 4, blurb: "吃得比別人多。", excludes: ["lighteater"] },
+  { id: "conspicuous", name: "顯眼", kind: "neg", points: 4, blurb: "它們先看見你。", stealth: -1, excludes: ["inconspicuous"] },
+  { id: "proneillness", name: "易病", kind: "neg", points: 4, blurb: "感染走得比較快。" },
+  { id: "sleepyhead", name: "貪睡", kind: "neg", points: 4, blurb: "怎麼睡都不夠。", excludes: ["wakeful"] },
+  { id: "unlucky", name: "倒霉", kind: "neg", points: 4, blurb: "抽屜總是空的。", scavenge: -1, excludes: ["lucky"] },
+  { id: "agoraphobic", name: "廣場恐懼", kind: "neg", points: 4, blurb: "出門本身就是刑罰。", morale: -4, excludes: ["brave", "adrenaline", "desensitized"] },
+  { id: "depressed", name: "抑鬱", kind: "neg", points: 4, blurb: "起床已經用掉一天的力氣。", morale: -16 },
+  { id: "selfish", name: "自私", kind: "neg", points: 4, blurb: "口袋裡的東西，不一定拿出來分。", morale: -6, excludes: ["leader"] },
+  { id: "underweight", name: "過輕", kind: "neg", points: 4, blurb: "風一吹就晃。", hp: -10, excludes: ["athletic", "overweight"] },
+  { id: "overweight", name: "過重", kind: "neg", points: 4, blurb: "跑起來費力。", hp: -6, combat: -1, excludes: ["athletic", "underweight"] },
+  { id: "hemophobic", name: "見血恐懼", kind: "neg", points: 5, blurb: "自己的血也會讓手停。", medical: -1, morale: -6, excludes: ["desensitized"] },
+  { id: "asthmatic", name: "氣喘", kind: "neg", points: 5, blurb: "一口氣還沒喘完，下一拳就來了。" },
+  { id: "pacifist", name: "厭戰", kind: "neg", points: 5, blurb: "殺太多會惡心。戰鬥不順手。", combat: -1 },
+  { id: "insomnia", name: "失眠", kind: "neg", points: 6, blurb: "夜裡總在聽門外。", excludes: ["wakeful"] },
+  { id: "slowlearner", name: "愚鈍", kind: "neg", points: 6, blurb: "同樣的傷要犯第二次。成長較慢。", excludes: ["fastlearner"] },
+  { id: "weak", name: "體弱", kind: "neg", points: 6, blurb: "一場感冒就能躺平。", combat: -1, hp: -16, excludes: ["strong", "stout"] },
+  { id: "thinskinned", name: "皮薄", kind: "neg", points: 8, blurb: "抓一下就破。大筆點數，大筆風險。", hp: -8, excludes: ["thickskinned"] },
+  { id: "unfit", name: "體能差", kind: "neg", points: 10, blurb: "跑兩步就垮。十點很甜，命很薄。", combat: -1, hp: -12, excludes: ["athletic"] },
+  { id: "desensitized", name: "脫敏", kind: "occ", points: 0, blurb: "幾乎不恐慌。退伍軍人的職業病。", morale: 8, excludes: ["brave", "coward", "agoraphobic", "hemophobic", "adrenaline"] },
+  { id: "keencook", name: "精通烹飪", kind: "occ", points: 0, blurb: "過期的東西，到他手上還能成熱食。", cook: 1 },
+  { id: "burglarhands", name: "竊賊", kind: "occ", points: 0, blurb: "撬窗較安靜，搜刮較俐落。", stealth: 1, scavenge: 1 },
+  { id: "vehicleknow", name: "車輛知識", kind: "occ", points: 0, blurb: "引擎與鐵皮聽得懂。", build: 1 },
+];
+
+export const EASY_NEG: TraitId[] = [
+  "highthirst",
+  "weakstomach",
+  "shortsighted",
+  "clumsy",
+  "allthumbs",
+  "smoker",
+  "slowhealer",
+  "sleepyhead",
+  "heartyappetite",
+  "conspicuous",
+  "unlucky",
+  "insomnia",
+];
+
+export const HARD_NEG: TraitId[] = [
+  "coward",
+  "agoraphobic",
+  "depressed",
+  "selfish",
+  "underweight",
+  "overweight",
+  "proneillness",
+  "hemophobic",
+  "asthmatic",
+  "pacifist",
+  "slowlearner",
+  "weak",
+  "thinskinned",
+  "unfit",
+];
+
+export const VALUED_POS: TraitId[] = [
+  "athletic",
+  "strong",
+  "thickskinned",
+  "handy",
+  "hunter",
+  "fastlearner",
+  "brawler",
+  "stout",
+  "keenhearing",
+  "gymnast",
+  "organized",
+  "quiet",
+  "inconspicuous",
+  "wakeful",
+  "catseyes",
+  "dextrous",
+  "lighteater",
+  "lowthirst",
+  "outdoorsman",
+  "irongut",
+  "brave",
+  "lucky",
+  "leader",
+  "firstaid",
+  "gardener",
+  "adrenaline",
 ];
 
 export const START_SHELTERS: {
@@ -221,14 +376,14 @@ export const FACILITIES: {
   { id: "kitchen", name: "廚房", blurb: "熱食讓食物更耐吃，也讓人比較不像要散。", max: 3, cost: { materials: 6 }, effect: "食物消耗降低" },
   { id: "water", name: "集水器", blurb: "屋頂接雨。沒有它，你得到河裡冒險。", max: 3, cost: { materials: 5 }, effect: "每日產水" },
   { id: "workshop", name: "工坊", blurb: "鋸子、釘子、能修的都在這。", max: 3, cost: { materials: 8 }, effect: "建造與圍牆" },
-  { id: "infirmary", name: "醫務室", blurb: "一張乾淨的桌子，勝過在地板上縫。", max: 3, cost: { materials: 7, extra: { medicine: 2 } }, effect: "治療與清感染" },
+  { id: "infirmary", name: "醫務室", blurb: "一張乾淨的桌子，勝過在地板上縫。", max: 3, cost: { materials: 7, extra: { medicine: 1 } }, effect: "治療與清感染" },
   { id: "garden", name: "菜園", blurb: "種子比子彈值錢，只是慢。", max: 3, cost: { materials: 6 }, effect: "每日產糧" },
   { id: "radio", name: "無線電", blurb: "廢頻裡有人在呼救，也有人在設局。", max: 2, cost: { materials: 6, extra: { fuel: 1 } }, effect: "發現地點／倖存者" },
-  { id: "watch", name: "哨塔", blurb: "先看到，才有機會不打。", max: 2, cost: { materials: 10 }, effect: "降低夜襲" },
+  { id: "watch", name: "哨塔", blurb: "先看到，才有機會不擋。", max: 2, cost: { materials: 10 }, effect: "降低夜襲" },
 ];
 
 export const JOBS: { id: JobId; name: string; need?: FacilityId; blurb: string }[] = [
-  { id: "rest", name: "休息", blurb: "回血、降疲勞。" },
+  { id: "rest", name: "休息", blurb: "回血、降疲勞、回情緒。" },
   { id: "cook", name: "炊事", need: "kitchen", blurb: "把存糧做成熱食。" },
   { id: "farm", name: "耕作", need: "garden", blurb: "菜園產出。" },
   { id: "guard", name: "警戒", blurb: "守夜，擋襲擊。" },
@@ -238,13 +393,31 @@ export const JOBS: { id: JobId; name: string; need?: FacilityId; blurb: string }
   { id: "craft", name: "打造", need: "workshop", blurb: "耗材換圍牆與武器。" },
 ];
 
-export const WEAPONS: Record<WeaponId, { name: string; melee: number; gun: boolean }> = {
+export const WEAPONS: Record<string, { name: string; melee: number; gun: boolean }> = {
   fists: { name: "徒手", melee: 0, gun: false },
   knife: { name: "刀", melee: 6, gun: false },
-  axe: { name: "斧", melee: 12, gun: false },
+  huntingknife: { name: "獵刀", melee: 8, gun: false },
+  cleaver: { name: "砍骨刀", melee: 9, gun: false },
+  machete: { name: "開山刀", melee: 13, gun: false },
+  crowbar: { name: "撬棍", melee: 10, gun: false },
   bat: { name: "球棒", melee: 8, gun: false },
+  nailbat: { name: "釘棒", melee: 11, gun: false },
+  nightstick: { name: "警棍", melee: 8, gun: false },
+  hammer: { name: "鐵鎚", melee: 7, gun: false },
+  wrench: { name: "扳手", melee: 7, gun: false },
+  golf: { name: "高爾夫桿", melee: 6, gun: false },
+  pan: { name: "平底鍋", melee: 5, gun: false },
+  woodaxe: { name: "柴斧", melee: 11, gun: false },
+  axe: { name: "斧", melee: 14, gun: false },
+  sledge: { name: "大鎚", melee: 16, gun: false },
+  spear: { name: "長矛", melee: 12, gun: false },
+  katana: { name: "武士刀", melee: 18, gun: false },
   pistol: { name: "手槍", melee: 2, gun: true },
+  revolver: { name: "左輪", melee: 3, gun: true },
+  shotgun: { name: "霰彈槍", melee: 4, gun: true },
   rifle: { name: "步槍", melee: 3, gun: true },
+  assault: { name: "突擊步槍", melee: 4, gun: true },
+  smg: { name: "衝鋒槍", melee: 3, gun: true },
 };
 
 export const RESOURCES: { id: ResourceId; name: string }[] = [
@@ -275,6 +448,8 @@ export interface LocationDef {
   occupyFacilities: Partial<Record<FacilityId, number>>;
   occupyBarricade: number;
   neighbors: string[];
+  lat: number;
+  lng: number;
   startKnown?: boolean;
   isStart?: boolean;
 }
@@ -298,7 +473,9 @@ export const LOCATIONS: LocationDef[] = [
     occupyCapacity: 4,
     occupyFacilities: { beds: 1, kitchen: 1, garden: 1, water: 1 },
     occupyBarricade: 50,
-    neighbors: ["muldraugh_wh", "rosewood_pd", "riverside_mart"],
+    neighbors: ["muldraugh_wh", "rosewood_pd", "riverside_mart", "echo_creek", "mammoth_cave"],
+    lat: 37.937,
+    lng: -85.9914,
     startKnown: true,
     isStart: true,
   },
@@ -321,6 +498,8 @@ export const LOCATIONS: LocationDef[] = [
     occupyFacilities: { beds: 1, workshop: 1, kitchen: 1 },
     occupyBarricade: 40,
     neighbors: ["westpoint_town", "louisville_apt"],
+    lat: 37.8392,
+    lng: -85.9472,
     startKnown: true,
     isStart: true,
   },
@@ -342,7 +521,9 @@ export const LOCATIONS: LocationDef[] = [
     occupyCapacity: 5,
     occupyFacilities: { beds: 1, kitchen: 1, radio: 1, water: 1 },
     occupyBarricade: 35,
-    neighbors: ["louisville_er", "louisville_mall", "westpoint_town"],
+    neighbors: ["louisville_er", "louisville_mall", "westpoint_town", "valley_station", "louisville_school", "westpoint_shop"],
+    lat: 38.255,
+    lng: -85.762,
     startKnown: true,
     isStart: true,
   },
@@ -364,7 +545,9 @@ export const LOCATIONS: LocationDef[] = [
     occupyCapacity: 4,
     occupyFacilities: { beds: 1, workshop: 1, watch: 1 },
     occupyBarricade: 60,
-    neighbors: ["muldraugh_farm", "muldraugh_wh", "march_ridge"],
+    neighbors: ["muldraugh_farm", "muldraugh_wh", "march_ridge", "rosewood_prison", "brandenburg", "irvington_scrap"],
+    lat: 37.652,
+    lng: -86.248,
     startKnown: true,
   },
   {
@@ -385,7 +568,9 @@ export const LOCATIONS: LocationDef[] = [
     occupyCapacity: 6,
     occupyFacilities: { beds: 1, kitchen: 1, workshop: 1 },
     occupyBarricade: 45,
-    neighbors: ["muldraugh_farm", "westpoint_town", "rosewood_pd"],
+    neighbors: ["muldraugh_farm", "westpoint_town", "rosewood_pd", "brandenburg"],
+    lat: 37.948,
+    lng: -85.972,
     startKnown: true,
   },
   {
@@ -406,7 +591,9 @@ export const LOCATIONS: LocationDef[] = [
     occupyCapacity: 3,
     occupyFacilities: { beds: 1, kitchen: 1 },
     occupyBarricade: 30,
-    neighbors: ["muldraugh_farm", "westpoint_town"],
+    neighbors: ["muldraugh_farm", "westpoint_town", "echo_creek", "doe_valley"],
+    lat: 38.376,
+    lng: -86.162,
     startKnown: true,
   },
   {
@@ -427,7 +614,9 @@ export const LOCATIONS: LocationDef[] = [
     occupyCapacity: 6,
     occupyFacilities: { beds: 1, kitchen: 1, workshop: 1, watch: 1 },
     occupyBarricade: 40,
-    neighbors: ["westpoint_shop", "louisville_er", "muldraugh_wh", "riverside_mart"],
+    neighbors: ["westpoint_shop", "louisville_er", "muldraugh_wh", "riverside_mart", "lexington", "doe_valley", "louisville_apt"],
+    lat: 37.845,
+    lng: -85.95,
   },
   {
     id: "march_ridge",
@@ -447,7 +636,9 @@ export const LOCATIONS: LocationDef[] = [
     occupyCapacity: 7,
     occupyFacilities: { beds: 2, kitchen: 1, garden: 1, watch: 1 },
     occupyBarricade: 55,
-    neighbors: ["rosewood_pd", "louisville_mall"],
+    neighbors: ["rosewood_pd", "louisville_mall", "rosewood_prison"],
+    lat: 37.718,
+    lng: -85.698,
   },
   {
     id: "louisville_er",
@@ -467,7 +658,9 @@ export const LOCATIONS: LocationDef[] = [
     occupyCapacity: 8,
     occupyFacilities: { beds: 2, infirmary: 2, kitchen: 1, water: 1 },
     occupyBarricade: 40,
-    neighbors: ["louisville_apt", "louisville_mall", "westpoint_town", "cincinnati"],
+    neighbors: ["louisville_apt", "louisville_mall", "westpoint_town", "cincinnati", "louisville_school", "lexington"],
+    lat: 38.248,
+    lng: -85.763,
   },
   {
     id: "louisville_mall",
@@ -487,7 +680,9 @@ export const LOCATIONS: LocationDef[] = [
     occupyCapacity: 10,
     occupyFacilities: { beds: 2, kitchen: 2, workshop: 1, radio: 1 },
     occupyBarricade: 35,
-    neighbors: ["louisville_er", "louisville_apt", "fort_knox", "nashville"],
+    neighbors: ["louisville_er", "louisville_apt", "fort_knox", "nashville", "valley_station", "march_ridge"],
+    lat: 38.21,
+    lng: -85.68,
   },
   {
     id: "fort_knox",
@@ -507,7 +702,9 @@ export const LOCATIONS: LocationDef[] = [
     occupyCapacity: 10,
     occupyFacilities: { beds: 2, workshop: 2, watch: 2, infirmary: 1 },
     occupyBarricade: 70,
-    neighbors: ["louisville_mall", "nashville"],
+    neighbors: ["louisville_mall", "nashville", "lexington"],
+    lat: 37.916,
+    lng: -85.956,
   },
   {
     id: "cincinnati",
@@ -527,7 +724,9 @@ export const LOCATIONS: LocationDef[] = [
     occupyCapacity: 12,
     occupyFacilities: { beds: 2, kitchen: 1, radio: 2, water: 1, infirmary: 1 },
     occupyBarricade: 45,
-    neighbors: ["louisville_er", "indianapolis", "chicago"],
+    neighbors: ["louisville_er", "indianapolis", "chicago", "columbus", "lexington"],
+    lat: 39.1031,
+    lng: -84.512,
   },
   {
     id: "indianapolis",
@@ -547,7 +746,9 @@ export const LOCATIONS: LocationDef[] = [
     occupyCapacity: 12,
     occupyFacilities: { beds: 2, workshop: 2, kitchen: 1, watch: 1 },
     occupyBarricade: 50,
-    neighbors: ["cincinnati", "chicago", "stlouis"],
+    neighbors: ["cincinnati", "chicago", "stlouis", "gary", "columbus"],
+    lat: 39.7684,
+    lng: -86.1581,
   },
   {
     id: "nashville",
@@ -567,7 +768,9 @@ export const LOCATIONS: LocationDef[] = [
     occupyCapacity: 11,
     occupyFacilities: { beds: 2, kitchen: 2, radio: 1, garden: 1 },
     occupyBarricade: 40,
-    neighbors: ["louisville_mall", "fort_knox", "memphis", "stlouis"],
+    neighbors: ["louisville_mall", "fort_knox", "memphis", "stlouis", "mammoth_cave"],
+    lat: 36.1627,
+    lng: -86.7816,
   },
   {
     id: "memphis",
@@ -588,6 +791,8 @@ export const LOCATIONS: LocationDef[] = [
     occupyFacilities: { beds: 2, kitchen: 1, workshop: 1, water: 2 },
     occupyBarricade: 42,
     neighbors: ["nashville", "stlouis"],
+    lat: 35.1495,
+    lng: -90.049,
   },
   {
     id: "stlouis",
@@ -607,7 +812,9 @@ export const LOCATIONS: LocationDef[] = [
     occupyCapacity: 14,
     occupyFacilities: { beds: 3, kitchen: 2, workshop: 1, watch: 1, radio: 1 },
     occupyBarricade: 48,
-    neighbors: ["indianapolis", "nashville", "memphis", "chicago"],
+    neighbors: ["indianapolis", "nashville", "memphis", "chicago", "springfield_il"],
+    lat: 38.627,
+    lng: -90.1994,
   },
   {
     id: "chicago",
@@ -627,7 +834,273 @@ export const LOCATIONS: LocationDef[] = [
     occupyCapacity: 18,
     occupyFacilities: { beds: 3, kitchen: 2, workshop: 2, infirmary: 2, radio: 2, watch: 2 },
     occupyBarricade: 55,
-    neighbors: ["cincinnati", "indianapolis", "stlouis"],
+    neighbors: ["cincinnati", "indianapolis", "stlouis", "gary", "springfield_il"],
+    lat: 41.8781,
+    lng: -87.6298,
+  },
+  {
+    id: "echo_creek",
+    name: "回聲溪",
+    nameEn: "Echo Creek",
+    state: "肯塔基",
+    region: "ky",
+    size: "outpost",
+    blurb: "泥路盡頭的農鎮。雞還在叫。",
+    desc: "穀倉門半開。鎮上的人走得很整齊——像被誰領過。食物近，援手遠。",
+    zombies: 10,
+    fuel: 1,
+    image: "/art/shelter-farm.jpg",
+    zones: ["店面", "廚房", "後院", "穀倉"],
+    loot: { food: [3, 7], materials: [2, 5], water: [1, 3] },
+    survivorChance: 0.3,
+    occupyCapacity: 4,
+    occupyFacilities: { beds: 1, kitchen: 1, garden: 1, water: 1 },
+    occupyBarricade: 42,
+    neighbors: ["muldraugh_farm", "riverside_mart", "doe_valley", "irvington_scrap"],
+    lat: 37.812,
+    lng: -86.074,
+  },
+  {
+    id: "doe_valley",
+    name: "鹿谷",
+    nameEn: "Doe Valley",
+    state: "肯塔基",
+    region: "ky",
+    size: "outpost",
+    blurb: "湖邊木屋。安靜得不像真的。",
+    desc: "棧橋還在。湖面漂著空船。適合躲，不適合久留——冬天湖會結，東西會從冰上來。",
+    zombies: 7,
+    fuel: 1,
+    image: "/art/shelter-farm.jpg",
+    zones: ["湖屋", "碼頭棧橋", "後院", "儲藏"],
+    loot: { food: [3, 6], water: [3, 7], materials: [1, 3] },
+    survivorChance: 0.35,
+    occupyCapacity: 4,
+    occupyFacilities: { beds: 1, kitchen: 1, garden: 2, water: 2 },
+    occupyBarricade: 38,
+    neighbors: ["riverside_mart", "echo_creek", "westpoint_town"],
+    lat: 38.281,
+    lng: -86.041,
+  },
+  {
+    id: "irvington_scrap",
+    name: "歐文頓廢鐵場",
+    nameEn: "Irvington Scrap",
+    state: "肯塔基",
+    region: "ky",
+    size: "outpost",
+    blurb: "車殼堆成牆。扳手比槍多。",
+    desc: "壓縮機還卡著一輛皮卡。鐵、油、會響的東西。適合技工，不適合偷偷摸摸。",
+    zombies: 12,
+    fuel: 1,
+    image: "/art/loc-warehouse.jpg",
+    zones: ["廢鐵堆", "車庫", "工具間", "辦公室"],
+    loot: { materials: [6, 12], fuel: [2, 5], ammo: [0, 2] },
+    survivorChance: 0.22,
+    occupyCapacity: 4,
+    occupyFacilities: { beds: 1, workshop: 2, watch: 1 },
+    occupyBarricade: 52,
+    neighbors: ["rosewood_pd", "echo_creek", "brandenburg"],
+    lat: 37.59,
+    lng: -86.284,
+  },
+  {
+    id: "rosewood_prison",
+    name: "玫瑰鎮監獄",
+    nameEn: "Rosewood Prison",
+    state: "肯塔基",
+    region: "ky",
+    size: "town",
+    blurb: "鐵門、走廊、沒人開的槍櫃。",
+    desc: "探訪室玻璃碎了。牢房門一扇扇開著。裡面的東西還穿著制服。彈藥多，退路少。",
+    zombies: 30,
+    fuel: 1,
+    image: "/art/loc-pd.jpg",
+    zones: ["大廳", "牢房", "槍械庫", "操場", "食堂"],
+    loot: { ammo: [8, 16], materials: [4, 8], food: [2, 5], medicine: [1, 3] },
+    survivorChance: 0.28,
+    occupyCapacity: 10,
+    occupyFacilities: { beds: 2, workshop: 1, watch: 2, infirmary: 1 },
+    occupyBarricade: 78,
+    neighbors: ["rosewood_pd", "march_ridge", "brandenburg"],
+    lat: 37.638,
+    lng: -86.221,
+  },
+  {
+    id: "brandenburg",
+    name: "勃蘭登堡",
+    nameEn: "Brandenburg",
+    state: "肯塔基",
+    region: "ky",
+    size: "town",
+    blurb: "河鎮。油從碼頭上來。",
+    desc: "渡輪停在半河。主街的加油站被撬過兩次，第三次還有剩。過河往西，肯塔基就變薄了。",
+    zombies: 16,
+    fuel: 2,
+    image: "/art/loc-warehouse.jpg",
+    zones: ["碼頭", "店面", "加油站", "倉庫"],
+    loot: { fuel: [3, 7], materials: [3, 6], food: [2, 4], ammo: [1, 3] },
+    survivorChance: 0.32,
+    occupyCapacity: 6,
+    occupyFacilities: { beds: 1, kitchen: 1, workshop: 1, water: 1 },
+    occupyBarricade: 44,
+    neighbors: ["rosewood_pd", "muldraugh_wh", "rosewood_prison", "irvington_scrap", "mammoth_cave"],
+    lat: 37.999,
+    lng: -86.169,
+  },
+  {
+    id: "louisville_school",
+    name: "路易斯維爾高中",
+    nameEn: "Louisville High",
+    state: "肯塔基",
+    region: "ky",
+    size: "town",
+    blurb: "鈴不會再響。體育館還鎖著人。",
+    desc: "走廊貼滿黃色通知單。教室桌椅推成牆。有人在這裡守過——字條寫：別下地下室。",
+    zombies: 22,
+    fuel: 1,
+    image: "/art/shelter-highrise.jpg",
+    zones: ["教室", "體育館", "走廊", "校園藥房", "地下室"],
+    loot: { materials: [3, 7], food: [2, 5], medicine: [1, 4], ammo: [0, 2] },
+    survivorChance: 0.5,
+    occupyCapacity: 9,
+    occupyFacilities: { beds: 2, kitchen: 1, infirmary: 1, watch: 1 },
+    occupyBarricade: 40,
+    neighbors: ["louisville_apt", "louisville_er", "valley_station"],
+    lat: 38.221,
+    lng: -85.758,
+  },
+  {
+    id: "valley_station",
+    name: "谷站",
+    nameEn: "Valley Station",
+    state: "肯塔基",
+    region: "ky",
+    size: "town",
+    blurb: "城北郊區商場。推車還排著隊。",
+    desc: "停車場的車門全開。超市冷凍櫃化成河。東西多，迴音也多——一聲推車，整層都聽見。",
+    zombies: 24,
+    fuel: 2,
+    image: "/art/loc-mall.jpg",
+    zones: ["中庭", "超市", "停車場", "員工通道"],
+    loot: { food: [5, 11], materials: [2, 5], ammo: [1, 3], water: [2, 4] },
+    survivorChance: 0.38,
+    occupyCapacity: 8,
+    occupyFacilities: { beds: 2, kitchen: 2, radio: 1 },
+    occupyBarricade: 36,
+    neighbors: ["louisville_mall", "louisville_apt", "louisville_school"],
+    lat: 38.318,
+    lng: -85.621,
+  },
+  {
+    id: "lexington",
+    name: "列克星敦",
+    nameEn: "Lexington",
+    state: "肯塔基",
+    region: "ky",
+    size: "city",
+    blurb: "大學城。醫院與馬場之間。",
+    desc: "校園還插著旗。大學醫院的藥局被搬空一半，另一半鎖在停電的冷櫃裡。有人用廣播唸課表。",
+    zombies: 32,
+    fuel: 2,
+    image: "/art/loc-hospital.jpg",
+    zones: ["大學醫院", "校園", "市區藥房", "公寓樓"],
+    loot: { medicine: [6, 12], food: [3, 6], ammo: [1, 4], materials: [2, 5] },
+    survivorChance: 0.42,
+    occupyCapacity: 10,
+    occupyFacilities: { beds: 2, infirmary: 2, kitchen: 1, radio: 1 },
+    occupyBarricade: 42,
+    neighbors: ["westpoint_town", "louisville_er", "cincinnati", "fort_knox"],
+    lat: 38.0406,
+    lng: -84.5037,
+  },
+  {
+    id: "mammoth_cave",
+    name: "猛瑪洞穴",
+    nameEn: "Mammoth Cave",
+    state: "肯塔基",
+    region: "ky",
+    size: "outpost",
+    blurb: "地底下沒有風。也沒有訊號。",
+    desc: "遊客中心的燈碎了。溶洞口涼、黑、有回聲。佔領這裡牆極高——無線電在地下沒用，出門要摸黑。",
+    zombies: 9,
+    fuel: 2,
+    image: "/art/title.jpg",
+    zones: ["溶洞口", "洞穴", "探路營", "地下河"],
+    loot: { food: [1, 3], water: [2, 5], materials: [1, 3], medicine: [0, 2] },
+    survivorChance: 0.16,
+    occupyCapacity: 5,
+    occupyFacilities: { beds: 1, kitchen: 1, water: 2, watch: 1 },
+    occupyBarricade: 82,
+    neighbors: ["muldraugh_farm", "brandenburg", "nashville"],
+    lat: 37.187,
+    lng: -86.1,
+  },
+  {
+    id: "columbus",
+    name: "哥倫布",
+    nameEn: "Columbus",
+    state: "俄亥俄",
+    region: "oh",
+    size: "city",
+    blurb: "州府還在地圖上。人已經不在。",
+    desc: "寬街被公車堵住。醫院側門堆著推床。往東是更空的俄亥俄，往西才是回家的路。",
+    zombies: 40,
+    fuel: 3,
+    image: "/art/loc-city.jpg",
+    zones: ["市區", "醫院側門", "倉庫", "校園"],
+    loot: { food: [4, 9], medicine: [3, 8], materials: [4, 8], ammo: [2, 5] },
+    survivorChance: 0.36,
+    occupyCapacity: 12,
+    occupyFacilities: { beds: 2, kitchen: 1, infirmary: 1, radio: 1, watch: 1 },
+    occupyBarricade: 46,
+    neighbors: ["cincinnati", "indianapolis"],
+    lat: 39.9612,
+    lng: -82.9988,
+  },
+  {
+    id: "springfield_il",
+    name: "斯普林菲爾德",
+    nameEn: "Springfield",
+    state: "伊利諾",
+    region: "il",
+    size: "city",
+    blurb: "林肯的城。北上就是風城。",
+    desc: "州議會的旗還掛著。電台有人唸過避難名單，唸到一半斷了。這裡是芝加哥前的最後一座像樣的城。",
+    zombies: 38,
+    fuel: 4,
+    image: "/art/loc-city.jpg",
+    zones: ["州議會", "市區", "醫院側門", "電台"],
+    loot: { medicine: [3, 7], ammo: [3, 7], food: [4, 8], materials: [3, 6], fuel: [1, 3] },
+    survivorChance: 0.35,
+    occupyCapacity: 12,
+    occupyFacilities: { beds: 2, kitchen: 1, radio: 2, infirmary: 1, watch: 1 },
+    occupyBarricade: 48,
+    neighbors: ["stlouis", "chicago"],
+    lat: 39.7817,
+    lng: -89.6501,
+  },
+  {
+    id: "gary",
+    name: "加里",
+    nameEn: "Gary",
+    state: "印第安納",
+    region: "in",
+    size: "city",
+    blurb: "鋼城。芝加哥的南門。煙囪還在冒——不是煙。",
+    desc: "高爐裡有東西在走。廠房鐵皮被風吹得像鐘。建材與燃油成堆，屍潮從湖岸壓過來。清完這裡，芝加哥就在眼前。",
+    zombies: 46,
+    fuel: 4,
+    image: "/art/loc-warehouse.jpg",
+    zones: ["高爐", "廠房", "碼頭", "市區"],
+    loot: { materials: [8, 14], fuel: [3, 7], ammo: [2, 5], food: [2, 5] },
+    survivorChance: 0.2,
+    occupyCapacity: 10,
+    occupyFacilities: { beds: 2, workshop: 2, watch: 2, kitchen: 1 },
+    occupyBarricade: 58,
+    neighbors: ["indianapolis", "chicago"],
+    lat: 41.5933,
+    lng: -87.3464,
   },
 ];
 
@@ -683,25 +1156,53 @@ export const ZONE_FLAVOR: Record<string, string[]> = {
 };
 
 export function locById(id: string): LocationDef {
-  const loc = LOCATIONS.find((l) => l.id === id);
-  if (!loc) throw new Error(`missing location ${id}`);
-  return loc;
+  return LOCATIONS.find((l) => l.id === id) ?? LOCATIONS[0];
 }
 
 export function occById(id: OccupationId) {
-  return OCCUPATIONS.find((o) => o.id === id)!;
+  return OCCUPATIONS.find((o) => o.id === id) ?? OCCUPATIONS[0];
 }
 
 export function traitById(id: TraitId) {
   return TRAITS.find((t) => t.id === id)!;
 }
 
+export function pickerTraits() {
+  return TRAITS.filter((t) => t.kind !== "occ");
+}
+
+export function traitAllowed(have: TraitId[], next: TraitId): boolean {
+  if (have.includes(next)) return false;
+  const incoming = traitById(next);
+  const blocked = incoming.excludes ?? [];
+  if (blocked.some((x) => have.includes(x))) return false;
+  for (const id of have) {
+    if ((traitById(id).excludes ?? []).includes(next)) return false;
+  }
+  return true;
+}
+
+export function withOccupationTraits(occupation: OccupationId, current: TraitId[]): TraitId[] {
+  const occIds = new Set(TRAITS.filter((x) => x.kind === "occ").map((x) => x.id));
+  const granted = occById(occupation).granted;
+  const kept = current.filter((id) => !occIds.has(id));
+  const next: TraitId[] = [];
+  for (const id of [...granted, ...kept]) {
+    if (traitAllowed(next, id)) next.push(id);
+  }
+  return next;
+}
+
+export function poolOf(occupation: OccupationId, traits: TraitId[]): number {
+  return occById(occupation).pool + traits.reduce((sum, id) => sum + traitById(id).points, 0);
+}
+
 export function sizeLabel(s: Size): string {
-  return { outpost: "據點", town: "小鎮", city: "城市", metro: "大都會" }[s];
+  return t(`size.${s}`);
 }
 
 export function stanceLabel(s: string): string {
-  return { leader: "隊長", friend: "同伴", neutral: "中立", rival: "不穩", hostile: "敵對" }[s] ?? s;
+  return t(`stance.${s}`);
 }
 
 export const EMPTY_BAG = (): {

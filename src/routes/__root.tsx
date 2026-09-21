@@ -3,7 +3,7 @@ import { AuthProvider } from "@/lib/auth/provider";
 import { PreviewHostBridge } from "@/components/preview-host-bridge";
 import appCss from "../styles.css?url";
 
-const APP_NAME = "灰州 ASH STATE";
+const APP_NAME = "再活一晚 One More Night";
 
 export const Route = createRootRoute({
   head: () => ({
@@ -17,7 +17,7 @@ export const Route = createRootRoute({
       { title: APP_NAME },
       {
         name: "description",
-        content: "灰州 ASH STATE — 選人設、經營庇護所、在美國廢土出任務。倖存者可友可敵。永久死亡。",
+        content: "再活一晚 One More Night v0.1 — 免費文字僵屍據點。一晚一命。不收費。",
       },
       { name: "theme-color", content: "#0d0c0a" },
     ],
@@ -37,7 +37,7 @@ export const Route = createRootRoute({
       },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Noto+Sans+TC:wght@400;500;600&family=Oswald:wght@500;600&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Noto+Sans+TC:wght@400;500;600&family=Noto+Serif+TC:wght@400;500;600&family=Oswald:wght@500;600&family=Source+Serif+4:opsz,wght@8..60,400;500;600&display=swap",
       },
     ],
   }),
