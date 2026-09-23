@@ -6,8 +6,14 @@ import { join } from "node:path";
 const root = process.cwd();
 const stage = join(root, "itch-public");
 const outDir = join(root, "dist-itch");
-const zipName = "one-more-night-v0.1.zip";
+const zipName = "one-more-night-v0.2.zip";
 const zipPath = join(root, "public", zipName);
+
+const page = spawnSync(process.execPath, ["scripts/write-itch-page.mjs"], {
+  cwd: root,
+  stdio: "inherit",
+});
+if (page.status !== 0) process.exit(page.status ?? 1);
 
 rmSync(stage, { recursive: true, force: true });
 mkdirSync(stage, { recursive: true });
@@ -23,11 +29,12 @@ copy("game", "game");
 copy("favicon.svg", "favicon.svg");
 copy("itch-cover.jpg", "itch-cover.jpg");
 copy("og.jpg", "og.jpg");
+copy("itch-page.md", "itch-page.md");
 rmSync(join(stage, "art/gear/wear"), { recursive: true, force: true });
 
 writeFileSync(
   join(stage, "README.txt"),
-  "One More Night v0.1\nUpload this ZIP as-is on itch.io (HTML). Do not unzip and re-zip.\n",
+  "One More Night v0.2\nUpload this ZIP as-is on itch.io (HTML). Do not unzip and re-zip.\nThe in-game Dev log is the itch description. Copy it from the title screen, or paste itch-page.md.\n",
 );
 
 const build = spawnSync("npx", ["vite", "build", "--config", "vite.itch.config.ts"], {
@@ -48,7 +55,7 @@ dest = ${JSON.stringify(zipPath)}
 os.makedirs(os.path.dirname(dest), exist_ok=True)
 if os.path.exists(dest):
     os.remove(dest)
-skip = {"one-more-night-v0.1.zip"}
+skip = {"one-more-night-v0.1.zip", "one-more-night-v0.2.zip"}
 n = 0
 with zipfile.ZipFile(dest, "w", zipfile.ZIP_DEFLATED) as z:
     for dirpath, dirnames, filenames in os.walk(root):
@@ -68,7 +75,18 @@ process.stdout.write(pack.stdout || "");
 process.stderr.write(pack.stderr || "");
 if (pack.status !== 0) process.exit(pack.status ?? 1);
 
+const countLine = (pack.stdout || "").trim().split("\n").pop() || "";
+const fileCount = Number(countLine.split(" ")[0]);
+if (!Number.isFinite(fileCount) || fileCount < 1) {
+  console.error("zip produced no files");
+  process.exit(1);
+}
+if (fileCount >= 1000) {
+  console.error(`zip file count ${fileCount} exceeds itch 1000-file cap`);
+  process.exit(1);
+}
+
 mkdirSync(join(root, "artifacts"), { recursive: true });
 cpSync(zipPath, join(root, "artifacts", zipName));
 const kb = Math.round(statSync(zipPath).size / 1024);
-console.log(`packed ${zipName} (${kb} KB)`);
+console.log(`packed ${zipName} (${kb} KB, ${fileCount} files)`);

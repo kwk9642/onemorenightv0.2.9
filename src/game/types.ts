@@ -81,7 +81,7 @@ export type TraitId =
 
 export type SkillId = "combat" | "stealth" | "scavenge" | "medical" | "build" | "farm" | "cook";
 
-export type JobId = "rest" | "cook" | "farm" | "guard" | "repair" | "tend" | "radio" | "craft";
+export type JobId = "rest" | "cook" | "farm" | "guard" | "repair" | "tend" | "radio" | "craft" | "press";
 
 export type FacilityId =
   | "beds"
@@ -91,7 +91,8 @@ export type FacilityId =
   | "infirmary"
   | "garden"
   | "radio"
-  | "watch";
+  | "watch"
+  | "still";
 
 export type WeaponId =
   | "fists"
@@ -262,6 +263,29 @@ export interface CreateInput {
   traits: TraitId[];
   alloc: Partial<Skills>;
   shelterId: string;
+  mode?: PlayMode;
+  sandbox?: SandboxOpts;
+}
+
+export type PlayMode = "casual" | "normal" | "extinct" | "sandbox";
+
+export interface SandboxOpts {
+  companions: number;
+  customStash: boolean;
+  food: number;
+  water: number;
+  materials: number;
+  medicine: number;
+  ammo: number;
+  fuel: number;
+  lootMul: number;
+  zedMul: number;
+  raidCap: number;
+  maxAP: number;
+  infectMul: number;
+  permadeath: boolean;
+  chicagoWins: boolean;
+  ignoreBeds: boolean;
 }
 
 export type SkillNotice = {
@@ -310,4 +334,7 @@ export interface GameState {
   stash: GearItem[];
   notices: SkillNotice[];
   dispatches: DispatchParty[];
+  mode: PlayMode;
+  sandbox?: SandboxOpts;
+  stillCooldown: number;
 }

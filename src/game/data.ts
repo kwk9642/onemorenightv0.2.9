@@ -12,7 +12,7 @@ import type {
 
 export const SAVE_KEY = "ash-state-v5";
 export const SAVE_VERSION = 5;
-export const GAME_VERSION = "0.3";
+export const GAME_VERSION = "0.2";
 
 export const OCCUPATIONS: {
   id: OccupationId;
@@ -380,6 +380,7 @@ export const FACILITIES: {
   { id: "garden", name: "菜園", blurb: "種子比子彈值錢，只是慢。", max: 3, cost: { materials: 6 }, effect: "每日產糧" },
   { id: "radio", name: "無線電", blurb: "廢頻裡有人在呼救，也有人在設局。", max: 2, cost: { materials: 6, extra: { fuel: 1 } }, effect: "發現地點／倖存者" },
   { id: "watch", name: "哨塔", blurb: "先看到，才有機會不擋。", max: 2, cost: { materials: 10 }, effect: "降低夜襲" },
+  { id: "still", name: "油桶", blurb: "把多餘的食物做成一桶油。", max: 2, cost: { materials: 6 }, effect: "每晚最多 1 燃油" },
 ];
 
 export const JOBS: { id: JobId; name: string; need?: FacilityId; blurb: string }[] = [
@@ -391,6 +392,7 @@ export const JOBS: { id: JobId; name: string; need?: FacilityId; blurb: string }
   { id: "tend", name: "看護", need: "infirmary", blurb: "治療傷患。" },
   { id: "radio", name: "監聽", need: "radio", blurb: "搜頻道。" },
   { id: "craft", name: "打造", need: "workshop", blurb: "耗材換圍牆與武器。" },
+  { id: "press", name: "榨油", need: "still", blurb: "多餘的食物換成一桶油。" },
 ];
 
 export const WEAPONS: Record<string, { name: string; melee: number; gun: boolean }> = {

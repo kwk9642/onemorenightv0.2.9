@@ -50,6 +50,18 @@ import {
   xpGainLine,
 } from "./growth";
 import { chance, jitter, pick, range, uid } from "./rng";
+import {
+  eatWaste,
+  fuelCost,
+  lootModeMul,
+  meleeFailInfect,
+  modeOf,
+  pressFoodCost,
+  quietModeMul,
+  raidChance,
+  rotAt,
+  waterBill,
+} from "./mode";
 import type {
   Choice,
   CreateInput,
@@ -292,8 +304,43 @@ export function createNewGame(input: CreateInput): GameState {
     garden: 0,
     radio: 0,
     watch: 0,
+    still: 0,
     ...start.facilities,
   };
+
+  const mode = input.mode ?? "normal";
+  const sandbox = mode === "sandbox" ? input.sandbox : undefined;
+  if (mode === "casual") {
+    resources = addRes(resources, { food: 4, water: 4, fuel: 2 });
+  } else if (mode === "extinct") {
+    resources = {
+      food: Math.max(1, resources.food - 1),
+      water: Math.max(1, resources.water - 1),
+      materials: Math.max(0, resources.materials - 1),
+      medicine: Math.max(0, resources.medicine - 1),
+      ammo: Math.max(0, resources.ammo - 1),
+      fuel: Math.max(0, resources.fuel - 1),
+    };
+  } else if (sandbox?.customStash) {
+    resources = {
+      food: sandbox.food,
+      water: sandbox.water,
+      materials: sandbox.materials,
+      medicine: sandbox.medicine,
+      ammo: sandbox.ammo,
+      fuel: sandbox.fuel,
+    };
+  }
+  const zedMul = sandbox?.zedMul ?? 1;
+  if (zedMul !== 1) {
+    for (const loc of LOCATIONS) {
+      locations[loc.id] = {
+        ...locations[loc.id],
+        zombies: Math.max(0, Math.round(locations[loc.id].zombies * zedMul)),
+      };
+    }
+  }
+  const maxAP = sandbox?.maxAP ?? MAX_AP;
 
   let state: GameState = {
     version: SAVE_VERSION,
@@ -301,12 +348,12 @@ export function createNewGame(input: CreateInput): GameState {
     seed,
     rng: r,
     day: 1,
-    dayAP: MAX_AP,
-    maxAP: MAX_AP,
+    dayAP: maxAP,
+    maxAP,
     survivors: [dressed.s],
     shelter: {
       locationId: start.locationId,
-      capacity: start.capacity,
+      capacity: sandbox?.ignoreBeds ? 8 : start.capacity,
       facilities,
       barricade: start.barricade,
     },
@@ -324,11 +371,41 @@ export function createNewGame(input: CreateInput): GameState {
     stash: [...dressed.extra, extra.item],
     notices: [],
     dispatches: [],
+    mode,
+    sandbox,
+    stillCooldown: 0,
   };
   state = pushLog(
     state,
     t("log.settle", { name: dressed.s.name, occ: t(`occ.${occ.id}`), place: t(`sh.${start.id}`) }),
   );
+  const extraHands = sandbox?.companions ?? 0;
+  if (extraHands > 0) {
+    const room = Math.max(0, state.shelter.capacity - living(state).length);
+    const n = Math.min(extraHands, room);
+    for (let i = 0; i < n; i++) {
+      const occPick = pick(state.rng, OCCUPATIONS);
+      const nm = randomName(occPick.r);
+      const face = pickFace(nm.r);
+      const pos = pick(face.r, TRAITS.filter((x) => x.kind === "pos"));
+      const neg = pick(pos.r, TRAITS.filter((x) => x.kind === "neg"));
+      const made = makeSurvivor(neg.r, {
+        name: nm.name,
+        occupation: occPick.item.id,
+        traits: [pos.item.id, neg.item.id],
+        stance: "neutral",
+        portrait: face.item.id,
+      });
+      const mate = dressSurvivor(made.r, occPick.item.id, made.s);
+      state = {
+        ...state,
+        rng: mate.r,
+        stash: [...state.stash, ...mate.extra],
+        survivors: [...state.survivors, mate.s],
+      };
+    }
+    if (n < extraHands) state = pushLog(state, t("log.bedsFull", { n: state.shelter.capacity }));
+  }
   return state;
 }
 
@@ -348,7 +425,8 @@ export function canTravel(state: GameState, id: string): { ok: boolean; reason: 
   if (!isDiscovered(state, id)) return { ok: false, reason: t("travel.unknown") };
   if (id === state.shelter.locationId) return { ok: false, reason: t("travel.home") };
   const loc = locById(id);
-  if (state.resources.fuel < loc.fuel) return { ok: false, reason: t("travel.fuel", { n: loc.fuel }) };
+  const cost = fuelCost(state, id);
+  if (state.resources.fuel < cost) return { ok: false, reason: t("travel.fuel", { n: cost }) };
   if (living(state).length === 0) return { ok: false, reason: t("travel.nobody") };
   if (!living(state).filter((s) => !isAway(state, s.id)).some(canMission)) return { ok: false, reason: t("travel.mood") };
   if (apOf(state) < 1) return { ok: false, reason: t("ap.none") };
@@ -441,7 +519,7 @@ export function startMission(state: GameState, locationId: string, squadIds: str
   }
   const spent = trySpend(state, AP_COST.travel);
   if (!spent) return pushLog(state, t("ap.none"));
-  const fuel = loc.fuel;
+  const fuel = fuelCost(state, locationId);
   const bag = EMPTY_BAG();
   const names = squad.map((s) => s.name).join(t("ui.comma"));
   let next: GameState = {
@@ -473,6 +551,7 @@ export function startMission(state: GameState, locationId: string, squadIds: str
     },
   };
   next = pushLog(next, t("log.depart", { names, loc: tLoc(loc.id), state: t(`state.${loc.region}`) }));
+  next = pushLog(next, fuel === 0 ? t("log.walk", { loc: tLoc(loc.id) }) : t("log.burn", { loc: tLoc(loc.id), n: fuel }));
   return beginZone(next, 0);
 }
 
@@ -533,8 +612,8 @@ function rollLoot(state: GameState, loud: boolean): { state: GameState; got: Par
   }
   const scv = skillFx("scavenge", sk.scavenge);
   const sth = skillFx("stealth", sk.stealth);
-  let mult = lootMult(scout, loud) * scv.loot;
-  if (!loud) mult *= sth.quietLoot;
+  let mult = lootMult(scout, loud) * scv.loot * lootModeMul(state);
+  if (!loud) mult *= sth.quietLoot * quietModeMul(state);
   for (const [k, pair] of Object.entries(loc.loot) as [keyof Resources, [number, number]][]) {
     const n = range(r, pair[0], pair[1]);
     r = n.r;
@@ -724,6 +803,19 @@ function hurt(state: GameState, id: string, dmg: number, infectP: number, cause:
 
 function checkWipe(state: GameState): GameState {
   if (living(state).length > 0) return state;
+  if (state.mode === "sandbox" && state.sandbox?.permadeath === false) {
+    const fallen = state.survivors[0];
+    if (!fallen) return state;
+    return pushLog(
+      {
+        ...state,
+        survivors: state.survivors.map((s, i) =>
+          i === 0 ? { ...s, alive: true, hp: 1, death: "" } : s,
+        ),
+      },
+      t("log.sandRevive", { name: fallen.name }),
+    );
+  }
   return {
     ...state,
     screen: "end",
@@ -847,13 +939,16 @@ function resolveFight(state: GameState, style: "melee" | "gun" | "flank"): GameS
   if (score < -10) {
     dmg = range(next.rng, 18, 40).n;
     next = { ...next, rng: range(next.rng, 18, 40).r };
-    infectP = style === "melee" ? 0.35 : 0.22;
+    infectP = style === "melee" ? meleeFailInfect(modeOf(state)) : 0.22;
   } else if (score < 20) {
     dmg = range(next.rng, 6, 16).n;
     next = { ...next, rng: range(next.rng, 6, 16).r };
     infectP = style === "melee" ? 0.18 : 0.08;
   }
-  if (dmg > 0) next = hurt(next, fighter.id, dmg, infectP, t("death.torn"));
+  if (dmg > 0) {
+    const mul = state.mode === "sandbox" ? (state.sandbox?.infectMul ?? 1) : 1;
+    next = hurt(next, fighter.id, dmg, infectP * mul, t("death.torn"));
+  }
   if (next.ended) return next;
   if (dmg > 0) {
     next = mapSur(next, fighter.id, (x) => (x.alive ? degradeWorn(degradeWorn(x, "body", 2), "head", 1) : x));
@@ -1257,11 +1352,16 @@ export function occupyHere(state: GameState): GameState {
   for (const n of loc.neighbors) {
     next = { ...next, locations: { ...next.locations, [n]: { ...next.locations[n], discovered: true } } };
   }
-  if (loc.size === "metro") {
+  if (loc.size === "metro" && !(state.mode === "sandbox" && state.sandbox?.chicagoWins === false)) {
     next = {
       ...next,
       screen: "end",
-      ended: { kind: "win", reason: t("end.winBody", { day: next.day, loc: tLoc(loc.id) }) },
+      ended: {
+        kind: "win",
+        reason:
+          t("end.winBody", { day: next.day, loc: tLoc(loc.id) }) +
+          (next.mode === "sandbox" ? t("end.sandbox") : ""),
+      },
     };
   }
   return next;
@@ -1359,10 +1459,10 @@ export function restNight(state: GameState, fromHome: boolean): GameState {
   const watch = next.shelter.facilities.watch;
   const people = living(next).filter((s) => !away.has(s.id));
   const eaters = people.reduce((n, s) => n + (has(s, "heartyappetite") ? 1.4 : has(s, "lighteater") ? 0.7 : 1), 0);
-  const drinkers = people.reduce((n, s) => n + (has(s, "highthirst") ? 1.5 : has(s, "lowthirst") ? 0.7 : 1), 0);
-  const waste = next.day >= 16 ? 1 : 0;
+  const waste = eatWaste(next.day, modeOf(next));
   const eat = Math.max(1, Math.round(eaters - kitchen * 0.4 + waste));
-  const drink = Math.max(1, Math.round(drinkers - waterLv * 0.4 + waste));
+  const bill = waterBill(people, waterLv, next.day, modeOf(next));
+  const drink = bill.drink;
   const foodHave = next.resources.food;
   const waterHave = next.resources.water;
   const foodUsed = Math.min(foodHave, eat);
@@ -1372,7 +1472,7 @@ export function restNight(state: GameState, fromHome: boolean): GameState {
   const thirsty = waterUsed < drink;
 
   let foodGain = 0;
-  let waterGain = waterLv > 0 ? Math.max(1, Math.round(waterLv * 0.6)) : 0;
+  let waterGain = bill.yield;
   let medUsed = 0;
   let barricade = next.shelter.barricade;
   let radioFind = false;
@@ -1477,7 +1577,7 @@ export function restNight(state: GameState, fromHome: boolean): GameState {
       const a = chance(next.rng, 0.35);
       next = { ...next, rng: a.r };
       if (a.ok) radioFind = true;
-      const b = chance(next.rng, 0.12);
+      const b = chance(next.rng, modeOf(next) === "extinct" ? 0.06 : 0.12);
       next = { ...next, rng: b.r };
       if (b.ok) radioPerson = true;
     }
@@ -1573,10 +1673,37 @@ export function restNight(state: GameState, fromHome: boolean): GameState {
     water: next.resources.water + waterGain,
     medicine: Math.max(0, next.resources.medicine - medUsed),
   };
-  if (next.resources.food > 10) {
-    const rot = Math.max(1, Math.ceil((next.resources.food - 10) * 0.07));
+  next = pushLog(next, t("log.water", { drink, yield: waterGain, n: next.resources.water }));
+  const rotLine = rotAt(modeOf(next));
+  if (next.resources.food > rotLine) {
+    const rot = Math.max(1, Math.ceil((next.resources.food - rotLine) * 0.07));
     next.resources = { ...next.resources, food: next.resources.food - rot };
     next = pushLog(next, t("log.rot", { n: rot }));
+  }
+  const stillLv = next.shelter.facilities.still ?? 0;
+  const presser = home.find((s) => s.alive && canWork(s) && s.job === "press");
+  if (presser) {
+    if ((next.stillCooldown ?? 0) > 0) {
+      next = { ...next, stillCooldown: 0 };
+      next = pushLog(next, t("log.press.wait", { name: presser.name }));
+    } else if (stillLv <= 0) {
+      next = pushLog(next, t("log.press.need", { name: presser.name }));
+    } else {
+      const cost = pressFoodCost(stillLv, modeOf(next));
+      if (next.resources.food < cost) {
+        next = pushLog(next, t("log.press.short"));
+      } else {
+        next.resources = {
+          ...next.resources,
+          food: next.resources.food - cost,
+          fuel: next.resources.fuel + 1,
+        };
+        next = pushLog(next, t("log.press", { name: presser.name, n: cost }));
+        if (modeOf(next) === "extinct") next = { ...next, stillCooldown: 1 };
+      }
+    }
+  } else if ((next.stillCooldown ?? 0) > 0) {
+    next = { ...next, stillCooldown: next.stillCooldown - 1 };
   }
   next.shelter = { ...next.shelter, barricade };
 
@@ -1619,7 +1746,8 @@ export function restNight(state: GameState, fromHome: boolean): GameState {
   const guards = stillHome.filter((s) => s.job === "guard").length;
   const pressure = nightPressure(next.day);
   const floorP = 0.04 * Math.min(1, next.day / 8);
-  const raidP = clamp(((100 - barricade) / 170) * pressure - guards * 0.055 - watch * 0.04, floorP, 0.75);
+  const raidRaw = clamp(((100 - barricade) / 170) * pressure - guards * 0.055 - watch * 0.04, floorP, 0.9);
+  const raidP = raidChance(raidRaw, next);
   const raid = chance(next.rng, raidP);
   next = { ...next, rng: raid.r };
   if (raid.ok && living(next).length > 0) {

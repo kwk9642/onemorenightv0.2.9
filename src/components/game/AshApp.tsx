@@ -9,9 +9,11 @@ import { BuildScreen, RosterScreen, ShelterScreen } from "./HubScreens";
 import { MapScreen, SquadScreen } from "./MapScreens";
 import { EncounterScreen, EndScreen, MissionScreen, OccupyScreen } from "./MissionScreens";
 import { ShopScreen } from "./ShopScreen";
+import { ModeScreen } from "./ModeScreen";
 import { TitleScreen } from "./TitleScreen";
 import { Shell } from "./chrome";
 import { DataBible } from "./DataBible";
+import { DevLogSheet } from "./DevLogSheet";
 import { DispatchPanel } from "./DispatchPanel";
 
 class GameCatch extends Component<{ children: ReactNode }, { crashed: boolean }> {
@@ -55,6 +57,8 @@ export function AshApp() {
   const help = useGame((s) => s.help);
   const closeHelp = useGame((s) => s.closeHelp);
   const dispatchOpen = useGame((s) => s.dispatchOpen);
+  const logOpen = useGame((s) => s.logOpen);
+  const closeLog = useGame((s) => s.closeLog);
   const raw = run?.ended ? "end" : run?.screen;
   const screen =
     raw === "title" || raw === "create" ? "shelter" : (raw ?? (menu === "create" ? "create" : menu === "shop" ? "shop" : "title"));
@@ -76,7 +80,7 @@ export function AshApp() {
       setBgm("off");
       return;
     }
-    if (!run || screen === "title" || screen === "create" || menu === "shop") setBgm("title");
+    if (!run || screen === "title" || screen === "create" || menu === "shop" || menu === "mode") setBgm("title");
     else if (screen === "end") setBgm("end");
     else if (screen === "occupy") setBgm("occupy");
     else if (screen === "mission" || screen === "encounter") setBgm("mission");
@@ -98,6 +102,11 @@ export function AshApp() {
       <DataBible onClose={closeHelp} />
     </div>
   ) : null;
+  const logSheet = logOpen ? (
+    <div className="fixed inset-0 z-50 bg-bg">
+      <DevLogSheet onClose={closeLog} />
+    </div>
+  ) : null;
   const dispatchSheet =
     run && dispatchOpen ? (
       <div className="fixed inset-0 z-40 bg-bg">
@@ -111,6 +120,16 @@ export function AshApp() {
         <>
           <CreateScreen />
           {bible}
+          {logSheet}
+        </>
+      );
+    }
+    if (menu === "mode") {
+      return (
+        <>
+          <ModeScreen />
+          {bible}
+          {logSheet}
         </>
       );
     }
@@ -118,6 +137,7 @@ export function AshApp() {
       <>
         <TitleScreen muted={muted} />
         {bible}
+        {logSheet}
       </>
     );
   }
@@ -144,6 +164,7 @@ export function AshApp() {
         <ShelterScreen state={run} />
       )}
       {bible}
+      {logSheet}
       {dispatchSheet}
     </GameCatch>
   );

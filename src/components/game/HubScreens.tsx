@@ -43,6 +43,7 @@ export function ShelterScreen({ state }: { state: GameState }) {
   const clearNotices = useGame((s) => s.clearNotices);
   const parkTitle = useGame((s) => s.parkTitle);
   const openHelp = useGame((s) => s.openHelp);
+  const openLog = useGame((s) => s.openLog);
   const openDispatch = useGame((s) => s.openDispatch);
   const loc = locById(state.shelter.locationId);
   const people = living(state);
@@ -128,6 +129,13 @@ export function ShelterScreen({ state }: { state: GameState }) {
           className="text-left text-[11px] tracking-[0.16em] text-muted uppercase"
         >
           {tt("bible.openBtn")}
+        </button>
+        <button
+          type="button"
+          onClick={openLog}
+          className="text-left text-[11px] tracking-[0.16em] text-muted uppercase"
+        >
+          {tt("log.openBtn")}
         </button>
         <button
           type="button"

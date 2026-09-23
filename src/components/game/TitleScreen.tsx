@@ -24,8 +24,9 @@ export function TitleScreen({ muted }: { muted: boolean }) {
   const tt = useT();
   const loc = getLocale();
   const continueGame = useGame((s) => s.continueGame);
-  const openCreate = useGame((s) => s.openCreate);
+  const openMode = useGame((s) => s.openMode);
   const openHelp = useGame((s) => s.openHelp);
+  const openLog = useGame((s) => s.openLog);
   const hasSave = useGame((s) => s.hasSave);
   const savePeek = useGame((s) => s.savePeek);
   const toggleMute = useGame((s) => s.toggleMute);
@@ -105,12 +106,17 @@ export function TitleScreen({ muted }: { muted: boolean }) {
                 </Button>
               </div>
             ) : null}
-            <Button size="lg" variant={hasSave ? "secondary" : "default"} className="w-full" onClick={openCreate}>
+            <Button size="lg" variant={hasSave ? "secondary" : "default"} className="w-full" onClick={openMode}>
               {tt("ui.new")}
             </Button>
-            <Button size="lg" variant="secondary" className="w-full" onClick={openHelp}>
-              {tt("bible.openBtn")}
-            </Button>
+            <div className="grid grid-cols-2 gap-2">
+              <Button size="lg" variant="secondary" className="w-full" onClick={openHelp}>
+                {tt("bible.openBtn")}
+              </Button>
+              <Button size="lg" variant="secondary" className="w-full" onClick={openLog}>
+                {tt("log.openBtn")}
+              </Button>
+            </div>
             <button
               type="button"
               onClick={() => setFb(true)}
@@ -148,6 +154,13 @@ export function TitleScreen({ muted }: { muted: boolean }) {
                   <img src={asset(shot.src.split("?")[0])} alt="" className="w-full rounded-md border border-border" />
                 </div>
               ))}
+              <a
+                href="/one-more-night-v0.2.zip"
+                download
+                className="mb-4 flex h-11 items-center justify-center rounded-md border border-border bg-surface text-sm"
+              >
+                {tt("ui.zip")}
+              </a>
             </div>
           </div>
         ) : null}

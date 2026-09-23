@@ -2,12 +2,12 @@ import { i as __toESM } from "../_runtime.mjs";
 import { n as require_react } from "../_libs/@radix-ui/react-compose-refs+[...].mjs";
 import { v as require_jsx_runtime } from "../_libs/@tanstack/react-router+[...].mjs";
 import { C as BookOpen, S as Cigarette, T as Apple, _ as House, b as CookingPot, c as Sparkles, d as ScrollText, f as Package, g as KeyRound, h as Leaf, i as Users, l as Shield, m as Map$1, n as VolumeX, o as Stethoscope, p as Medal, r as Volume2, s as Sprout, t as Wrench, u as ShieldCheck, v as Hammer, w as Ban, x as Compass, y as Flame } from "../_libs/lucide-react.mjs";
-import { n as Route } from "./router-D8B6lfhN.mjs";
+import { n as Route } from "./router-D28X_Kts.mjs";
 import { t as create } from "../_libs/zustand.mjs";
 import { n as clsx, t as cva } from "../_libs/class-variance-authority+clsx.mjs";
 import { t as Slot } from "../_libs/radix-ui__react-slot.mjs";
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-C-NeMstj.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-XCvRsKyu.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 /** Public-file URL that works on `/` and itch.io `./` base. */
@@ -1488,7 +1488,7 @@ var dispatchEn = {
 	"dispatch.pack": "Take food {food} · water {water} · 1 action",
 	"dispatch.packShort": "Not enough rations. They go hungry. Worse odds.",
 	"dispatch.away": "Out",
-	"dispatch.out": "{names} are out ({task}). Back after you sleep.",
+	"dispatch.out": "{names} — out ({task}). Back after you sleep.",
 	"dispatch.backTonight": "Back tonight",
 	"dispatch.stillOut": "Not back yet",
 	"dispatch.open": "Send out",
@@ -1691,6 +1691,63 @@ var dispatchKo = {
 	"bible.play.dispatch.body": "두 명부터. 하나는 남긴다. 행동 1, 사람당 식량 1·물 1. 연료 없음. 집 가장자리를 걷고 자면 돌아온다. 익숙한 것을 찾는다. 의료/농사 약, 수색/제작 자재, 농사/야외 식량. 「특기로」는 각자 손. 빈손, 부상, 하루 지연, 온실, 지하실, 사람, 지도가 있다. 출격이 아니다. 출격은 지도를 쓸고, 파견은 남은 손으로 집을 먹인다.",
 	"bible.rule.dispatch": "파견",
 	"bible.rule.dispatch.body": "생존자 2부터. 최대 2, 최소 1 잔류. 행동 1. 굶어도 보낼 수 있으나 위험. 잠에서 결산. 나간 사람은 집안일과 경계를 안 한다. 벽이 낮으면 남겨 둔 한 사람이 야습을 맞는다."
+};
+/** Chrome strings for the in-game devlog. Last-merged so ui.ver stays honest. */
+var logZh = {
+	"ui.ver": "v0.2 · 免費文字據點",
+	"ui.zip": "下載 v0.2 ZIP（itch 上傳用）",
+	"log.openBtn": "開發日誌",
+	"log.kicker": "版本",
+	"log.close": "關閉",
+	"log.title": "開發日誌",
+	"log.body": "v0.1 是初代系統。v0.2 是玩家打完三十晚之後的更新。以後每次公開更新都寫在這裡，itch 主頁貼同一份。不是下載文件。",
+	"log.latest": "目前",
+	"log.copyItch": "複製 itch 主頁文案",
+	"log.copied": "已複製，去 itch 專案說明貼上",
+	"log.itchHint": "itch 的 Description 直接貼這段。換語言再複製一次。遊戲裡看到的就是這份。",
+	"fb.preview": "v0.2 已修"
+};
+var logEn = {
+	"ui.ver": "v0.2 · free text house",
+	"ui.zip": "Download v0.2 ZIP for itch",
+	"log.openBtn": "Dev log",
+	"log.kicker": "Versions",
+	"log.close": "Close",
+	"log.title": "Dev log",
+	"log.body": "v0.1 is the first system. v0.2 is what thirty nights of play asked for. Future public updates are written here. The itch page gets the same text. Not a download.",
+	"log.latest": "Now",
+	"log.copyItch": "Copy itch description",
+	"log.copied": "Copied. Paste into the itch project description.",
+	"log.itchHint": "Paste into itch Description. Switch language and copy again. What you read in the game is this file.",
+	"fb.preview": "Fixed in v0.2"
+};
+var logJa = {
+	"ui.ver": "v0.2 · 無料の文字拠点",
+	"ui.zip": "itch 用 v0.2 ZIP",
+	"log.openBtn": "開発日誌",
+	"log.kicker": "版",
+	"log.close": "閉じる",
+	"log.title": "開発日誌",
+	"log.body": "v0.1 が最初の仕組み。v0.2 は三十晩遊んだあとの更新。以後の公開更新もここに書く。itch のページも同じ文。ダウンロードではない。",
+	"log.latest": "いま",
+	"log.copyItch": "itch 説明をコピー",
+	"log.copied": "コピーした。itch の説明に貼る。",
+	"log.itchHint": "itch の Description に貼る。言語を切り替えてもう一度。ゲームで読む文がこれ。",
+	"fb.preview": "v0.2 で修正"
+};
+var logKo = {
+	"ui.ver": "v0.2 · 무료 텍스트 거점",
+	"ui.zip": "itch용 v0.2 ZIP",
+	"log.openBtn": "개발 일지",
+	"log.kicker": "버전",
+	"log.close": "닫기",
+	"log.title": "개발 일지",
+	"log.body": "v0.1이 첫 시스템. v0.2는 삼십 밤을 살고 돌아온 업데이트다. 이후 공개 업데이트도 여기에 쓴다. itch 페이지도 같은 글. 다운로드가 아니다.",
+	"log.latest": "지금",
+	"log.copyItch": "itch 설명 복사",
+	"log.copied": "복사됨. itch 프로젝트 설명에 붙여라.",
+	"log.itchHint": "itch Description에 붙여라. 언어를 바꾸고 다시 복사. 게임에서 읽는 글이 이것이다.",
+	"fb.preview": "v0.2에서 고침"
 };
 var LOCALES = [
 	{
@@ -5264,7 +5321,8 @@ var DICT = {
 		...helpZh,
 		...whyZh,
 		...skillZh,
-		...dispatchZh
+		...dispatchZh,
+		...logZh
 	},
 	ja: {
 		...ja,
@@ -5274,7 +5332,8 @@ var DICT = {
 		...helpJa,
 		...whyJa,
 		...skillJa,
-		...dispatchJa
+		...dispatchJa,
+		...logJa
 	},
 	en: {
 		...en,
@@ -5284,7 +5343,8 @@ var DICT = {
 		...helpEn,
 		...whyEn,
 		...skillEn,
-		...dispatchEn
+		...dispatchEn,
+		...logEn
 	},
 	ko: {
 		...ko,
@@ -5294,7 +5354,8 @@ var DICT = {
 		...helpKo,
 		...whyKo,
 		...skillKo,
-		...dispatchKo
+		...dispatchKo,
+		...logKo
 	}
 };
 function tRoom(name) {
@@ -12813,6 +12874,7 @@ var useGame = create((set, get) => ({
 	savePeek: null,
 	help: false,
 	dispatchOpen: false,
+	logOpen: false,
 	menu: "title",
 	muted: false,
 	boot: () => {
@@ -12842,7 +12904,11 @@ var useGame = create((set, get) => ({
 	openCreate: () => {
 		unlockAudio();
 		click();
-		set({ menu: "create" });
+		set({
+			menu: "create",
+			logOpen: false,
+			dispatchOpen: false
+		});
 	},
 	openTitle: () => set({ menu: "title" }),
 	parkTitle: () => {
@@ -12852,6 +12918,7 @@ var useGame = create((set, get) => ({
 			run: null,
 			menu: "title",
 			dispatchOpen: false,
+			logOpen: false,
 			hasSave: !!run || get().hasSave,
 			savePeek: peekOf(run) ?? get().savePeek
 		});
@@ -12859,7 +12926,10 @@ var useGame = create((set, get) => ({
 	openShop: () => {
 		unlockAudio();
 		click();
-		set({ menu: "shop" });
+		set({
+			menu: "shop",
+			logOpen: false
+		});
 	},
 	closeShop: () => {
 		click();
@@ -12870,6 +12940,11 @@ var useGame = create((set, get) => ({
 		set({ help: true });
 	},
 	closeHelp: () => set({ help: false }),
+	openLog: () => {
+		click();
+		set({ logOpen: true });
+	},
+	closeLog: () => set({ logOpen: false }),
 	openDispatch: () => {
 		click();
 		set({ dispatchOpen: true });
@@ -12898,7 +12973,9 @@ var useGame = create((set, get) => ({
 			savePeek: peekOf(run),
 			menu: "title",
 			muted: run.muted,
-			help: false
+			help: false,
+			logOpen: false,
+			dispatchOpen: false
 		});
 	},
 	continueGame: () => {
@@ -12910,11 +12987,14 @@ var useGame = create((set, get) => ({
 			hasSave: true,
 			savePeek: peekOf(run),
 			muted: !!run.muted,
-			help: false
+			help: false,
+			dispatchOpen: false,
+			logOpen: false
 		});
 		else set({
 			hasSave: false,
-			savePeek: null
+			savePeek: null,
+			logOpen: false
 		});
 	},
 	abandon: () => {
@@ -12924,7 +13004,9 @@ var useGame = create((set, get) => ({
 			hasSave: false,
 			savePeek: null,
 			menu: "title",
-			help: false
+			help: false,
+			logOpen: false,
+			dispatchOpen: false
 		});
 	},
 	setScreen: (screen) => {
@@ -14450,6 +14532,7 @@ function ShelterScreen({ state }) {
 	const clearNotices = useGame((s) => s.clearNotices);
 	const parkTitle = useGame((s) => s.parkTitle);
 	const openHelp = useGame((s) => s.openHelp);
+	const openLog = useGame((s) => s.openLog);
 	const openDispatch = useGame((s) => s.openDispatch);
 	const loc = locById(state.shelter.locationId);
 	const people = living(state);
@@ -14558,17 +14641,26 @@ function ShelterScreen({ state }) {
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 				className: "mb-4 flex gap-4",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-					type: "button",
-					onClick: openHelp,
-					className: "text-left text-[11px] tracking-[0.16em] text-muted uppercase",
-					children: tt("bible.openBtn")
-				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-					type: "button",
-					onClick: parkTitle,
-					className: "text-left text-[11px] tracking-[0.16em] text-muted uppercase",
-					children: tt("ui.title")
-				})]
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						type: "button",
+						onClick: openHelp,
+						className: "text-left text-[11px] tracking-[0.16em] text-muted uppercase",
+						children: tt("bible.openBtn")
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						type: "button",
+						onClick: openLog,
+						className: "text-left text-[11px] tracking-[0.16em] text-muted uppercase",
+						children: tt("log.openBtn")
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						type: "button",
+						onClick: parkTitle,
+						className: "text-left text-[11px] tracking-[0.16em] text-muted uppercase",
+						children: tt("ui.title")
+					})
+				]
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
 				className: "mb-2 text-[11px] tracking-[0.16em] text-muted uppercase",
@@ -16187,6 +16279,7 @@ function TitleScreen({ muted }) {
 	const continueGame = useGame((s) => s.continueGame);
 	const openCreate = useGame((s) => s.openCreate);
 	const openHelp = useGame((s) => s.openHelp);
+	const openLog = useGame((s) => s.openLog);
 	const hasSave = useGame((s) => s.hasSave);
 	const savePeek = useGame((s) => s.savePeek);
 	const toggleMute = useGame((s) => s.toggleMute);
@@ -16274,12 +16367,21 @@ function TitleScreen({ muted }) {
 							onClick: openCreate,
 							children: tt("ui.new")
 						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-							size: "lg",
-							variant: "secondary",
-							className: "w-full",
-							onClick: openHelp,
-							children: tt("bible.openBtn")
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "grid grid-cols-2 gap-2",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+								size: "lg",
+								variant: "secondary",
+								className: "w-full",
+								onClick: openHelp,
+								children: tt("bible.openBtn")
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+								size: "lg",
+								variant: "secondary",
+								className: "w-full",
+								onClick: openLog,
+								children: tt("log.openBtn")
+							})]
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 							type: "button",
@@ -16329,7 +16431,13 @@ function TitleScreen({ muted }) {
 								alt: "",
 								className: "w-full rounded-md border border-border"
 							})]
-						}, shot.src))
+						}, shot.src)),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", {
+							href: "/one-more-night-v0.2.zip",
+							download: true,
+							className: "mb-4 flex h-11 items-center justify-center rounded-md border border-border bg-surface text-sm",
+							children: tt("ui.zip")
+						})
 					]
 				})]
 			}) : null
@@ -16545,6 +16653,202 @@ function DataBible({ onClose }) {
 					meta: c.meta,
 					body: c.body
 				}, c.key))]
+			})
+		]
+	});
+}
+var L = (zh, en, ja, ko) => ({
+	zh,
+	en,
+	ja,
+	ko
+});
+var DEVLOG = [{
+	id: "0.2",
+	version: "0.2",
+	date: "2026-09-22",
+	title: L("v0.2　玩家打完三十晚之後", "v0.2  After thirty nights", "v0.2　三十晩のあと", "v0.2　30밤 이후"),
+	kicker: L("公開更新", "Public update", "公開更新", "공개 업데이트"),
+	sections: [
+		{
+			heading: L("這一版為什麼存在", "Why this build", "なぜこの版か", "이 버전이 나온 이유"),
+			body: L("v0.1 是免費原型，讓人整局任玩。有人打到第三、四十晚回來問：後面要做什麼？為什麼牆在那、醫務室按不了、地圖寫已清理但其實還有兩隻、裝備數字看不懂、東西丟不掉、搜得太輕鬆。這一版把那些問題一併收進文字遊戲裡，沒有另開戰場。", "v0.1 was a free prototype. People lived thirty, forty nights and came back: what now? Why is the wall there, why won't the infirmary take materials, why does the map say cleared with two left, what do gear numbers do, why can't I throw kit away, why is quiet search so fat. This build folds those answers into the text game. No second combat mode.", "v0.1 は無料の原型。三十、四十晩生きて戻ってきた声：この先は何だ。壁は何のため、医務室はなぜ押せない、地図は掃いたのに二匹、装備の数字は何か、捨てられない、隠密が太りすぎ。この版はそれを文字のまま直す。別の戦場は開かない。", "v0.1은 무료 원형이었다. 삼십, 사십 밤을 살고 돌아온 말: 이제 뭘 하나. 벽은 왜 있나, 의무실은 왜 안 올라가, 지도는 청소인데 두 마리, 장비 숫자는 뭔가, 버릴 수가 없다, 은밀이 너무 많다. 이 판은 그걸 텍스트 그대로 고친다. 다른 전장은 안 연다.")
+		},
+		{
+			heading: L("白天：六格行動", "Day: six actions", "昼：行動六", "낮: 행동 6칸"),
+			body: L("一天只有六格。移動、搜索、戰鬥、下一間各 1。建造 2，補牆 1。撤離不睡覺、不耗格。地點的物資是有限的，搜光就沒有。悄悄搜索幾乎不出聲，但大約只有徹底翻的四成。大聲會引僵屍。地圖不再謊稱已清理——還有幾隻就寫幾隻。芝加哥是遠的終點，蓋瑞是南面的鋼門。", "Six actions a day. Travel, search, fight, next room cost 1. Build 2, patch the wall 1. Extract does not sleep and costs nothing. Sites have finite stock; empty is empty. Quiet search is almost silent and about 40% of a loud rummage. Noise draws them. The map does not lie about cleared — leftover zombies stay on the pin. Chicago is the far end. Gary is the steel door south.", "一日は六。移動・捜索・戦闘・次の部屋は 1。建設 2、壁 1。撤退は眠らず、消費しない。場所の備蓄は有限。静かなら音はほぼ出ないが、徹底の四割ほど。騒げば呼ぶ。地図は「掃いた」と嘘をつかない。シカゴが遠い終わり。ゲイリーが南の鋼の門。", "하루 여섯 칸. 이동·수색·전투·다음 방은 1. 건설 2, 벽 1. 철수는 자지 않고 칸을 안 쓴다. 장소 재고는 유한하다. 은밀은 거의 조용하고, 철저의 약 40%. 시끄러우면 부른다. 지도는 청소했다고 거짓말하지 않는다. 시카고가 먼 끝. 게리가 남쪽 강철 문.")
+		},
+		{
+			heading: L("人：用過才會長", "People: use is how you grow", "人：使った手が伸びる", "사람: 써야 는다"),
+			body: L("技能 0 到 10。只有實際用過才加經驗：打架長戰鬥、翻袋長搜刮、耕田長農耕。每級寫明加什麼。出身決定學得快慢。人多才能委派——留下一個守家，最多兩個去外圍採藥、拆板、覓食。熟什麼就優先搜什麼。可能空手、帶傷、迷路，或撞上溫室、地窖、活人、一張地圖。這不是出征。", "Skills run 0–10. XP only from doing the thing: fights raise combat, rummaging raises scavenge, the garden raises farming. Each rank says what it adds. Starting level locks how fast you learn. Spare hands can be sent out — leave one home, two at most, around the house for herbs, boards, a creek. They search what they know. They can come back empty, cut, a day late, or with a greenhouse, a cellar, a stranger, a map. That is not a raid.", "技能は 0 から 10。使った手だけが伸びる。殴れば戦闘、漁れば捜索、耕せば農耕。各級に何が増えるか書いてある。生まれで伸び方が決まる。人が余れば派遣できる。一人は家に残し、多くて二人。薬草、板、小川。得意なものを先に取る。空手、傷、一日遅れ、温室、地下室、他人、地図がありうる。出撃ではない。", "기술 0에서 10. 실제로 쓴 손만 는다. 싸움은 전투, 뒤지는 수색, 밭은 농사. 각 급이 무엇을 더하는지 적혀 있다. 출발이 배우는 속도를 잠근다. 손이 남으면 파견할 수 있다. 하나는 집, 최대 둘. 약초, 판자, 개울. 익숙한 것을 먼저 찾는다. 빈손, 상처, 하루 늦음, 온실, 지하실, 사람, 지도. 출격이 아니다.")
+		},
+		{
+			heading: L("家：夜會來人", "House: night comes in", "家：夜は入ってくる", "집: 밤이 들어온다"),
+			body: L("牆低、天數越高，過夜越容易被襲。警戒和哨塔減一點。食物超過十會腐。用不到的裝備可以丟掉，爛到還能拆的會變成建材。房間、工作、裝備的說明寫在按鈕旁邊和資料庫裡——這是文字遊戲，字就是規則。資料庫在遊戲裡打開，不是下載一份文件。", "Low walls and later days draw raids. Guard duty and the tower shave the odds. Food over ten rots. Kit you do not need can be thrown; salvage above a threshold becomes lumber. Rooms, jobs, and gear say what they do next to the button and in the handbook. This is a text game. The words are the rules. The handbook opens in the game. It is not a file you download.", "壁が低く日が経つと夜襲。警戒と塔が少し減らす。食料が十を超えると腐る。要らない装備は捨てられる。まだ使える壊れは材になる。部屋も仕事も装備も、ボタンの横と資料に何のためか書いてある。これは文字のゲーム。字が規則。資料はゲームの中で開く。ダウンロードではない。", "벽이 낮고 날이 갈수록 야습. 경계와 탑이 조금 줄인다. 식량 10이 넘으면 썩는다. 안 쓰는 장비는 버릴 수 있다. 어느 정도 남은 내구는 자재가 된다. 방, 일, 장비는 버튼 옆과 자료실에 용도가 있다. 텍스트 게임이다. 글자가 규칙이다. 자료실은 게임 안에서 연다. 다운로드가 아니다.")
+		},
+		{
+			heading: L("怎麼算贏，什麼沒有動", "How you win, what we left", "勝ちと、動かさなかったもの", "이기는 법, 안 건드린 것"),
+			body: L("清掉芝加哥的僵屍並佔領，這一局才結束。全軍覆沒就輸。存檔仍在這台裝置，標題有「繼續」。這一版仍然是文字。像素戰鬥、天氣、派系都還關著，不放在標題上、也不塞進這一包。", "Clear Chicago and occupy it. That is the win. Everyone dead is the loss. The save still lives on this device. Title has Continue. This is still text. Pixel fights, weather, factions stay unplugged — not on the title, not in this zip.", "シカゴを掃いて占領すれば勝ち。全滅は負け。記録はこの端末。タイトルに「続きから」。これはまだ文字。画素の戦闘、天候、派閥は入れない。タイトルにもこの ZIP にも出さない。", "시카고를 쓸고 점령하면 이긴다. 전원이 죽으면 진다. 저장은 이 기기. 타이틀에 「이어하기」. 아직 텍스트다. 픽셀 전투, 날씨, 세력은 빼 둔다. 타이틀에도 이 압축에도 안 넣는다.")
+		}
+	]
+}, {
+	id: "0.1",
+	version: "0.1",
+	date: "2026-09-13",
+	title: L("v0.1　初代系統", "v0.1  The first system", "v0.1　最初の仕組み", "v0.1　첫 시스템"),
+	kicker: L("免費原型", "Free prototype", "無料プロトタイプ", "무료 원형"),
+	sections: [
+		{
+			heading: L("這是什麼", "What it is", "何か", "무엇인가"),
+			body: L("再活一晚是文字僵屍據點。肯塔基鄉下起家，美國中西部是真的地圖。職業、缺點、一棟破房子。目標寫在標題裡：再撐一晚。永久死亡。不收費、無試用鎖。錢不能換命。", "One More Night is a text zombie house. You start in rural Kentucky. The Midwest is a real map. Occupation, flaws, a wreck of a house. The title is the brief: last one more night. Permadeath. No paywall, no trial lock. Money cannot buy a pulse.", "『もう一晩』は文字のゾンビ拠点。ケンタッキーの田舎から。中西部は本物の地図。職業、欠点、壊れた家。題が任務：もう一晩。永久死。料金も試用制限もない。金で脈は買えない。", "『하루만 더』는 텍스트 좀비 거점이다. 켄터키 시골에서 시작한다. 중서는 실제 지도. 직업, 단점, 허물어진 집. 제목이 임무다: 하룻밤만 더. 영구 사망. 요금도 체험 제한도 없다. 돈으로 맥박은 못 산다.")
+		},
+		{
+			heading: L("一天怎麼過", "A day", "一日", "하루"),
+			body: L("白天出門：選地點、組最多三人、搜索或打架、帶東西回來。遠的城要油。晚上吃飯喝水，派人煮飯、耕田、修牆、看護、守夜、聽電台。沒人做的工就空轉。睡了才過一日。", "Day: pick a pin, take up to three, search or fight, come home with a bag. Far cities cost fuel. Night: eat, drink, cook, farm, mend, tend, watch, listen to the radio. A job with nobody in it does nothing. Sleep is what turns the day.", "昼は出る。場所を選び、多くて三人、漁るか殴るか、袋を持って帰る。遠い街は燃料。夜は食い、飲み、炊き、耕し、直し、看り、見張り、無線。誰も就かない仕事は空転。眠ると日が変わる。", "낮에 나간다. 장소를 고르고 최대 셋, 뒤지거나 싸우고 가방을 들고 돌아온다. 먼 도시는 연료. 밤에는 먹고 마시고 요리하고 갈고 고치고 간호하고 지키고 무전을 듣는다. 빈 일은 헛돈다. 잠이 날을 넘긴다.")
+		},
+		{
+			heading: L("人", "People", "人", "사람"),
+			body: L("八個職業決定起手技能和一把武器。特質有好有壞，點數要自己算。情緒太低，出不了門也做不了工。關係會變——陌生人、相識、朋友、情人。其中一個死了，另一個會垮。", "Eight occupations lock starting skills and a weapon. Traits help and hurt; you spend the points. Mood too low and they will not leave the house or work. Bonds move: stranger, known, friend, lover. One dies, the other drops.", "職業は八。初期技能と武器が決まる。特性は功も罪も。点は自分で。気分が底なら出られないし働けない。関係は動く。他人、顔見知り、友、恋人。片方が死ぬと、もう片方は折れる。", "직업 여덟. 시작 기술과 무기가 잠긴다. 특성은 득과 실. 점수는 네가 센다. 기분이 바닥이면 문 밖도 일도 없다. 관계는 움직인다. 남, 아는 사이, 친구, 연인. 하나가 죽으면 다른 하나가 꺾인다.")
+		},
+		{
+			heading: L("房子", "The house", "家", "집"),
+			body: L("寢室是床位。廚房讓晚飯少耗一點。集水器產水。菜園要人耕。工坊派人打造才修裝備。醫務室讓看護有效。電台照亮地圖、偶爾聽到人。哨塔減夜襲。牆是夜裡的門。佔領新據點，容量和設施跟那棟走，舊的升級不會帶走。", "Beds are capacity. The kitchen trims supper. The cistern makes water. The garden needs a farmer. The shop only mends kit if someone crafts. The infirmary makes tending real. Radio lights the map and sometimes a voice. The tower cuts raids. The wall is the door at night. Occupy a new pin and capacity and rooms follow that building. Old upgrades do not travel.", "寝室が定員。台所は夕食を少し減らす。雨水が水を出す。畑は人が耕す。工房は「作る」を就けた夜だけ装備を直す。医務室で看護が効く。無線は地図を灯し、たまに声。塔が夜襲を削る。壁が夜の扉。新しい拠点を占領すると定員と部屋はそこの建物に従う。古い改修は持っていけない。", "침실이 정원. 부엌은 저녁을 조금 줄인다. 집수기가 물을 만든다. 밭은 사람이 간다. 공방은 「제작」을 넣은 밤에만 장비를 고친다. 의무실이 있어야 간호가 된다. 무전은 지도를 밝히고 가끔 목소리를. 탑이 야습을 깎는다. 벽이 밤의 문. 새 거점을 점령하면 정원과 방은 그 건물을 따른다. 옛 업그레이드는 안 가져간다.")
+		},
+		{
+			heading: L("出門", "Going out", "外出", "외출"),
+			body: L("地圖上選一個看得到的地方。安靜翻、徹底翻、或打。槍要子彈。側擊看潛行。帶回來的東西進倉庫，可以穿上。清光一區才能搬家。床不夠，佔領只是換地方餓死。", "Pick a pin you can see. Search quiet, search loud, or fight. Guns want ammo. Flank wants stealth. What you bring goes to the stash and can be worn. You only move house when the site is empty of them. Not enough beds and occupying is starving in a new room.", "見える場所を選ぶ。静かに漁るか、徹底するか、殴るか。銃は弾。側面は隠密。持ち帰ったものは倉庫、着られる。掃いてから引っ越せる。ベッドが足りなければ、占領は別の部屋で餓死するだけ。", "보이는 핀을 고른다. 조용히 뒤지거나, 철저히 하거나, 싸운다. 총은 탄약. 측면은 은신. 가져온 것은 창고, 입을 수 있다. 쓸어야 이사한다. 침대가 모자라면 점령은 다른 방에서 굶는 일이다.")
+		},
+		{
+			heading: L("死與存檔", "Death and the save", "死と記録", "죽음과 저장"),
+			body: L("最後一個倒下去，這一局結束。存檔寫在這台裝置上。清資料就沒了。標題的繼續會讀它。新的倖存會蓋掉舊的。", "When the last one falls, the run ends. The save is on this device. Clear the data and it is gone. Continue on the title reads it. A new survivor overwrites the old one.", "最後の一人が倒れたら終わり。記録はこの端末。消したら無い。タイトルの続きからがそれを読む。新しい生存は古いのを上書きする。", "마지막 한 사람이 쓰러지면 끝. 저장은 이 기기. 지우면 없다. 타이틀의 이어하기가 읽는다. 새 생존은 옛것을 덮는다.")
+		}
+	]
+}];
+function locText(rec, loc) {
+	return rec[loc] ?? rec.zh;
+}
+function itchPageText(loc) {
+	const lines = [];
+	if (loc === "zh") lines.push("再活一晚（One More Night）是免費文字僵屍據點。肯塔基鄉下起家，美國中西部是真的地圖。一晚一命。不收費。", "", "開發日誌寫在遊戲標題的「開發日誌」裡，和這頁同一份。以後每次更新都從這裡報告，不另開一篇消失的 itch 文。", "");
+	else if (loc === "en") lines.push("One More Night is a free text zombie house. Rural Kentucky. A real Midwest map. One night. One life. No paywall.", "", "The same devlog lives under Dev log on the title screen. Future updates are posted there, not in a second itch essay that goes stale.", "");
+	else if (loc === "ja") lines.push("『もう一晩』は無料の文字ゾンビ拠点。ケンタッキーの田舎。本物の中西部地図。一晩、一条の命。料金なし。", "", "同じ開発日誌がタイトルの「開発日誌」にある。以後の更新もそこに書く。itch に消える別文は作らない。", "");
+	else lines.push("『하루만 더』는 무료 텍스트 좀비 거점이다. 켄터키 시골. 실제 중서 지도. 하룻밤, 목숨 하나. 요금 없음.", "", "같은 개발 일지가 타이틀의 「개발 일지」에 있다. 이후 업데이트도 거기에 쓴다. itch에 사라지는 다른 글을 만들지 않는다.", "");
+	for (const entry of DEVLOG) {
+		lines.push(`v${entry.version} · ${entry.date}`);
+		lines.push(locText(entry.title, loc));
+		lines.push(locText(entry.kicker, loc));
+		lines.push("");
+		for (const s of entry.sections) {
+			lines.push(locText(s.heading, loc));
+			lines.push(locText(s.body, loc));
+			lines.push("");
+		}
+		lines.push("—");
+		lines.push("");
+	}
+	return lines.join("\n").replace(/\n—\n\n$/, "\n").trim() + "\n";
+}
+function DevLogSheet({ onClose }) {
+	const tt = useT();
+	const loc = getLocale();
+	const [sel, setSel] = (0, import_react.useState)(DEVLOG[0]?.id ?? "0.2");
+	const [copied, setCopied] = (0, import_react.useState)(false);
+	const entry = DEVLOG.find((e) => e.id === sel) ?? DEVLOG[0];
+	const copy = async () => {
+		const body = itchPageText(loc);
+		try {
+			await navigator.clipboard.writeText(body);
+		} catch {
+			const ta = document.createElement("textarea");
+			ta.value = body;
+			document.body.appendChild(ta);
+			ta.select();
+			document.execCommand("copy");
+			ta.remove();
+		}
+		setCopied(true);
+	};
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "mx-auto flex h-dvh max-w-md flex-col bg-bg text-fg",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("header", {
+				className: "px-4 pt-[max(0.75rem,env(safe-area-inset-top))] pb-2",
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex items-center justify-between gap-2",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "text-[11px] tracking-[0.16em] text-muted uppercase",
+							children: tt("log.kicker")
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "flex items-center gap-1",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(LangSwitch, {}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								type: "button",
+								className: "h-11 px-3 text-sm",
+								onClick: onClose,
+								children: tt("log.close")
+							})]
+						})]
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
+						className: "font-display text-xl tracking-wide",
+						children: tt("log.title")
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						className: "mt-1 text-xs leading-relaxed text-muted",
+						children: tt("log.body")
+					})
+				]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "flex gap-1 overflow-x-auto px-4 pb-2",
+				children: DEVLOG.map((e, i) => {
+					const on = e.id === sel;
+					return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+						type: "button",
+						onClick: () => setSel(e.id),
+						className: cn("h-11 shrink-0 rounded-md px-3 text-xs", on ? "bg-accent text-accent-fg" : "bg-surface text-muted"),
+						children: [
+							"v",
+							e.version,
+							i === 0 ? ` · ${tt("log.latest")}` : ""
+						]
+					}, e.id);
+				})
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "min-h-0 flex-1 space-y-3 overflow-y-auto px-4 pb-[max(1rem,env(safe-area-inset-bottom))]",
+				children: entry ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+						className: "text-[11px] tracking-[0.16em] text-muted uppercase",
+						children: [
+							locText(entry.kicker, loc),
+							" · ",
+							entry.date
+						]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+						className: "mt-1 font-display text-lg tracking-wide",
+						children: locText(entry.title, loc)
+					})] }),
+					entry.sections.map((s) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("article", {
+						className: "rounded-md border border-border bg-surface px-3 py-3",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+							className: "font-display text-sm tracking-wide",
+							children: locText(s.heading, loc)
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "mt-1 text-sm leading-relaxed text-muted",
+							children: locText(s.body, loc)
+						})]
+					}, locText(s.heading, loc))),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						className: "text-[11px] leading-relaxed text-faint",
+						children: tt("log.itchHint")
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+						className: "w-full",
+						onClick: copy,
+						children: copied ? tt("log.copied") : tt("log.copyItch")
+					})
+				] }) : null
 			})
 		]
 	});
@@ -16787,6 +17091,8 @@ function AshApp() {
 	const help = useGame((s) => s.help);
 	const closeHelp = useGame((s) => s.closeHelp);
 	const dispatchOpen = useGame((s) => s.dispatchOpen);
+	const logOpen = useGame((s) => s.logOpen);
+	const closeLog = useGame((s) => s.closeLog);
 	const raw = run?.ended ? "end" : run?.screen;
 	const screen = raw === "title" || raw === "create" ? "shelter" : raw ?? (menu === "create" ? "create" : menu === "shop" ? "shop" : "title");
 	(0, import_react.useEffect)(() => {
@@ -16829,17 +17135,30 @@ function AshApp() {
 		className: "fixed inset-0 z-50 bg-bg",
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DataBible, { onClose: closeHelp })
 	}) : null;
+	const logSheet = logOpen ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		className: "fixed inset-0 z-50 bg-bg",
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DevLogSheet, { onClose: closeLog })
+	}) : null;
 	const dispatchSheet = run && dispatchOpen ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 		className: "fixed inset-0 z-40 bg-bg",
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DispatchPanel, { state: run })
 	}) : null;
 	if (!run) {
-		if (menu === "create") return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CreateScreen, {}), bible] });
-		return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TitleScreen, { muted }), bible] });
+		if (menu === "create") return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CreateScreen, {}),
+			bible,
+			logSheet
+		] });
+		return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TitleScreen, { muted }),
+			bible,
+			logSheet
+		] });
 	}
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(GameCatch, { children: [
 		screen === "end" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(EndScreen, { state: run }) : screen === "encounter" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(EncounterScreen, { state: run }) : screen === "mission" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MissionScreen, { state: run }) : screen === "occupy" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(OccupyScreen, { state: run }) : screen === "squad" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SquadScreen, { state: run }) : screen === "map" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MapScreen, { state: run }) : screen === "roster" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(RosterScreen, { state: run }) : screen === "build" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BuildScreen, { state: run }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShelterScreen, { state: run }),
 		bible,
+		logSheet,
 		dispatchSheet
 	] });
 }

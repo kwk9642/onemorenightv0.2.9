@@ -26,7 +26,8 @@ import { canStartDispatch, isAway, startDispatch } from "./dispatch";
 import { clearSave, loadSave, writeSave } from "./save";
 import { click, ok, setBgm, setMuted, unlockAudio, warn } from "./audio";
 import { useShop } from "./shop";
-import type { CreateInput, DispatchTask, EquipSlot, FacilityId, GameState, GearItem, JobId, Resources } from "./types";
+import type { CreateInput, DispatchTask, EquipSlot, FacilityId, GameState, GearItem, JobId, PlayMode, Resources, SandboxOpts } from "./types";
+import { DEFAULT_SANDBOX } from "./mode";
 
 function persist(s: GameState): GameState {
   const log = s.log ?? [];
@@ -46,7 +47,13 @@ interface GameStore {
   savePeek: { day: number; loc: string } | null;
   help: boolean;
   dispatchOpen: boolean;
-  menu: "title" | "create" | "shop";
+  logOpen: boolean;
+  menu: "title" | "create" | "shop" | "mode";
+  draftMode: PlayMode;
+  draftSandbox: SandboxOpts;
+  openMode: () => void;
+  setDraftMode: (mode: PlayMode) => void;
+  setDraftSandbox: (patch: Partial<SandboxOpts>) => void;
   muted: boolean;
   boot: () => void;
   openCreate: () => void;
@@ -56,6 +63,8 @@ interface GameStore {
   closeShop: () => void;
   openHelp: () => void;
   closeHelp: () => void;
+  openLog: () => void;
+  closeLog: () => void;
   openDispatch: () => void;
   closeDispatch: () => void;
   sendDispatch: (ids: string[], task: DispatchTask) => void;
@@ -94,7 +103,10 @@ export const useGame = create<GameStore>((set, get) => ({
   savePeek: null,
   help: false,
   dispatchOpen: false,
+  logOpen: false,
   menu: "title",
+  draftMode: "normal",
+  draftSandbox: { ...DEFAULT_SANDBOX },
   muted: false,
   boot: () => {
     useShop.getState().boot();
@@ -104,27 +116,34 @@ export const useGame = create<GameStore>((set, get) => ({
       set({ hasSave: !!saved, savePeek: peekOf(run) });
       return;
     }
-    if (menu === "create" || menu === "shop") {
+    if (menu === "create" || menu === "shop" || menu === "mode") {
       set({ hasSave: !!saved, savePeek: peekOf(saved) });
       return;
     }
     set({ hasSave: !!saved, savePeek: peekOf(saved), muted: !!saved?.muted });
   },
+  openMode: () => {
+    unlockAudio();
+    click();
+    set({ menu: "mode", logOpen: false, dispatchOpen: false });
+  },
+  setDraftMode: (mode) => set({ draftMode: mode }),
+  setDraftSandbox: (patch) => set({ draftSandbox: { ...get().draftSandbox, ...patch } }),
   openCreate: () => {
     unlockAudio();
     click();
-    set({ menu: "create" });
+    set({ menu: "create", logOpen: false, dispatchOpen: false });
   },
   openTitle: () => set({ menu: "title" }),
   parkTitle: () => {
     const run = get().run;
     if (run) writeSave(run);
-    set({ run: null, menu: "title", dispatchOpen: false, hasSave: !!run || get().hasSave, savePeek: peekOf(run) ?? get().savePeek });
+    set({ run: null, menu: "title", dispatchOpen: false, logOpen: false, hasSave: !!run || get().hasSave, savePeek: peekOf(run) ?? get().savePeek });
   },
   openShop: () => {
     unlockAudio();
     click();
-    set({ menu: "shop" });
+    set({ menu: "shop", logOpen: false });
   },
   closeShop: () => {
     click();
@@ -135,6 +154,11 @@ export const useGame = create<GameStore>((set, get) => ({
     set({ help: true });
   },
   closeHelp: () => set({ help: false }),
+  openLog: () => {
+    click();
+    set({ logOpen: true });
+  },
+  closeLog: () => set({ logOpen: false }),
   openDispatch: () => {
     click();
     set({ dispatchOpen: true });
@@ -153,19 +177,19 @@ export const useGame = create<GameStore>((set, get) => ({
   newGame: (input) => {
     unlockAudio();
     ok();
-    const run = persist(createNewGame(input));
-    set({ run, hasSave: true, savePeek: peekOf(run), menu: "title", muted: run.muted, help: false });
+    const run = persist(createNewGame({ ...input, mode: get().draftMode, sandbox: get().draftSandbox }));
+    set({ run, hasSave: true, savePeek: peekOf(run), menu: "title", muted: run.muted, help: false, logOpen: false, dispatchOpen: false });
   },
   continueGame: () => {
     unlockAudio();
     click();
     const run = loadSave();
-    if (run) set({ run, hasSave: true, savePeek: peekOf(run), muted: !!run.muted, help: false, dispatchOpen: false });
-    else set({ hasSave: false, savePeek: null });
+    if (run) set({ run, hasSave: true, savePeek: peekOf(run), muted: !!run.muted, help: false, dispatchOpen: false, logOpen: false });
+    else set({ hasSave: false, savePeek: null, logOpen: false });
   },
   abandon: () => {
     clearSave();
-    set({ run: null, hasSave: false, savePeek: null, menu: "title", help: false });
+    set({ run: null, hasSave: false, savePeek: null, menu: "title", help: false, logOpen: false, dispatchOpen: false });
   },
   setScreen: (screen) => {
     const run = get().run;

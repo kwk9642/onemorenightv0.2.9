@@ -7,11 +7,13 @@
       "status": 200,
       "title": "再活一晚 One More Night",
       "hasCanvas": false,
-      "bodyTextLen": 90,
-      "bodyTextHash": "c7f136288e70d5d13465e27e42d2c439be8f99c37f38b8cb9a0ae1d7048dea65",
-      "bodyTextPrefix": "中 日 EN 한 V0.3 · 一天六格行動 再活一晚 ONE MORE NIGHT 提示 情緒沉到地板，人就出不了門。先過夜，",
+      "bodyTextLen": 91,
+      "bodyTextHash": "a7fc7965f3560757f093c1a6d3e3f50e760788da8e5ada462593c4a8bda865d6",
+      "bodyTextPrefix": "中日EN한 v0.2 · 免費文字據點 再活一晚 One More Night 提示 情緒沉到地板，人就出不了門。先過夜，再談出",
       "horizontalOverflow": false,
-      "consoleErrors": [],
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 ()"
+      ],
       "pageErrors": [],
       "screenshot": "/workspace/screenshots/app-builder-built.png"
     },
@@ -21,11 +23,13 @@
       "status": 200,
       "title": "再活一晚 One More Night",
       "hasCanvas": false,
-      "bodyTextLen": 90,
-      "bodyTextHash": "c7f136288e70d5d13465e27e42d2c439be8f99c37f38b8cb9a0ae1d7048dea65",
-      "bodyTextPrefix": "中 日 EN 한 V0.3 · 一天六格行動 再活一晚 ONE MORE NIGHT 提示 情緒沉到地板，人就出不了門。先過夜，",
+      "bodyTextLen": 91,
+      "bodyTextHash": "a7fc7965f3560757f093c1a6d3e3f50e760788da8e5ada462593c4a8bda865d6",
+      "bodyTextPrefix": "中日EN한 v0.2 · 免費文字據點 再活一晚 One More Night 提示 情緒沉到地板，人就出不了門。先過夜，再談出",
       "horizontalOverflow": false,
-      "consoleErrors": [],
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 ()"
+      ],
       "pageErrors": [],
       "screenshot": "/workspace/screenshots/app-builder-built-mobile.png"
     }
@@ -35,6 +39,9 @@
   "verdictFile": "/workspace/screenshots/app-builder-built.json",
   "divergesFromBaseline": true,
   "baselineReasons": [
-    "mobile: body text collapsed (187 -> 90 chars)"
+    "desktop: console/page errors appeared (1)",
+    "desktop: body text collapsed (190 -> 91 chars)",
+    "mobile: console/page errors appeared (1)",
+    "mobile: body text collapsed (203 -> 91 chars)"
   ]
 }

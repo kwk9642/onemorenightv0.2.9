@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { asset } from "@/game/asset";
 import { LOCATIONS, locById, sizeLabel } from "@/game/data";
 import { canTravel, isDiscovered, living } from "@/game/engine";
+import { fuelCost } from "@/game/mode";
 import { isAway } from "@/game/dispatch";
 import { bondOf, canMission, moodLabel, relationOf, squadRelationBonus } from "@/game/growth";
 import { tLoc, useT } from "@/game/i18n";
@@ -63,8 +64,14 @@ export function MapScreen({ state }: { state: GameState }) {
                 <span className="text-[11px] tabular-nums text-muted">
                   {home
                     ? tt("map.home")
-                    : !travel.ok
-                      ? travel.reason
+                    : fuelCost(state, loc.id) === 0
+                      ? tt("travel.near")
+                      : tt("travel.cost", { n: fuelCost(state, loc.id) })}
+                  {" · "}
+                  {!home && !travel.ok
+                    ? travel.reason
+                    : home
+                      ? ""
                       : ls.zombies > 0
                         ? tt("map.zombies", { n: ls.zombies })
                         : tt("map.cleared")}

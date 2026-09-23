@@ -15,7 +15,7 @@ var grokOgIdentity = { "site": {
 	"title": "再活一晚 One More Night",
 	"type": "x:game",
 	"card": "custom",
-	"description": "v0.1 free prototype. Overnight permadeath shelter sim. No paywall.",
+	"description": "v0.2 free text house. Overnight permadeath. Six actions a day. No paywall.",
 	"image": "/og.jpg",
 	"banner": "/x-banner.jpg"
 } };

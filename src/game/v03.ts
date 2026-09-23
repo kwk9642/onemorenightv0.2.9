@@ -105,11 +105,19 @@ export function padV03(state: GameState): GameState {
   return {
     ...state,
     rng: r,
-    version: Math.max(state.version ?? 0, 5),
+    version: Math.max(state.version ?? 0, 6),
     dayAP: state.dayAP ?? MAX_AP,
     maxAP: state.maxAP ?? MAX_AP,
     locations,
     dispatches: Array.isArray(state.dispatches) ? state.dispatches : [],
+    mode: state.mode ?? "normal",
+    stillCooldown: state.stillCooldown ?? 0,
+    shelter: state.shelter
+      ? {
+          ...state.shelter,
+          facilities: { ...state.shelter.facilities, still: state.shelter.facilities.still ?? 0 },
+        }
+      : state.shelter,
   };
 }
 

@@ -3,7 +3,7 @@ import { n as require_react } from "../_libs/@radix-ui/react-compose-refs+[...].
 import { _ as useRouter, f as createRouter, g as createRootRoute, h as createFileRoute, l as Scripts, m as lazyRouteComponent, p as Outlet, u as HeadContent, v as require_jsx_runtime } from "../_libs/@tanstack/react-router+[...].mjs";
 import { a as TriangleAlert } from "../_libs/lucide-react.mjs";
 import { a as union, i as string, n as number, r as object, t as literal } from "../_libs/zod.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-D8B6lfhN.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-D28X_Kts.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var __defProp = Object.defineProperty;
@@ -307,7 +307,7 @@ function PreviewHostBridge() {
 	}, [router]);
 	return null;
 }
-var styles_default = "/assets/styles-DWmdIJnj.css";
+var styles_default = "/assets/styles-4iHgSAOZ.css";
 var APP_NAME = "再活一晚 One More Night";
 var Route$1 = createRootRoute({
 	head: () => ({
@@ -320,7 +320,7 @@ var Route$1 = createRootRoute({
 			{ title: APP_NAME },
 			{
 				name: "description",
-				content: "再活一晚 One More Night v0.1 — 免費文字僵屍據點。一晚一命。不收費。"
+				content: "再活一晚 One More Night v0.2 — 免費文字僵屍據點。一晚一命。不收費。"
 			},
 			{
 				name: "theme-color",
@@ -373,7 +373,7 @@ var Route$1 = createRootRoute({
 		})]
 	})
 });
-var $$splitComponentImporter = () => import("./routes-C-NeMstj.mjs");
+var $$splitComponentImporter = () => import("./routes-XCvRsKyu.mjs");
 var Route = createFileRoute("/")({
 	validateSearch: (s) => ({ rd: s.rd === "bible" ? s.rd : void 0 }),
 	component: lazyRouteComponent($$splitComponentImporter, "component")

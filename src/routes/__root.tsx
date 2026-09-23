@@ -17,7 +17,7 @@ export const Route = createRootRoute({
       { title: APP_NAME },
       {
         name: "description",
-        content: "再活一晚 One More Night v0.1 — 免費文字僵屍據點。一晚一命。不收費。",
+        content: "再活一晚 One More Night v0.2 — 免費文字僵屍據點。一晚一命。不收費。",
       },
       { name: "theme-color", content: "#0d0c0a" },
     ],
