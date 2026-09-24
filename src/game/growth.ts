@@ -1,5 +1,4 @@
 import { t } from "./i18n";
-import { gearSkills } from "./gear";
 import type { GameState, Relation, SkillId, Skills, Survivor } from "./types";
 import {
   SKILL_KEYS,
@@ -187,9 +186,8 @@ export function squadRelationBonus(state: GameState, s: Survivor, squadIds: stri
 export function effectiveSkills(state: GameState, s: Survivor, squadIds?: string[]): Skills {
   const ids = squadIds ?? state.mission?.squadIds ?? [];
   const bonus = squadRelationBonus(state, s, ids);
-  const gear = gearSkills(s);
   const out = emptySkills();
-  for (const k of SKILL_KEYS) out[k] = clamp(s.skills[k] + bonus[k] + Math.round(gear[k]), 0, 10);
+  for (const k of SKILL_KEYS) out[k] = clamp(s.skills[k] + bonus[k], 0, 10);
   return out;
 }
 

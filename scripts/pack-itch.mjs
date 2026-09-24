@@ -6,7 +6,7 @@ import { join } from "node:path";
 const root = process.cwd();
 const stage = join(root, "itch-public");
 const outDir = join(root, "dist-itch");
-const zipName = "one-more-night-v0.2.zip";
+const zipName = "one-more-night-v0.2.1.zip";
 const zipPath = join(root, "public", zipName);
 
 const page = spawnSync(process.execPath, ["scripts/write-itch-page.mjs"], {
@@ -34,7 +34,7 @@ rmSync(join(stage, "art/gear/wear"), { recursive: true, force: true });
 
 writeFileSync(
   join(stage, "README.txt"),
-  "One More Night v0.2\nUpload this ZIP as-is on itch.io (HTML). Do not unzip and re-zip.\nThe in-game Dev log is the itch description. Copy it from the title screen, or paste itch-page.md.\n",
+  "One More Night v0.2.1\nUpload this ZIP as-is on itch.io (HTML). Do not unzip and re-zip.\nThe in-game Dev log is the itch description. Copy it from the title screen, or paste itch-page.md.\n",
 );
 
 const build = spawnSync("npx", ["vite", "build", "--config", "vite.itch.config.ts"], {
@@ -55,7 +55,7 @@ dest = ${JSON.stringify(zipPath)}
 os.makedirs(os.path.dirname(dest), exist_ok=True)
 if os.path.exists(dest):
     os.remove(dest)
-skip = {"one-more-night-v0.1.zip", "one-more-night-v0.2.zip"}
+skip = {"one-more-night-v0.1.zip", "one-more-night-v0.2.zip", "one-more-night-v0.2.1.zip"}
 n = 0
 with zipfile.ZipFile(dest, "w", zipfile.ZIP_DEFLATED) as z:
     for dirpath, dirnames, filenames in os.walk(root):

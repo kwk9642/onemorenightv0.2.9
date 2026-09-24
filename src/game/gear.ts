@@ -298,6 +298,17 @@ export function gearSkills(s: Survivor): Skills {
   return out;
 }
 
+export function gearActs(s: Survivor): { wall: number; mend: number; noiseCut: number; heal: number; power: number } {
+  const g = gearSkills(s);
+  return {
+    wall: Math.round(g.build),
+    mend: Math.round(g.build),
+    noiseCut: Math.max(0, Math.round(g.stealth)),
+    heal: Math.round(g.medical) * 2,
+    power: Math.round(g.combat) * 4,
+  };
+}
+
 export function armorOf(s: Survivor): { armor: number; bite: number; noise: number; fatigue: number; carry: number } {
   let armor = 0;
   let bite = 0;

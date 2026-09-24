@@ -206,6 +206,8 @@ export interface LocationState {
   threat: number;
   noiseToday: number;
   alertLevel: number;
+  infection?: number;
+  baseZombies?: number;
 }
 
 export interface Choice {
@@ -232,6 +234,7 @@ export interface MissionState {
   choices: Choice[];
   phase: "zone" | "fight" | "loot";
   fightStyle: "melee" | "gun" | "flank" | null;
+  foe?: import("./zombies").ZombieKind;
   kills: number;
 }
 

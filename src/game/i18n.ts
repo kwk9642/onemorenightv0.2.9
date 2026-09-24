@@ -1,6 +1,7 @@
 import { useSyncExternalStore } from "react";
 import { whyEn, whyJa, whyKo, whyZh } from "./why";
 import { v021En, v021Ja, v021Ko, v021Zh } from "./v021Copy";
+import { v022En, v022Ja, v022Ko, v022Zh } from "./v022Copy";
 import { skillEn, skillJa, skillKo, skillZh } from "./skillCopy";
 import { dispatchEn, dispatchJa, dispatchKo, dispatchZh } from "./dispatchCopy";
 import { logEn, logJa, logKo, logZh } from "./logCopy";
@@ -3591,10 +3592,10 @@ const helpKo: Record<string, string> = {
 };
 
 const DICT: Record<Locale, Record<string, string>> = {
-  zh: { ...zh, ...extraZh, ...v03Zh, ...mapZh, ...helpZh, ...whyZh, ...skillZh, ...dispatchZh, ...logZh, ...v021Zh },
-  ja: { ...ja, ...extraJa, ...v03Ja, ...mapJa, ...helpJa, ...whyJa, ...skillJa, ...dispatchJa, ...logJa, ...v021Ja },
-  en: { ...en, ...extraEn, ...v03En, ...mapEn, ...helpEn, ...whyEn, ...skillEn, ...dispatchEn, ...logEn, ...v021En },
-  ko: { ...ko, ...extraKo, ...v03Ko, ...mapKo, ...helpKo, ...whyKo, ...skillKo, ...dispatchKo, ...logKo, ...v021Ko },
+  zh: { ...zh, ...extraZh, ...v03Zh, ...mapZh, ...helpZh, ...whyZh, ...skillZh, ...dispatchZh, ...logZh, ...v021Zh, ...v022Zh },
+  ja: { ...ja, ...extraJa, ...v03Ja, ...mapJa, ...helpJa, ...whyJa, ...skillJa, ...dispatchJa, ...logJa, ...v021Ja, ...v022Ja },
+  en: { ...en, ...extraEn, ...v03En, ...mapEn, ...helpEn, ...whyEn, ...skillEn, ...dispatchEn, ...logEn, ...v021En, ...v022En },
+  ko: { ...ko, ...extraKo, ...v03Ko, ...mapKo, ...helpKo, ...whyKo, ...skillKo, ...dispatchKo, ...logKo, ...v021Ko, ...v022Ko },
 };
 
 export function tRoom(name: string) {

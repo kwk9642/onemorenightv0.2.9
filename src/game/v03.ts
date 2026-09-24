@@ -59,7 +59,14 @@ export function seedLoot(r: number, locId: string): { r: number; bag: Resources 
 
 export function padLocation(ls: LocationState, locId: string, r: number): { r: number; ls: LocationState } {
   if (ls.lootRemaining && ls.threat != null && ls.noiseToday != null && ls.alertLevel != null) {
-    return { r, ls };
+    return {
+      r,
+      ls: {
+        ...ls,
+        infection: ls.infection ?? 0,
+        baseZombies: ls.baseZombies ?? locById(locId).zombies,
+      },
+    };
   }
   const seeded = ls.lootRemaining ? { r, bag: ls.lootRemaining } : seedLoot(r, locId);
   return {
@@ -70,6 +77,8 @@ export function padLocation(ls: LocationState, locId: string, r: number): { r: n
       threat: ls.threat ?? 0,
       noiseToday: ls.noiseToday ?? 0,
       alertLevel: ls.alertLevel ?? 0,
+      infection: ls.infection ?? 0,
+      baseZombies: ls.baseZombies ?? locById(locId).zombies,
     },
   };
 }

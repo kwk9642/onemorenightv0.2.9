@@ -23,6 +23,42 @@ const L = (zh: string, en: string, ja: string, ko: string): Record<Locale, strin
 
 export const DEVLOG: DevLogEntry[] = [
   {
+    id: "0.2.2",
+    version: "0.2.2",
+    date: "2026-09-24",
+    title: L("v0.2.2　日子會變壞", "v0.2.2  The days get worse", "v0.2.2　日は悪くなる", "v0.2.2　날이 나빠진다"),
+    kicker: L("公開更新", "Public update", "公開更新", "공개 업데이트"),
+    sections: [
+      {
+        heading: L("這一版改了什麼", "What changed", "何が変わったか", "무엇이 바뀌었나"),
+        body: L(
+          "還沒清的鎮會慢慢變擠，鄰居不長，清過的點不會每晚長滿。第 5 晚起可能碰上先到的，第 8 晚皮厚的，第 10 晚會叫的，第 15 晚才有異變。滅絕更早，休閒更晚。夜襲傷害隨日子略升。地圖上有感染高低，不是精確數字。",
+          "Pins you have not cleared get slowly thicker. Neighbors do not. Cleared pins do not refill every night. From day 5 a fast one may arrive first, day 8 a thick one, day 10 a screamer, day 15 a mutant. Extinct earlier, casual later. Night raids hit a little harder later. The map shows infection as a word, not a precise number.",
+          "掃いていない町は少しずつ増える。隣は増えない。掃いた場所が毎晩満員には戻らない。5 日目から速い一匹、8 日目から厚い一匹、10 日目から叫ぶ一匹、15 日目から異変。絶滅は早く、気楽は遅い。夜襲の傷は日とともに少し増える。地図の感染は言葉。",
+          "안 치운 동네는 천천히 붐빈다. 이웃은 안 늘고, 치운 곳은 매일 안 찬다. 5일부터 빠른 것, 8일부터 두꺼운 것, 10일부터 우는 것, 15일부터 변이. 멸종은 더 일찍, 캐주얼은 더 늦게. 야습 피해는 날이 갈수록 조금 세다. 지도의 감염은 말이다.",
+        ),
+      },
+      {
+        heading: L("四種之外的普通", "Four words, plus the ordinary", "四つと、普通", "넷과 보통"),
+        body: L(
+          "普通的還是基準。先到的讓包抄更難、近身失手更痛。皮厚的近戰少殺一隻，槍不受影響。會叫的打完會再引來一兩隻，不超過上限。異變稀、晚、更危險。同一場一種。不新開即時戰鬥。",
+          "Walkers stay the baseline. Runners make flank harder and a missed swing hurt more. Brutes cost one melee kill; guns ignore that. Screamers pull one or two more after the fight, under the cap. Mutants are rare, late, and worse. One kind a fight. No new real-time combat.",
+          "普通は基準。速い一匹は迂回を難しくし、近接の失敗を痛くする。厚い一匹は近接の数を一つ減らす。銃は同じ。叫ぶ一匹は戦闘後に一、二匹呼ぶ。上限を超えない。異変は稀で遅く、危ない。一戦一種。即時戦闘は作らない。",
+          "보통이 기준이다. 빠른 것은 우회를 어렵게 하고 근접 실패를 더 아프게 한다. 두꺼운 것은 근접 킬을 하나 줄인다. 총은 같다. 우는 것은 전투 뒤 한두 마리를 부른다. 상한을 넘지 않는다. 변이는 드물고 늦고 더 위험하다. 한 판에 하나. 실시간 전투는 없다.",
+        ),
+      },
+      {
+        heading: L("油桶與裝備", "The still and the kit", "桶と装備", "통과 장비"),
+        body: L(
+          "油桶二級、正常：2 食物換 1 油。一級仍是 3。滅絕二級是 3，而且榨一晚歇一晚。日誌寫油桶等級和吃了幾份。裝備不再加技能等級，也不提早開包抄。手套多修一點牆和裝備，潛行裝讓搜索 quieter，醫療裝多回一點血，戰鬥裝只加近戰骰。門檻仍看練出來的等級。",
+          "Still level 2 on Normal: 2 food for 1 fuel. Level 1 is still 3. Extinct level 2 is 3, and the still rests every other night. The log names the still level and the food. Gear no longer adds skill ranks and does not unlock flank. Gloves patch a little more wall and kit. Quiet clothes cut search noise. Medical kit heals a little more. Combat kit only adds to the melee roll. Gates still use the rank you trained.",
+          "桶二級、通常は食料 2 で燃料 1。一級は 3。絶滅の二級は 3 で、一晩搾って一晩休む。日誌に等級と食料。装備は技能等級を足さない。迂回も早開けしない。手袋は壁と装備を少し多く直し、隠密の服は捜索の音を減らし、医療は回復を少し増やし、戦闘は近接の骰だけ。門は鍛えた等級。",
+          "통 2급, 보통: 식량 2에 연료 1. 1급은 그대로 3. 멸종 2급은 3이고, 하루 짜고 하루 쉰다. 일지에 등급과 식량. 장비는 기술 등급을 더하지 않고 우회를 일찍 열지 않는다. 장갑은 벽과 장비를 조금 더 고치고, 은밀 옷은 수색 소리를 줄이고, 의료는 회복을 조금 늘리고, 전투는 근접 굴림만. 문턱은 익힌 등급.",
+        ),
+      },
+    ],
+  },
+  {
     id: "0.2.1",
     version: "0.2.1",
     date: "2026-09-23",

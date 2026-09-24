@@ -14,22 +14,7 @@ import {
   traitById,
   withOccupationTraits,
 } from "./data";
-import {
-  armorOf,
-  carryOf,
-  degradeWorn,
-  dressSurvivor,
-  dmgFromArmor,
-  gearById,
-  infectFromArmor,
-  labelItem,
-  liveWeapon,
-  luckMult,
-  mintGear,
-  repairWorst,
-  rollSearchGear,
-  salvageWorn,
-} from "./gear";
+import { gearActs, armorOf, carryOf, degradeWorn, dressSurvivor, dmgFromArmor, gearById, infectFromArmor, labelItem, liveWeapon, luckMult, mintGear, repairWorst, rollSearchGear, salvageWorn } from "./gear";
 import { t, tLoc, tResBits, tRoom } from "./i18n";
 import {
   addBond,
@@ -62,6 +47,7 @@ import {
   rotAt,
   waterBill,
 } from "./mode";
+import { bumpInfection, raidDamage, rallyNight, rollKind } from "./zombies";
 import type {
   Choice,
   CreateInput,
@@ -292,6 +278,8 @@ export function createNewGame(input: CreateInput): GameState {
       threat: 0,
       noiseToday: 0,
       alertLevel: 0,
+      infection: 0,
+      baseZombies: loc.zombies,
     };
   }
 
@@ -829,6 +817,12 @@ function fightPrompt(state: GameState): GameState {
   const m = state.mission!;
   const ls = state.locations[m.locationId];
   const squad = squadOf(state, m.squadIds);
+  let foe = m.foe;
+  if (!foe) {
+    const rolled = rollKind(state, m.locationId, false);
+    state = { ...state, rng: rolled.r, mission: { ...m, foe: rolled.kind } };
+    foe = rolled.kind;
+  }
   if (ls.zombies <= 0) {
     return {
       ...state,
@@ -856,7 +850,10 @@ function fightPrompt(state: GameState): GameState {
       hint: t("ch.flankHint"),
       disabled: (() => {
         const sneak = effectiveSkills(state, best(state, squad, "stealth"), m.squadIds);
-        return sneak.stealth < skillFx("stealth", sneak.stealth).flankNeed;
+        const trained = skillFx("stealth", sneak.stealth).flankNeed;
+        const foe = state.mission?.foe;
+        const gate = foe === "runner" ? trained + 2 : trained;
+        return sneak.stealth < gate;
       })(),
     },
     { id: "back", label: t("ch.back") },
@@ -865,9 +862,10 @@ function fightPrompt(state: GameState): GameState {
     ...state,
     mission: {
       ...m,
+      foe: state.mission?.foe,
       phase: "fight",
       promptTitle: t("ch.contact", { n: ls.zombies }),
-      promptBody: t("txt.fightBody", { zone: tRoom(m.zoneName) }),
+      promptBody: `${t("txt.fightBody", { zone: tRoom(m.zoneName) })} ${t(`foe.${state.mission?.foe ?? "walker"}`)}`,
       choices,
     },
   };
@@ -888,6 +886,8 @@ function resolveFight(state: GameState, style: "melee" | "gun" | "flank"): GameS
   const sk = effectiveSkills(state, fighter, m.squadIds);
   const w = liveWeapon(fighter);
   let power = (sk.combat * 8 + w.melee * 2) * combatMod(fighter);
+  if (style === "melee") power += gearActs(fighter).power;
+  const foe = m.foe ?? "walker";
   let ammoUse = 0;
   let noise = 1 + Math.round(armorOf(fighter).noise);
   if (style === "gun") {
@@ -906,7 +906,7 @@ function resolveFight(state: GameState, style: "melee" | "gun" | "flank"): GameS
   const cfx = skillFx("combat", sk.combat);
   const sfx = skillFx("stealth", sk.stealth);
   noise = Math.max(0, Math.round(noise * (1 - sfx.noisePct / 100)));
-  const zPow = ls.zombies * 7 + m.noise;
+  const zPow = (ls.zombies * 7 + m.noise) * (foe === "mutant" ? 1.25 : foe === "runner" ? 1.1 : 1);
   const rollA = range(r, 80, 120);
   r = rollA.r;
   const rollB = range(r, 80, 120);
@@ -915,6 +915,8 @@ function resolveFight(state: GameState, style: "melee" | "gun" | "flank"): GameS
   let kills = 1 + Math.floor(w.melee / 7) + cfx.extraKill;
   if (style === "gun") kills = 2 + ammoUse + Math.floor(sk.combat / 4) + (cfx.extraKill > 1 ? 1 : 0);
   if (style === "flank") kills = 1 + sfx.extraFlank;
+  if (foe === "brute" && style !== "gun") kills = Math.max(1, kills - 1);
+  if (foe === "mutant") kills = Math.max(1, kills - 1);
   if (score > 25) kills += 2;
   else if (score > 5) kills += 1;
   else if (score < -20) kills = Math.max(1, kills - 1);
@@ -922,6 +924,20 @@ function resolveFight(state: GameState, style: "melee" | "gun" | "flank"): GameS
   if (ls.zombies - kills > 0 && ls.zombies - kills <= 2 && score >= -12) kills = ls.zombies;
   let next: GameState = { ...state, rng: r, resources: { ...state.resources, ammo: state.resources.ammo - ammoUse } };
   next = killZombies(next, kills);
+  if (foe === "screamer") {
+    const loc = next.locations[m.locationId];
+    const cap = Math.max(loc.zombies + 2, 2);
+    const add = 1 + ((next.rng >>> 0) % 2);
+    next = {
+      ...next,
+      rng: (next.rng + 3) | 0,
+      locations: {
+        ...next.locations,
+        [m.locationId]: { ...loc, zombies: Math.min(cap, loc.zombies + add), cleared: false },
+      },
+    };
+    next = pushLog(next, t("log.screamer"));
+  }
   next = attract(next, noise, false);
   next = bumpNoise(next, m.locationId, noise, style === "gun" ? 1 : 0);
   const prevFighter = fighter;
@@ -945,6 +961,8 @@ function resolveFight(state: GameState, style: "melee" | "gun" | "flank"): GameS
     next = { ...next, rng: range(next.rng, 6, 16).r };
     infectP = style === "melee" ? 0.18 : 0.08;
   }
+  if (foe === "runner" && style === "melee" && score < 20) dmg += 6;
+  if (foe === "mutant") dmg += 6;
   if (dmg > 0) {
     const mul = state.mode === "sandbox" ? (state.sandbox?.infectMul ?? 1) : 1;
     next = hurt(next, fighter.id, dmg, infectP * mul, t("death.torn"));
@@ -969,6 +987,7 @@ function resolveFight(state: GameState, style: "melee" | "gun" | "flank"): GameS
     ...next,
     mission: {
       ...next.mission!,
+      foe: undefined,
       phase: "zone",
       promptTitle: cleared ? t("ch.clearedTitle") : tRoom(m.zoneName),
       promptBody: (cleared ? `${body} ${t("txt.canOccupy")}` : body) + (xpGainLine("combat", { ...xp, survivor: xp.survivor }) ? ` ${xpGainLine("combat", xp)}` : ""),
@@ -992,7 +1011,7 @@ function doSearch(state: GameState, loud: boolean): GameState {
   if (has(scout, "quiet") || has(scout, "gymnast") || has(scout, "burglarhands")) noiseAdd = Math.max(0, noiseAdd - 1);
   if (has(scout, "clumsy") || has(scout, "conspicuous")) noiseAdd += 2;
   if (!loud && has(scout, "burglarhands")) noiseAdd = 0;
-  noiseAdd = Math.max(0, Math.round(noiseAdd * (1 - skillFx("stealth", sk.stealth).noisePct / 100)));
+  noiseAdd = Math.max(0, Math.round(noiseAdd * (1 - skillFx("stealth", sk.stealth).noisePct / 100)) - gearActs(scout).noiseCut);
   const cur = next.mission!;
   next = attract(
     { ...next, mission: { ...cur, bag, searched: true, noise: cur.noise + noiseAdd } },
@@ -1422,7 +1441,7 @@ export function repairWall(state: GameState): GameState {
   const handy = living(state).some((s) => has(s, "handy") || has(s, "vehicleknow"));
   const builder = [...living(state)].sort((a, b) => b.skills.build - a.skills.build)[0];
   const bfx = skillFx("build", builder?.skills.build ?? 0);
-  const gain = bfx.wall + bfx.wallExtra + (handy ? 3 : 0);
+  const gain = bfx.wall + bfx.wallExtra + (builder ? gearActs(builder).wall : 0) + (handy ? 3 : 0);
   const barricade = clamp(state.shelter.barricade + gain, 0, 100);
   let next: GameState = {
     ...state,
@@ -1534,7 +1553,7 @@ export function restNight(state: GameState, fromHome: boolean): GameState {
     }
     if (job === "repair") {
       const rfx = skillFx("build", s.skills.build);
-      barricade = clamp(barricade + rfx.wall + rfx.wallExtra + (has(s, "handy") || has(s, "vehicleknow") ? 3 : 0), 0, 100);
+      barricade = clamp(barricade + rfx.wall + rfx.wallExtra + gearActs(s).wall + (has(s, "handy") || has(s, "vehicleknow") ? 3 : 0), 0, 100);
       nextS = addSkillXp(nextS, "build", 10);
     }
     if (job === "craft" && next.shelter.facilities.workshop > 0 && next.resources.materials > 0) {
@@ -1542,7 +1561,7 @@ export function restNight(state: GameState, fromHome: boolean): GameState {
       barricade = clamp(barricade + 6 + (has(s, "vehicleknow") ? 2 : 0), 0, 100);
       nextS = addSkillXp(nextS, "build", 8);
       const cfx = skillFx("build", nextS.skills.build);
-      const amt = cfx.mend + (has(s, "handy") ? 3 : 0);
+      const amt = cfx.mend + gearActs(s).mend + (has(s, "handy") ? 3 : 0);
       const shopLv = next.shelter.facilities.workshop;
       let stash = repairWorst(next.stash ?? [], amt);
       if (shopLv >= 2 || cfx.doubleMend) stash = repairWorst(stash, amt);
@@ -1653,7 +1672,7 @@ export function restNight(state: GameState, fromHome: boolean): GameState {
   if (tender && inf > 0) {
     for (const o of living(next)) {
       if (o.hp < o.maxHp) {
-        next = mapSur(next, o.id, (x) => ({ ...x, hp: clamp(x.hp + skillFx("medical", tender.skills.medical).heal, 0, x.maxHp) }));
+        next = mapSur(next, o.id, (x) => ({ ...x, hp: clamp(x.hp + skillFx("medical", tender.skills.medical).heal + gearActs(tender).heal, 0, x.maxHp) }));
       }
       if (o.infected && next.resources.medicine > medUsed && !has(tender, "hemophobic")) {
         const c = chance(next.rng, skillFx("medical", tender.skills.medical).cure);
@@ -1698,7 +1717,7 @@ export function restNight(state: GameState, fromHome: boolean): GameState {
           food: next.resources.food - cost,
           fuel: next.resources.fuel + 1,
         };
-        next = pushLog(next, t("log.press", { name: presser.name, n: cost }));
+        next = pushLog(next, t("log.press", { name: presser.name, n: cost, lv: stillLv }));
         if (modeOf(next) === "extinct") next = { ...next, stillCooldown: 1 };
       }
     }
@@ -1742,6 +1761,8 @@ export function restNight(state: GameState, fromHome: boolean): GameState {
   next = resolveDispatches(next);
   if (next.ended) return next;
 
+  next = rallyNight(next);
+  next = bumpInfection(next);
   const stillHome = living(next).filter((s) => !awayIds(next).has(s.id));
   const guards = stillHome.filter((s) => s.job === "guard").length;
   const pressure = nightPressure(next.day);
@@ -1754,7 +1775,8 @@ export function restNight(state: GameState, fromHome: boolean): GameState {
     const pool = stillHome.filter((s) => s.alive);
     const victim = pick(next.rng, pool.length ? pool : living(next));
     next = { ...next, rng: victim.r };
-    const dmg = range(next.rng, 14, 32);
+    const span = raidDamage(next.day, modeOf(next));
+    const dmg = range(next.rng, span[0], span[1]);
     next = { ...next, rng: dmg.r };
     next = hurt(next, victim.item.id, dmg.n, 0.22, t("death.raid"));
     const steal = 2 + Math.floor(next.day / 12);
