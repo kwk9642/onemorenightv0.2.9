@@ -121,6 +121,8 @@ export function padV03(state: GameState): GameState {
     dispatches: Array.isArray(state.dispatches) ? state.dispatches : [],
     mode: state.mode ?? "normal",
     stillCooldown: state.stillCooldown ?? 0,
+    herbs: state.herbs ?? [],
+    scenario: state.scenario ?? null,
     shelter: state.shelter
       ? {
           ...state.shelter,

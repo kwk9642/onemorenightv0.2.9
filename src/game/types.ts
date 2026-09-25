@@ -178,6 +178,7 @@ export interface Survivor {
   morale: number;
   fatigue: number;
   infected: boolean;
+  ailments?: import("./herbs").Ailment[];
   weapon: WeaponId;
   worn: Worn;
   stance: Stance;
@@ -267,6 +268,7 @@ export interface CreateInput {
   alloc: Partial<Skills>;
   shelterId: string;
   mode?: PlayMode;
+  scenario?: "late" | null;
   sandbox?: SandboxOpts;
 }
 
@@ -338,6 +340,8 @@ export interface GameState {
   notices: SkillNotice[];
   dispatches: DispatchParty[];
   mode: PlayMode;
+  scenario?: "late" | null;
   sandbox?: SandboxOpts;
   stillCooldown: number;
+  herbs?: import("./herbs").HerbStack[];
 }

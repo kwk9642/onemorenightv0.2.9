@@ -14,6 +14,7 @@ import {
 import { t, tLoc, useT } from "@/game/i18n";
 import { useGame } from "@/game/store";
 import type { FacilityId, GameState, JobId, ResourceId, Survivor } from "@/game/types";
+import { herbsOf, ailmentsOf } from "@/game/herbs";
 import { AP_COST, WALL_REPAIR_MATS, apOf } from "@/game/v03";
 import { cn } from "@/lib/utils";
 import { LogList, Meter, Portrait, ResourceBar, Shell, TabBar, TopStatus } from "./chrome";
@@ -33,6 +34,40 @@ function Hub({ state, children }: { state: GameState; children: ReactNode }) {
       <div className="min-h-0 flex-1 overflow-y-auto px-4 pb-4">{children}</div>
       <TabBar screen={state.screen} onTab={setScreen} />
     </Shell>
+  );
+}
+
+function HerbRow({ state }: { state: GameState }) {
+  const tt = useT();
+  const dose = useGame((s) => s.dose);
+  const people = living(state);
+  const herbs = herbsOf(state);
+  const sick = people.filter((s) => ailmentsOf(s).length);
+  if (!sick.length && !herbs.length) return null;
+  return (
+    <div className="mb-4 space-y-2 rounded-md border border-border bg-surface px-3 py-2">
+      {sick.map((s) => (
+        <p key={s.id} className="text-xs text-hp">
+          {s.name} · {ailmentsOf(s).map((a) => tt(`herb.ail.${a.id}`)).join(" · ")}
+        </p>
+      ))}
+      {herbs.map((h, i) => (
+        <div key={`${h.id}-${h.known}-${i}`} className="flex flex-wrap items-center gap-2 text-xs">
+          <span>{h.known ? tt(`herb.id.${h.id}`) : tt("herb.unknown")} ×{h.qty}</span>
+          {people.map((s) => (
+            <span key={s.id} className="flex gap-1">
+              <button type="button" className="h-8 rounded border border-border px-2" onClick={() => dose(s.id, i, "poultice")}>
+                {tt("herb.poultice")}
+              </button>
+              <button type="button" className="h-8 rounded border border-border px-2" onClick={() => dose(s.id, i, "brew")}>
+                {tt("herb.brew")}
+              </button>
+            </span>
+          ))}
+        </div>
+      ))}
+      <p className="text-[11px] text-muted">{tt("herb.bite")}</p>
+    </div>
   );
 }
 
@@ -84,6 +119,7 @@ export function ShelterScreen({ state }: { state: GameState }) {
           {crushed.length === people.length ? tt("hub.moodNoMission") : tt("hub.moodNoSquad")}
         </p>
       ) : null}
+      <HerbRow state={state} />
       <div className="mb-4 grid grid-cols-2 gap-2">
         <Button size="lg" className="w-full" onClick={() => setScreen("map")} disabled={ap < 1 || crushed.length === people.length}>
           {ap < 1 ? tt("ap.noneShort") : tt("ui.goMission")}

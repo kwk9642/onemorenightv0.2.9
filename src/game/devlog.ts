@@ -23,6 +23,42 @@ const L = (zh: string, en: string, ja: string, ko: string): Record<Locale, strin
 
 export const DEVLOG: DevLogEntry[] = [
   {
+    id: "0.2.3",
+    version: "0.2.3",
+    date: "2026-09-24",
+    title: L("v0.2.3　藥這時候才有用", "v0.2.3  Medicine is late on purpose", "v0.2.3　薬が必要になるのは今", "v0.2.3　약이 필요해지는 때"),
+    kicker: L("公開更新", "Public update", "公開更新", "공개 업데이트"),
+    sections: [
+      {
+        heading: L("這一版要解決什麼", "Why this build", "この版", "이 판"),
+        body: L(
+          "變異讓傷不再是睡一晚就好。草藥學這時候搬上來。前七晚只五味。三個用法：敷、泡、不吃。醫生認，農夫種。醫療越高，藥越像樣。咬傷仍然無藥。",
+          "Mutants made a night of sleep not enough. Herbalism comes up now. Five plants for seven nights. Poultice, brew, or leave it. The doctor names. The farmer grows. Higher medical is a better dose. The bite still has no herb.",
+          "異変のあと、一晩では足りない。薬草を上げる。最初の七晩は五味。貼る、煎じる、食べない。医者が見分け、農夫が育てる。噛み傷は無効。",
+          "변이 뒤로는 하룻밤으로 부족하다. 약초를 올린다. 첫 이레는 다섯 맛. 붙이다, 달이다, 두지 않다. 의사가 알아보고 농부가 기른다. 물림은 무효.",
+        ),
+      },
+      {
+        heading: L("病", "Sickness", "病", "병"),
+        body: L(
+          "病要有來源。開放傷口兩晚不敷會惡化。惡水來自生水。異變熱只在第 15 晚後、被異變或皮厚的近身打傷。認錯的草泡了，一晚不能出門。每人最多兩種。",
+          "Sickness needs a cause. An open wound turns after two nights. Flux comes from raw water. Mutant heat only after night 15, and only if a mutant or a brute cut you. Brew an unnamed plant and you stay in. Two ailments at most.",
+          "病には原因。開放創を二晩放置で悪化。異変熱は 15 日目以降、異変か厚い一匹の近接だけ。名のない草を煎じると一晩出られない。",
+          "병에는 원인이 있다. 열린 상처는 이틀이면 악화. 변이열은 15일 이후, 변이나 두꺼운 것의 근접만. 이름 없는 풀을 달이면 하룻밤 못 나간다.",
+        ),
+      },
+      {
+        heading: L("已經晚了", "Already late", "もう遅い", "이미 늦었다"),
+        body: L(
+          "難度旁邊多一張情境，不是第五種難度。職業自訂。第 8 晚醒來，牆低、糧少、帶傷帶熱。不是僵屍感染。芝加哥仍是終點。通關會註明。",
+          "A card beside the modes, not a fifth difficulty. Your job is yours. Night 8, low wall, little food, wound and fever. Not the bite. Chicago is still the end. A win is marked.",
+          "難易度の横の一枚。第五ではない。8日目、低い壁、少ない糧、傷と熱。噛み傷ではない。勝ちはシカゴ。",
+          "난이도 옆의 카드. 다섯 번째가 아니다. 8일, 낮은 벽, 적은 양식, 상처와 열. 물림이 아니다. 승리는 시카고.",
+        ),
+      },
+    ],
+  },
+  {
     id: "0.2.2",
     version: "0.2.2",
     date: "2026-09-24",

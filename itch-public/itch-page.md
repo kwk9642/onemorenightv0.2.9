@@ -9,6 +9,36 @@ The in-game Dev log is this file. Future public updates: add an entry at the top
 
 開發日誌寫在遊戲標題的「開發日誌」裡，和這頁同一份。以後每次更新都從這裡報告，不另開一篇消失的 itch 文。
 
+v0.2.3 · 2026-09-24
+v0.2.3　藥這時候才有用
+公開更新
+
+這一版要解決什麼
+變異讓傷不再是睡一晚就好。草藥學這時候搬上來。前七晚只五味。三個用法：敷、泡、不吃。醫生認，農夫種。醫療越高，藥越像樣。咬傷仍然無藥。
+
+病
+病要有來源。開放傷口兩晚不敷會惡化。惡水來自生水。異變熱只在第 15 晚後、被異變或皮厚的近身打傷。認錯的草泡了，一晚不能出門。每人最多兩種。
+
+已經晚了
+難度旁邊多一張情境，不是第五種難度。職業自訂。第 8 晚醒來，牆低、糧少、帶傷帶熱。不是僵屍感染。芝加哥仍是終點。通關會註明。
+
+—
+
+v0.2.2 · 2026-09-24
+v0.2.2　日子會變壞
+公開更新
+
+這一版改了什麼
+還沒清的鎮會慢慢變擠，鄰居不長，清過的點不會每晚長滿。第 5 晚起可能碰上先到的，第 8 晚皮厚的，第 10 晚會叫的，第 15 晚才有異變。滅絕更早，休閒更晚。夜襲傷害隨日子略升。地圖上有感染高低，不是精確數字。
+
+四種之外的普通
+普通的還是基準。先到的讓包抄更難、近身失手更痛。皮厚的近戰少殺一隻，槍不受影響。會叫的打完會再引來一兩隻，不超過上限。異變稀、晚、更危險。同一場一種。不新開即時戰鬥。
+
+油桶與裝備
+油桶二級、正常：2 食物換 1 油。一級仍是 3。滅絕二級是 3，而且榨一晚歇一晚。日誌寫油桶等級和吃了幾份。裝備不再加技能等級，也不提早開包抄。手套多修一點牆和裝備，潛行裝讓搜索 quieter，醫療裝多回一點血，戰鬥裝只加近戰骰。門檻仍看練出來的等級。
+
+—
+
 v0.2.1 · 2026-09-23
 v0.2.1　帳對得上
 公開修正
@@ -80,6 +110,36 @@ v0.1　初代系統
 One More Night is a free text zombie house. Rural Kentucky. A real Midwest map. One night. One life. No paywall.
 
 The same devlog lives under Dev log on the title screen. Future updates are posted there, not in a second itch essay that goes stale.
+
+v0.2.3 · 2026-09-24
+v0.2.3  Medicine is late on purpose
+Public update
+
+Why this build
+Mutants made a night of sleep not enough. Herbalism comes up now. Five plants for seven nights. Poultice, brew, or leave it. The doctor names. The farmer grows. Higher medical is a better dose. The bite still has no herb.
+
+Sickness
+Sickness needs a cause. An open wound turns after two nights. Flux comes from raw water. Mutant heat only after night 15, and only if a mutant or a brute cut you. Brew an unnamed plant and you stay in. Two ailments at most.
+
+Already late
+A card beside the modes, not a fifth difficulty. Your job is yours. Night 8, low wall, little food, wound and fever. Not the bite. Chicago is still the end. A win is marked.
+
+—
+
+v0.2.2 · 2026-09-24
+v0.2.2  The days get worse
+Public update
+
+What changed
+Pins you have not cleared get slowly thicker. Neighbors do not. Cleared pins do not refill every night. From day 5 a fast one may arrive first, day 8 a thick one, day 10 a screamer, day 15 a mutant. Extinct earlier, casual later. Night raids hit a little harder later. The map shows infection as a word, not a precise number.
+
+Four words, plus the ordinary
+Walkers stay the baseline. Runners make flank harder and a missed swing hurt more. Brutes cost one melee kill; guns ignore that. Screamers pull one or two more after the fight, under the cap. Mutants are rare, late, and worse. One kind a fight. No new real-time combat.
+
+The still and the kit
+Still level 2 on Normal: 2 food for 1 fuel. Level 1 is still 3. Extinct level 2 is 3, and the still rests every other night. The log names the still level and the food. Gear no longer adds skill ranks and does not unlock flank. Gloves patch a little more wall and kit. Quiet clothes cut search noise. Medical kit heals a little more. Combat kit only adds to the melee roll. Gates still use the rank you trained.
+
+—
 
 v0.2.1 · 2026-09-23
 v0.2.1  The books balance
@@ -153,6 +213,36 @@ When the last one falls, the run ends. The save is on this device. Clear the dat
 
 同じ開発日誌がタイトルの「開発日誌」にある。以後の更新もそこに書く。itch に消える別文は作らない。
 
+v0.2.3 · 2026-09-24
+v0.2.3　薬が必要になるのは今
+公開更新
+
+この版
+異変のあと、一晩では足りない。薬草を上げる。最初の七晩は五味。貼る、煎じる、食べない。医者が見分け、農夫が育てる。噛み傷は無効。
+
+病
+病には原因。開放創を二晩放置で悪化。異変熱は 15 日目以降、異変か厚い一匹の近接だけ。名のない草を煎じると一晩出られない。
+
+もう遅い
+難易度の横の一枚。第五ではない。8日目、低い壁、少ない糧、傷と熱。噛み傷ではない。勝ちはシカゴ。
+
+—
+
+v0.2.2 · 2026-09-24
+v0.2.2　日は悪くなる
+公開更新
+
+何が変わったか
+掃いていない町は少しずつ増える。隣は増えない。掃いた場所が毎晩満員には戻らない。5 日目から速い一匹、8 日目から厚い一匹、10 日目から叫ぶ一匹、15 日目から異変。絶滅は早く、気楽は遅い。夜襲の傷は日とともに少し増える。地図の感染は言葉。
+
+四つと、普通
+普通は基準。速い一匹は迂回を難しくし、近接の失敗を痛くする。厚い一匹は近接の数を一つ減らす。銃は同じ。叫ぶ一匹は戦闘後に一、二匹呼ぶ。上限を超えない。異変は稀で遅く、危ない。一戦一種。即時戦闘は作らない。
+
+桶と装備
+桶二級、通常は食料 2 で燃料 1。一級は 3。絶滅の二級は 3 で、一晩搾って一晩休む。日誌に等級と食料。装備は技能等級を足さない。迂回も早開けしない。手袋は壁と装備を少し多く直し、隠密の服は捜索の音を減らし、医療は回復を少し増やし、戦闘は近接の骰だけ。門は鍛えた等級。
+
+—
+
 v0.2.1 · 2026-09-23
 v0.2.1　帳が合う
 公開修正
@@ -224,6 +314,36 @@ v0.1　最初の仕組み
 『하루만 더』는 무료 텍스트 좀비 거점이다. 켄터키 시골. 실제 중서 지도. 하룻밤, 목숨 하나. 요금 없음.
 
 같은 개발 일지가 타이틀의 「개발 일지」에 있다. 이후 업데이트도 거기에 쓴다. itch에 사라지는 다른 글을 만들지 않는다.
+
+v0.2.3 · 2026-09-24
+v0.2.3　약이 필요해지는 때
+공개 업데이트
+
+이 판
+변이 뒤로는 하룻밤으로 부족하다. 약초를 올린다. 첫 이레는 다섯 맛. 붙이다, 달이다, 두지 않다. 의사가 알아보고 농부가 기른다. 물림은 무효.
+
+병
+병에는 원인이 있다. 열린 상처는 이틀이면 악화. 변이열은 15일 이후, 변이나 두꺼운 것의 근접만. 이름 없는 풀을 달이면 하룻밤 못 나간다.
+
+이미 늦었다
+난이도 옆의 카드. 다섯 번째가 아니다. 8일, 낮은 벽, 적은 양식, 상처와 열. 물림이 아니다. 승리는 시카고.
+
+—
+
+v0.2.2 · 2026-09-24
+v0.2.2　날이 나빠진다
+공개 업데이트
+
+무엇이 바뀌었나
+안 치운 동네는 천천히 붐빈다. 이웃은 안 늘고, 치운 곳은 매일 안 찬다. 5일부터 빠른 것, 8일부터 두꺼운 것, 10일부터 우는 것, 15일부터 변이. 멸종은 더 일찍, 캐주얼은 더 늦게. 야습 피해는 날이 갈수록 조금 세다. 지도의 감염은 말이다.
+
+넷과 보통
+보통이 기준이다. 빠른 것은 우회를 어렵게 하고 근접 실패를 더 아프게 한다. 두꺼운 것은 근접 킬을 하나 줄인다. 총은 같다. 우는 것은 전투 뒤 한두 마리를 부른다. 상한을 넘지 않는다. 변이는 드물고 늦고 더 위험하다. 한 판에 하나. 실시간 전투는 없다.
+
+통과 장비
+통 2급, 보통: 식량 2에 연료 1. 1급은 그대로 3. 멸종 2급은 3이고, 하루 짜고 하루 쉰다. 일지에 등급과 식량. 장비는 기술 등급을 더하지 않고 우회를 일찍 열지 않는다. 장갑은 벽과 장비를 조금 더 고치고, 은밀 옷은 수색 소리를 줄이고, 의료는 회복을 조금 늘리고, 전투는 근접 굴림만. 문턱은 익힌 등급.
+
+—
 
 v0.2.1 · 2026-09-23
 v0.2.1　장부가 맞다

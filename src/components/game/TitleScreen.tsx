@@ -6,19 +6,12 @@ import { asset } from "@/game/asset";
 import { getLocale, tLoc, TIP_COUNT, useT } from "@/game/i18n";
 import { useGame } from "@/game/store";
 import { LangSwitch, Shell } from "./chrome";
-import { FeedbackSheet } from "./FeedbackSheet";
 
 function rollTip(except?: number) {
   let n = Math.floor(Math.random() * TIP_COUNT);
   if (except != null && TIP_COUNT > 1 && n === except) n = (n + 1) % TIP_COUNT;
   return n;
 }
-
-const SHOTS = [
-  { src: "/shots/01-title.jpg?v=en", key: "ui.shot.1" },
-  { src: "/shots/02-shelter.jpg?v=en", key: "ui.shot.2" },
-  { src: "/shots/03-roster.jpg?v=en2", key: "ui.shot.3" },
-] as const;
 
 export function TitleScreen({ muted }: { muted: boolean }) {
   const tt = useT();
@@ -33,8 +26,6 @@ export function TitleScreen({ muted }: { muted: boolean }) {
   const storeMute = useGame((s) => s.muted);
   const quiet = muted || storeMute;
   const [tip, setTip] = useState(0);
-  const [kit, setKit] = useState(false);
-  const [fb, setFb] = useState(false);
 
   useEffect(() => {
     setTip(rollTip());
@@ -117,53 +108,8 @@ export function TitleScreen({ muted }: { muted: boolean }) {
                 {tt("log.openBtn")}
               </Button>
             </div>
-            <button
-              type="button"
-              onClick={() => setFb(true)}
-              className="h-11 text-[11px] tracking-[0.16em] text-muted uppercase"
-            >
-              {tt("fb.openBtn")}
-            </button>
-            {import.meta.env.DEV ? (
-              <button
-                type="button"
-                onClick={() => setKit(true)}
-                className="h-11 text-[11px] tracking-[0.16em] text-muted uppercase"
-              >
-                {tt("ui.kitOpen")}
-              </button>
-            ) : null}
           </div>
         </div>
-
-        {fb ? <FeedbackSheet onClose={() => setFb(false)} /> : null}
-        {kit ? (
-          <div className="absolute inset-0 z-30 flex flex-col bg-bg/95">
-            <div className="flex items-center justify-between px-4 pt-[max(0.75rem,env(safe-area-inset-top))] pb-2">
-              <p className="text-[11px] tracking-[0.16em] text-muted uppercase">{tt("ui.kitHint")}</p>
-              <button type="button" className="h-11 px-3 text-sm" onClick={() => setKit(false)}>
-                {tt("ui.kitClose")}
-              </button>
-            </div>
-            <div className="min-h-0 flex-1 overflow-y-auto px-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
-              <p className="mb-2 text-[11px] tracking-[0.16em] text-muted uppercase">{tt("ui.coverHint")}</p>
-              <img src={asset("/itch-cover.jpg")} width={630} height={500} alt="" className="mb-5 w-full rounded-md border border-border" />
-              {SHOTS.map((shot) => (
-                <div key={shot.src} className="mb-5">
-                  <p className="mb-1.5 text-[11px] tracking-[0.16em] text-muted uppercase">{tt(shot.key)}</p>
-                  <img src={asset(shot.src.split("?")[0])} alt="" className="w-full rounded-md border border-border" />
-                </div>
-              ))}
-              <a
-                href="/one-more-night-v0.2.zip"
-                download
-                className="mb-4 flex h-11 items-center justify-center rounded-md border border-border bg-surface text-sm"
-              >
-                {tt("ui.zip")}
-              </a>
-            </div>
-          </div>
-        ) : null}
       </div>
     </Shell>
   );

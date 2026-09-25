@@ -16,6 +16,7 @@ import {
 } from "./data";
 import { gearActs, armorOf, carryOf, degradeWorn, dressSurvivor, dmgFromArmor, gearById, infectFromArmor, labelItem, liveWeapon, luckMult, mintGear, repairWorst, rollSearchGear, salvageWorn } from "./gear";
 import { t, tLoc, tResBits, tRoom } from "./i18n";
+import { addHerb, afterFightHurt, applyLate, rollHerb, tickAilments, useHerb } from "./herbs";
 import {
   addBond,
   addSkillXp,
@@ -362,6 +363,8 @@ export function createNewGame(input: CreateInput): GameState {
     mode,
     sandbox,
     stillCooldown: 0,
+    herbs: [],
+    scenario: null,
   };
   state = pushLog(
     state,
@@ -394,6 +397,7 @@ export function createNewGame(input: CreateInput): GameState {
     }
     if (n < extraHands) state = pushLog(state, t("log.bedsFull", { n: state.shelter.capacity }));
   }
+  if (input.scenario === "late") state = applyLate(state);
   return state;
 }
 
@@ -766,6 +770,7 @@ function hurt(state: GameState, id: string, dmg: number, infectP: number, cause:
       ...x,
       hp: Math.max(0, hp),
       infected: x.infected || (!dead && inf.ok),
+      ailments: !dead ? afterFightHurt(x, state.day, undefined, true).ailments : x.ailments,
       alive: !dead,
       death: dead ? cause : x.death,
       morale: clamp(x.morale - moraleHit, 0, 100),
@@ -966,6 +971,11 @@ function resolveFight(state: GameState, style: "melee" | "gun" | "flank"): GameS
   if (dmg > 0) {
     const mul = state.mode === "sandbox" ? (state.sandbox?.infectMul ?? 1) : 1;
     next = hurt(next, fighter.id, dmg, infectP * mul, t("death.torn"));
+    if (!next.ended && (foe === "screamer" || foe === "mutant" || foe === "brute")) {
+      next = mapSur(next, fighter.id, (x) =>
+        x.alive ? afterFightHurt(x, next.day, foe, style === "melee") : x,
+      );
+    }
   }
   if (next.ended) return next;
   if (dmg > 0) {
@@ -1379,7 +1389,8 @@ export function occupyHere(state: GameState): GameState {
         kind: "win",
         reason:
           t("end.winBody", { day: next.day, loc: tLoc(loc.id) }) +
-          (next.mode === "sandbox" ? t("end.sandbox") : ""),
+          (next.mode === "sandbox" ? t("end.sandbox") : "") +
+          (next.scenario === "late" ? t("end.late") : ""),
       },
     };
   }
@@ -1460,6 +1471,10 @@ export function repairWall(state: GameState): GameState {
   return next;
 }
 
+export function doseHerb(state: GameState, whoId: string, index: number, how: "poultice" | "brew"): GameState {
+  return useHerb(state, whoId, index, how);
+}
+
 export function restNight(state: GameState, fromHome: boolean): GameState {
   if (state.ended) return state;
   let next: GameState = {
@@ -1467,6 +1482,7 @@ export function restNight(state: GameState, fromHome: boolean): GameState {
     day: state.day + 1,
     dayAP: state.maxAP ?? MAX_AP,
   };
+  next = tickAilments(next);
   const away = awayIds(next);
   const home = living(next).filter(
     (s) => !away.has(s.id) && (!next.mission || !next.mission.squadIds.includes(s.id) || fromHome),

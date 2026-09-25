@@ -17,6 +17,7 @@ import {
   resolveEncounter,
   restNight,
   repairWall as applyRepairWall,
+  doseHerb,
   startMission,
   unequipSlot,
   upgradeFacility,
@@ -50,9 +51,11 @@ interface GameStore {
   logOpen: boolean;
   menu: "title" | "create" | "shop" | "mode";
   draftMode: PlayMode;
+  draftLate: boolean;
   draftSandbox: SandboxOpts;
   openMode: () => void;
   setDraftMode: (mode: PlayMode) => void;
+  setDraftLate: (on: boolean) => void;
   setDraftSandbox: (patch: Partial<SandboxOpts>) => void;
   muted: boolean;
   boot: () => void;
@@ -84,6 +87,7 @@ interface GameStore {
   upgrade: (id: FacilityId) => void;
   repairWall: () => void;
   sleep: () => void;
+  dose: (whoId: string, index: number, how: "poultice" | "brew") => void;
   toggleMute: () => void;
   simKill: (killerId?: string) => void;
   simHurt: (id: string, dmg: number, infect: boolean) => void;
@@ -106,6 +110,7 @@ export const useGame = create<GameStore>((set, get) => ({
   logOpen: false,
   menu: "title",
   draftMode: "normal",
+  draftLate: false,
   draftSandbox: { ...DEFAULT_SANDBOX },
   muted: false,
   boot: () => {
@@ -128,6 +133,7 @@ export const useGame = create<GameStore>((set, get) => ({
     set({ menu: "mode", logOpen: false, dispatchOpen: false });
   },
   setDraftMode: (mode) => set({ draftMode: mode }),
+  setDraftLate: (on) => set({ draftLate: on }),
   setDraftSandbox: (patch) => set({ draftSandbox: { ...get().draftSandbox, ...patch } }),
   openCreate: () => {
     unlockAudio();
@@ -177,7 +183,7 @@ export const useGame = create<GameStore>((set, get) => ({
   newGame: (input) => {
     unlockAudio();
     ok();
-    const run = persist(createNewGame({ ...input, mode: get().draftMode, sandbox: get().draftSandbox }));
+    const run = persist(createNewGame({ ...input, mode: get().draftMode, sandbox: get().draftSandbox, scenario: get().draftLate ? "late" : null }));
     set({ run, hasSave: true, savePeek: peekOf(run), menu: "title", muted: run.muted, help: false, logOpen: false, dispatchOpen: false });
   },
   continueGame: () => {
@@ -290,6 +296,12 @@ export const useGame = create<GameStore>((set, get) => ({
     if (next.ended) warn();
     else click();
     set({ run: persist(next) });
+  },
+  dose: (whoId, index, how) => {
+    const run = get().run;
+    if (!run) return;
+    click();
+    set({ run: persist(doseHerb(run, whoId, index, how)) });
   },
   toggleMute: () => {
     const run = get().run;

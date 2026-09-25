@@ -10,6 +10,8 @@ export function ModeScreen() {
   const tt = useT();
   const mode = useGame((s) => s.draftMode);
   const box = useGame((s) => s.draftSandbox);
+  const late = useGame((s) => s.draftLate);
+  const setLate = useGame((s) => s.setDraftLate);
   const setMode = useGame((s) => s.setDraftMode);
   const patch = useGame((s) => s.setDraftSandbox);
   const openCreate = useGame((s) => s.openCreate);
@@ -36,6 +38,18 @@ export function ModeScreen() {
             </button>
           ))}
         </div>
+        <button
+          type="button"
+          onClick={() => setLate(!late)}
+          className={
+            late
+              ? "rounded-md border border-hp bg-surface-2 px-3 py-3 text-left"
+              : "rounded-md border border-border bg-surface px-3 py-3 text-left"
+          }
+        >
+          <div className="font-display tracking-wide">{tt("mode.late")}</div>
+          <p className="mt-1 text-xs leading-relaxed text-muted">{tt("mode.late.body")}</p>
+        </button>
         {mode === "sandbox" ? (
           <div className="space-y-3 rounded-md border border-border bg-surface p-3 text-sm">
             <label className="flex items-center justify-between gap-3">

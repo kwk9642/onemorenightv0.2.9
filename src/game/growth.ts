@@ -130,7 +130,8 @@ export function moodLabel(n: number): { name: string; canMission: boolean; canWo
 }
 
 export function canMission(s: Survivor): boolean {
-  return s.alive && s.morale >= MOOD_MISSION && s.hp > 12 && s.fatigue < 92;
+  const sick = (s.ailments ?? []).some((a) => a.id === "poison");
+  return s.alive && !sick && s.morale >= MOOD_MISSION && s.hp > 12 && s.fatigue < 92;
 }
 
 export function canWork(s: Survivor): boolean {

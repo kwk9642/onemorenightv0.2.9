@@ -28,6 +28,7 @@ import {
   startingMorale,
 } from "./growth";
 import { t, tLoc, tResBits } from "./i18n";
+import { addHerb, knowsOnSight, rollHerb } from "./herbs";
 import { chance, pick, range, uid } from "./rng";
 import type {
   DispatchFocus,
@@ -518,6 +519,12 @@ function resolveOne(state: GameState, party: DispatchParty): GameState {
     const score = focusScore(s, focus) + (has(s, "lucky") ? 1.5 : 0) - (has(s, "unlucky") ? 1 : 0);
     const rolledLoot = lootFor(focus, score, next.rng, ev === "lucky" ? 1.5 : ev === "empty" ? 0 : 1);
     next = { ...next, rng: rolledLoot.r };
+    if (focus === "herbs") {
+      const herb = rollHerb(next.day, next.rng);
+      next = { ...next, rng: herb.r };
+      const known = folks.some(knowsOnSight);
+      next = addHerb(next, herb.id, known, 1);
+    }
     loot = addBag(loot, rolledLoot.bag);
     if (party.task !== "auto") {
       const own = focusOf(s, "auto");
@@ -703,6 +710,9 @@ function resolveOne(state: GameState, party: DispatchParty): GameState {
 
   if (ev === "greenhouse") {
     loot = addBag(loot, { food: 2, medicine: 1 });
+    const known = folks.some(knowsOnSight);
+    next = addHerb(next, "plantain", known, 2);
+    next = addHerb(next, "mint", known, 1);
     const got = takeLoot(1);
     next = dropParty();
     next = wearTrip(next, folks, 4, 6);
