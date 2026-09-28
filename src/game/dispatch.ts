@@ -152,12 +152,17 @@ export function focusScore(s: Survivor, focus: DispatchFocus): number {
   );
 }
 
+export function dispatchBlock(state: GameState, s: Survivor): "ok" | "away" | "out" | "mood" | "hurt" | "tired" {
+  if (!s.alive || isAway(state, s.id)) return "away";
+  if (state.mission?.squadIds.includes(s.id)) return "out";
+  if (!canWork(s)) return "mood";
+  if (s.hp <= 14) return "hurt";
+  if (s.fatigue >= 90) return "tired";
+  return "ok";
+}
+
 export function canDispatchPerson(state: GameState, s: Survivor): boolean {
-  if (!s.alive || isAway(state, s.id)) return false;
-  if (state.mission?.squadIds.includes(s.id)) return false;
-  if (!canWork(s)) return false;
-  if (s.hp <= 14 || s.fatigue >= 90) return false;
-  return true;
+  return dispatchBlock(state, s) === "ok";
 }
 
 export function canStartDispatch(

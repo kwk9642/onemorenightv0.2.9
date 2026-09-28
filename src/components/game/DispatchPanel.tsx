@@ -5,6 +5,7 @@ import {
   DISPATCH_MAX,
   canDispatchPerson,
   canStartDispatch,
+  dispatchBlock,
   focusOf,
   focusScore,
 } from "@/game/dispatch";
@@ -134,7 +135,7 @@ export function DispatchPanel({ state }: { state: GameState }) {
                         </div>
                         <div className="text-[11px] leading-snug text-muted">{hintFor(s, task)}</div>
                         {locked ? (
-                          <div className="text-[11px] text-hp">{tt("squad.noGo")}</div>
+                          <div className="text-[11px] text-hp">{tt(`block.${dispatchBlock(state, s)}`)}</div>
                         ) : score < 3 ? (
                           <div className="text-[11px] text-faint">{tt("dispatch.hint.poor")}</div>
                         ) : null}

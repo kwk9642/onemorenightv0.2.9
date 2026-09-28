@@ -1,4 +1,5 @@
 import { t } from "./i18n";
+import { wornMorale } from "./gear";
 import type { GameState, Relation, SkillId, Skills, Survivor } from "./types";
 import {
   SKILL_KEYS,
@@ -119,6 +120,11 @@ function pushSkillLog(state: GameState, name: string, skill: SkillId, level: num
 export const MOOD_MISSION = 30;
 export const MOOD_WORK = 22;
 
+/** The mood number on the sheet. Gear that says it lifts mood is included. */
+export function moodOf(s: Survivor): number {
+  return clamp(s.morale + wornMorale(s), 0, 100);
+}
+
 export function moodLabel(n: number): { name: string; canMission: boolean; canWork: boolean } {
   if (n < 16) return { name: t("mood.broken"), canMission: false, canWork: false };
   if (n < MOOD_WORK) return { name: t("mood.despair"), canMission: false, canWork: false };
@@ -129,9 +135,18 @@ export function moodLabel(n: number): { name: string; canMission: boolean; canWo
   return { name: t("mood.high"), canMission: true, canWork: true };
 }
 
+/** Why this person cannot leave. Mood, wounds, exhaustion, and poison are separate. */
+export function leaveBlock(s: Survivor): "ok" | "dead" | "poison" | "hurt" | "tired" | "mood" {
+  if (!s.alive) return "dead";
+  if ((s.ailments ?? []).some((a) => a.id === "poison")) return "poison";
+  if (s.hp <= 12) return "hurt";
+  if (s.fatigue >= 92) return "tired";
+  if (moodOf(s) < MOOD_MISSION) return "mood";
+  return "ok";
+}
+
 export function canMission(s: Survivor): boolean {
-  const sick = (s.ailments ?? []).some((a) => a.id === "poison");
-  return s.alive && !sick && s.morale >= MOOD_MISSION && s.hp > 12 && s.fatigue < 92;
+  return leaveBlock(s) === "ok";
 }
 
 export function canWork(s: Survivor): boolean {

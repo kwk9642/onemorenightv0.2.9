@@ -30,6 +30,7 @@ import {
   effectiveSkills,
   emptySkills,
   grantSquadXpNoted,
+  MOOD_MISSION,
   noteSkillUps,
   relationOf,
   skillFx,
@@ -1584,7 +1585,8 @@ export function restNight(state: GameState, fromHome: boolean): GameState {
     if (has(s, "highthirst")) thirstDelta = thirsty ? -50 : 12;
     thirst = clamp(thirst + thirstDelta, 0, 100);
 
-    let readWarm = false;
+    let readGain = 0;
+    let cookGain = 0;
     if (job === "rest") {
       let restHp = 12;
       if (has(s, "slowhealer")) restHp = 6;
@@ -1604,14 +1606,12 @@ export function restNight(state: GameState, fromHome: boolean): GameState {
       next = read.state;
       if (read.gain > 0 && titleId) {
         const title = t(`mag.${titleId}`);
-        morale = clamp(morale + read.gain, 0, 100);
-        readWarm = true;
+        readGain = read.gain;
         next = pushLog(next, t("mag.read", { name: s.name, title }));
         if (read.gain <= 1) next = pushLog(next, t("mag.spent", { title }));
       } else {
         next = pushLog(next, t("mag.empty"));
       }
-      fatigue = clamp(fatigue + 4, 0, 100);
     } else {
       fatigue = clamp(fatigue + 12 + (has(s, "asthmatic") ? 6 : 0), 0, 100);
     }
@@ -1623,7 +1623,7 @@ export function restNight(state: GameState, fromHome: boolean): GameState {
     if (job === "cook" && kitchen > 0) {
       const kfx = skillFx("cook", s.skills.cook);
       foodGain += 1 + kfx.cookFood + (has(s, "keencook") ? 1 : 0);
-      morale = clamp(morale + 8 + kfx.cookMorale, 0, 100);
+      cookGain = 8 + kfx.cookMorale;
       nextS = addSkillXp(nextS, "cook", 12);
     }
     if (job === "repair") {
@@ -1705,7 +1705,8 @@ export function restNight(state: GameState, fromHome: boolean): GameState {
       death = infected ? t("death.infect") : hunger <= 0 || thirst <= 0 ? t("death.starve") : t("death.wound");
     }
     morale = clamp(morale, 0, 100);
-    if (readWarm) morale = Math.max(morale, 18);
+    if (cookGain > 0) morale = clamp(morale + cookGain, 0, 100);
+    if (readGain > 0) morale = clamp(Math.max(morale + readGain, MOOD_MISSION), 0, 100);
     next = mapSur(next, s.id, (x) => ({
       ...x,
       skills: nextS.skills,

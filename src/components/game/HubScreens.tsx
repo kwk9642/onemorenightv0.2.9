@@ -8,7 +8,9 @@ import {
   bondOf,
   canMission,
   canWork,
+  leaveBlock,
   moodLabel,
+  moodOf,
   relationOf,
 } from "@/game/growth";
 import { t, tLoc, useT } from "@/game/i18n";
@@ -189,10 +191,14 @@ export function ShelterScreen({ state }: { state: GameState }) {
       </p>
       <SkillNotices notices={state.notices ?? []} onDismiss={clearNotices} />
       {crushed.length ? (
-        <p className="mb-3 rounded-md border border-hp/40 bg-surface px-3 py-2 text-xs text-hp">
-          {crushed.map((s) => s.name).join("、")} {tt("hub.moodLow")}
-          {crushed.length === people.length ? tt("hub.moodNoMission") : tt("hub.moodNoSquad")}
-        </p>
+        <div className="mb-3 space-y-1 rounded-md border border-hp/40 bg-surface px-3 py-2 text-xs text-hp">
+          {crushed.map((s) => (
+            <p key={s.id}>
+              {s.name}
+              {tt(`block.${leaveBlock(s)}`)}
+            </p>
+          ))}
+        </div>
       ) : null}
       <HerbRow state={state} />
       <MagRow state={state} />
@@ -265,7 +271,7 @@ export function ShelterScreen({ state }: { state: GameState }) {
       <h3 className="mb-2 mt-4 text-[11px] tracking-[0.16em] text-muted uppercase">{tt("hub.jobs")}</h3>
       <ul className="mb-5 space-y-2">
         {people.map((s) => {
-          const mood = moodLabel(s.morale);
+          const mood = moodLabel(moodOf(s));
           const out = isAway(state, s.id);
           return (
             <li key={s.id} className="flex items-center gap-3 rounded-md bg-surface px-2 py-2">
@@ -276,7 +282,7 @@ export function ShelterScreen({ state }: { state: GameState }) {
                   <span className="ml-2 text-[11px] text-faint">{tt(`occ.${s.occupation}`)}</span>
                 </div>
                 <div className="text-[11px] text-muted">
-                  {out ? tt("dispatch.away") : tt(`job.${s.job}`)} · {mood.name} {s.morale}
+                  {out ? tt("dispatch.away") : tt(`job.${s.job}`)} · {mood.name} {moodOf(s)}
                 </div>
               </div>
               {s.infected ? <span className="text-[11px] text-hp">{tt("ui.infected")}</span> : null}
@@ -392,7 +398,7 @@ function SurvivorCard({
   onKick: () => void;
 }) {
   const tt = useT();
-  const mood = moodLabel(s.morale);
+  const mood = moodLabel(moodOf(s));
   const others = living(state).filter((o) => o.id !== s.id);
   const out = isAway(state, s.id);
   return (
@@ -400,7 +406,7 @@ function SurvivorCard({
       <div className="flex items-baseline justify-between gap-2">
         <div className="font-display tracking-wide">{s.name}</div>
         <span className="text-[11px] text-muted">
-          {mood.name} {s.morale}
+          {mood.name} {moodOf(s)}
         </span>
       </div>
       <div className="text-xs text-muted">
@@ -411,8 +417,8 @@ function SurvivorCard({
         <Meter value={s.hunger} tone="hunger" label={tt("meter.hunger")} />
         <Meter value={s.thirst} tone="thirst" label={tt("meter.thirst")} />
         <Meter
-          value={s.morale}
-          tone={s.morale < 30 ? "hp" : s.morale < 50 ? "hunger" : "stamina"}
+          value={moodOf(s)}
+          tone={moodOf(s) < 30 ? "hp" : moodOf(s) < 50 ? "hunger" : "stamina"}
           label={tt("meter.morale")}
         />
       </div>

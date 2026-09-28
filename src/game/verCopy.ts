@@ -1,5 +1,13 @@
 export const verZh: Record<string, string> = {
   "ui.ver": "v0.2.8",
+  "block.mood": "：情緒低於 30，出不了門。",
+  "block.hurt": "：傷太重，先休息或治療。",
+  "block.tired": "：太累，先休息。",
+  "block.poison": "：中了毒，出不了門。",
+  "block.away": "：人不在家。",
+  "block.out": "：已經在外面。",
+  "block.dead": "：不在了。",
+  "gear.stat.mood": "情緒 {n}",
   "edition.webTitle": "網頁版二十個州",
   "edition.webBody": "這一版只開放二十個州：{states}。從肯塔基出發，仍可走到芝加哥。其餘三十個州不在網頁版。五十個州的完整地圖在安卓版和 Steam 版。",
   "edition.webNote": "網頁版二十個州。五十個州在安卓版和 Steam 正式版。",
@@ -26,6 +34,14 @@ export const verZh: Record<string, string> = {
 };
 export const verEn: Record<string, string> = {
   "ui.ver": "v0.2.8",
+  "block.mood": ": mood under 30, cannot leave.",
+  "block.hurt": ": too hurt. Rest or treat first.",
+  "block.tired": ": too tired. Rest first.",
+  "block.poison": ": poisoned, cannot leave.",
+  "block.away": ": not at the house.",
+  "block.out": ": already outside.",
+  "block.dead": ": gone.",
+  "gear.stat.mood": "mood {n}",
   "edition.webTitle": "Twenty states on the web",
   "edition.webBody": "This version opens twenty states: {states}. You still start in Kentucky and can still reach Chicago. The other thirty states are not on the web. The full map is the Android app and the Steam version.",
   "edition.webNote": "Twenty states on the web. All fifty are on Android and the full Steam game.",
@@ -52,6 +68,14 @@ export const verEn: Record<string, string> = {
 };
 export const verJa: Record<string, string> = {
   "ui.ver": "v0.2.8",
+  "block.mood": "：情緒が 30 未満で出られない。",
+  "block.hurt": "：傷が重い。先に休むか治療。",
+  "block.tired": "：疲れすぎ。先に休む。",
+  "block.poison": "：毒。出られない。",
+  "block.away": "：家にいない。",
+  "block.out": "：すでに外にいる。",
+  "block.dead": "：いない。",
+  "gear.stat.mood": "士気 {n}",
   "edition.webTitle": "ウェブは二十州",
   "edition.webBody": "この版が開くのは二十州：{states}。ケンタッキーから始まり、シカゴへは行ける。残り三十州はウェブにない。五十州は Android 版と Steam 版。",
   "edition.webNote": "ウェブは二十州。五十州は Android 版と Steam 製品版。",
@@ -78,6 +102,14 @@ export const verJa: Record<string, string> = {
 };
 export const verKo: Record<string, string> = {
   "ui.ver": "v0.2.8",
+  "block.mood": ": 정서 30 미만, 못 나간다.",
+  "block.hurt": ": 상처가 깊다. 먼저 쉬거나 치료.",
+  "block.tired": ": 너무 지쳤다. 먼저 쉰다.",
+  "block.poison": ": 중독, 못 나간다.",
+  "block.away": ": 집에 없다.",
+  "block.out": ": 이미 밖에 있다.",
+  "block.dead": ": 없다.",
+  "gear.stat.mood": "정서 {n}",
   "edition.webTitle": "웹은 스무 개 주",
   "edition.webBody": "이 판이 여는 것은 스무 개 주: {states}. 켄터키에서 시작하고 시카고까지는 갈 수 있다. 나머지 서른 개 주는 웹에 없다. 쉰 개 주는 안드로이드와 Steam.",
   "edition.webNote": "웹은 스무 개 주. 쉰 개 주는 안드로이드와 Steam 정식판.",

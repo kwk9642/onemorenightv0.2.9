@@ -328,6 +328,17 @@ export function armorOf(s: Survivor): { armor: number; bite: number; noise: numb
   return { armor, bite, noise, fatigue, carry };
 }
 
+/** Hats and coats that say they lift mood. Same number the leave check uses. */
+export function wornMorale(s: Survivor): number {
+  let n = 0;
+  for (const it of wornPieces(s)) {
+    const g = gearById(it.defId);
+    if (!g || it.cond <= 0 || !g.morale) continue;
+    n += Math.round(g.morale * condMul(it.cond));
+  }
+  return n;
+}
+
 export function dmgFromArmor(s: Survivor): number {
   return 1 - Math.min(0.52, armorOf(s).armor / 78);
 }
@@ -362,6 +373,7 @@ export function gearStatBits(def: GearDef): string[] {
   if (def.build) bits.push(t("gear.stat.bld", { n: signed(def.build) }));
   if (def.farm) bits.push(t("gear.stat.frm", { n: signed(def.farm) }));
   if (def.cook) bits.push(t("gear.stat.ck", { n: signed(def.cook) }));
+  if (def.morale) bits.push(t("gear.stat.mood", { n: signed(def.morale) }));
   if (def.carry) bits.push(t("gear.stat.bag", { n: def.carry }));
   if (def.fatigue) bits.push(t("gear.stat.fat", { n: signed(def.fatigue) }));
   if (def.noise) bits.push(t("gear.stat.noise", { n: signed(def.noise) }));

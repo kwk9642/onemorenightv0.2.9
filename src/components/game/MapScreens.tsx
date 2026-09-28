@@ -5,7 +5,7 @@ import { canTravel, isDiscovered, living } from "@/game/engine";
 import { fuelCost } from "@/game/mode";
 import { infectionWord } from "@/game/zombies";
 import { isAway } from "@/game/dispatch";
-import { bondOf, canMission, moodLabel, relationOf, squadRelationBonus } from "@/game/growth";
+import { bondOf, canMission, leaveBlock, moodLabel, moodOf, relationOf, squadRelationBonus } from "@/game/growth";
 import { EDITION } from "@/game/edition";
 import { tLoc, useT } from "@/game/i18n";
 import { useGame } from "@/game/store";
@@ -144,7 +144,8 @@ export function SquadScreen({ state }: { state: GameState }) {
         <ul className="space-y-2">
           {people.map((s) => {
             const on = pick.includes(s.id);
-            const mood = moodLabel(s.morale);
+            const moodN = moodOf(s);
+            const mood = moodLabel(moodN);
             const locked = !canMission(s) || isAway(state, s.id);
             const others = pick.filter((id) => id !== s.id);
             const relBits = others
@@ -176,16 +177,16 @@ export function SquadScreen({ state }: { state: GameState }) {
                     <div className="text-[11px] text-muted">
                       {tt("skill.combat")} {s.skills.combat} {tt(`skill.rank.${s.skills.combat}`)}
                       {bonus.combat ? `+${bonus.combat}` : ""} · {tt("skill.stealth")} {s.skills.stealth} {tt(`skill.rank.${s.skills.stealth}`)} · {tt(`wep.${s.weapon}`)} ·{" "}
-                      {mood.name} {s.morale}
+                      {mood.name} {moodN}
                     </div>
                     {relBits.length ? <div className="text-[11px] text-faint">{relBits.join("  ")}</div> : null}
                     {locked ? (
                       <div className="text-[11px] text-hp">
-                        {isAway(state, s.id) ? tt("dispatch.away") : tt("squad.noGo")}
+                        {isAway(state, s.id) ? tt("dispatch.away") : tt(`block.${leaveBlock(s)}`)}
                       </div>
                     ) : null}
                     <div className="mt-1">
-                      <Meter value={s.morale} tone={s.morale < 30 ? "hp" : s.morale < 50 ? "hunger" : "stamina"} />
+                      <Meter value={moodN} tone={moodN < 30 ? "hp" : moodN < 50 ? "hunger" : "stamina"} />
                     </div>
                   </div>
                 </button>
