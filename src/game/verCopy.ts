@@ -1,5 +1,5 @@
 export const verZh: Record<string, string> = {
-  "ui.ver": "v0.2.8 · 路程與本機存檔",
+  "ui.ver": "v0.2.8",
   "edition.webTitle": "網頁版二十個州",
   "edition.webBody": "這一版只開放二十個州：{states}。從肯塔基出發，仍可走到芝加哥。其餘三十個州不在網頁版。五十個州的完整地圖在安卓版和 Steam 版。",
   "edition.webNote": "網頁版二十個州。五十個州在安卓版和 Steam 正式版。",
@@ -25,7 +25,7 @@ export const verZh: Record<string, string> = {
   "dip.btn.trade": "沒有東西就換不成",
 };
 export const verEn: Record<string, string> = {
-  "ui.ver": "v0.2.8 · roads and a file you keep",
+  "ui.ver": "v0.2.8",
   "edition.webTitle": "Twenty states on the web",
   "edition.webBody": "This version opens twenty states: {states}. You still start in Kentucky and can still reach Chicago. The other thirty states are not on the web. The full map is the Android app and the Steam version.",
   "edition.webNote": "Twenty states on the web. All fifty are on Android and the full Steam game.",
@@ -51,7 +51,7 @@ export const verEn: Record<string, string> = {
   "dip.btn.trade": "needs the goods",
 };
 export const verJa: Record<string, string> = {
-  "ui.ver": "v0.2.8 · 道と残せるファイル",
+  "ui.ver": "v0.2.8",
   "edition.webTitle": "ウェブは二十州",
   "edition.webBody": "この版が開くのは二十州：{states}。ケンタッキーから始まり、シカゴへは行ける。残り三十州はウェブにない。五十州は Android 版と Steam 版。",
   "edition.webNote": "ウェブは二十州。五十州は Android 版と Steam 製品版。",
@@ -77,7 +77,7 @@ export const verJa: Record<string, string> = {
   "dip.btn.trade": "物が要る",
 };
 export const verKo: Record<string, string> = {
-  "ui.ver": "v0.2.8 · 길과 남기는 파일",
+  "ui.ver": "v0.2.8",
   "edition.webTitle": "웹은 스무 개 주",
   "edition.webBody": "이 판이 여는 것은 스무 개 주: {states}. 켄터키에서 시작하고 시카고까지는 갈 수 있다. 나머지 서른 개 주는 웹에 없다. 쉰 개 주는 안드로이드와 Steam.",
   "edition.webNote": "웹은 스무 개 주. 쉰 개 주는 안드로이드와 Steam 정식판.",
