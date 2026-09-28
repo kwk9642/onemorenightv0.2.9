@@ -157,6 +157,13 @@ export default defineConfig(({ command, isPreview }) => ({
     strictPort: true,
   },
   resolve: { tsconfigPaths: true },
+  // GitHub / Vercel 用這份設定，固定五十州。itch 另走 vite.itch.config.ts。
+  define: {
+    __OMN_EDITION__: JSON.stringify("full"),
+  },
+  build: {
+    chunkSizeWarningLimit: 1200,
+  },
   plugins: [
     pgliteBootstrapPlugin(),
     // Before tanstackStart so /auth/popup never falls through to the SPA.
