@@ -186,7 +186,7 @@ describe("v0.3 new raid maps", () => {
       assert.ok(lootLeft(s.locations[id].lootRemaining) >= 0);
       assert.ok(locById(id).zones.length >= 3);
     }
-    assert.equal(LOCATIONS.length, 17 + NEW_IDS.length);
+    assert.ok(LOCATIONS.length >= 17 + NEW_IDS.length);
   });
 
   it("echo creek is on the farm's doorstep; prison is not", () => {

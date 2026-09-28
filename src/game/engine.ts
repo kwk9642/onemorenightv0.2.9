@@ -16,6 +16,7 @@ import {
 } from "./data";
 import { gearActs, armorOf, carryOf, degradeWorn, dressSurvivor, dmgFromArmor, gearById, infectFromArmor, labelItem, liveWeapon, luckMult, mintGear, repairWorst, rollSearchGear, salvageWorn } from "./gear";
 import { t, tLoc, tResBits, tRoom } from "./i18n";
+import { grantMags, maybeFindMag, readOne } from "./magazines";
 import { addHerb, afterFightHurt, applyLate, rollHerb, tickAilments, useHerb } from "./herbs";
 import {
   addBond,
@@ -49,6 +50,7 @@ import {
   waterBill,
 } from "./mode";
 import { bumpInfection, raidDamage, rallyNight, rollKind } from "./zombies";
+import { applySearch, clearExposure, machineDown, meetChoices, milesBetween, NEAR_MILES, phaseNote, phaseOf, regrow, repairMachine as fixMachine, resolveBand, rollBands, stampMiles, addIntelEach, tickBands, tickWear } from "./longrun";
 import type {
   Choice,
   CreateInput,
@@ -155,6 +157,8 @@ function makeSurvivor(
     traits: TraitId[];
     stance: Survivor["stance"];
     portrait?: string;
+    faceData?: string;
+    gender?: "m" | "f" | "n";
     weapon?: WeaponId;
     alloc?: Partial<Skills>;
   },
@@ -173,6 +177,8 @@ function makeSurvivor(
       occupation: opts.occupation,
       traits,
       portrait: opts.portrait ?? FACES[0].id,
+      faceData: opts.faceData,
+      gender: opts.gender,
       skills,
       skillXp: emptySkills(),
       skillBase: { ...skills },
@@ -205,6 +211,13 @@ function randomName(r: number): { r: number; name: string } {
 function pickFace(r: number, used: string[] = []) {
   const free = FACES.filter((f) => !used.includes(f.id));
   return pick(r, free.length ? free : FACES);
+}
+
+function takenFaces(state: GameState): string[] {
+  return [
+    ...state.survivors.filter((s) => s.alive && !s.faceData).map((s) => s.portrait),
+    ...(state.bands ?? []).map((b) => b.face).filter((id): id is string => !!id),
+  ];
 }
 
 export function randomCreate(r0 = (Date.now() ^ Math.floor(Math.random() * 1e9)) >>> 0): {
@@ -247,6 +260,8 @@ export function createNewGame(input: CreateInput): GameState {
     traits: input.traits,
     stance: "leader",
     portrait: input.portrait || FACES[0].id,
+    faceData: input.faceData,
+    gender: input.gender,
     alloc: input.alloc,
   });
   const dressed = dressSurvivor(player0.r, input.occupation, player0.s);
@@ -267,10 +282,16 @@ export function createNewGame(input: CreateInput): GameState {
     r = z.r;
     const stock = seedLoot(r, loc.id);
     r = stock.r;
-    const known = !!loc.startKnown || loc.id === start.locationId;
+    const homeLoc = start.locationId;
+    const homeDef = locById(homeLoc);
+    const miles = Math.round(milesBetween(homeDef, loc));
+    const known = loc.id === homeLoc || (homeDef.neighbors.includes(loc.id) && miles <= NEAR_MILES);
     locations[loc.id] = {
       zombies: loc.id === start.locationId ? Math.max(0, z.n - 3) : z.n,
       discovered: known,
+      searchPct: known ? 100 : 0,
+      intel: known ? 100 : 0,
+      miles,
       cleared: false,
       occupied: loc.id === start.locationId,
       visited: loc.id === start.locationId,
@@ -364,6 +385,7 @@ export function createNewGame(input: CreateInput): GameState {
     sandbox,
     stillCooldown: 0,
     herbs: [],
+    mags: [],
     scenario: null,
   };
   state = pushLog(
@@ -377,7 +399,7 @@ export function createNewGame(input: CreateInput): GameState {
     for (let i = 0; i < n; i++) {
       const occPick = pick(state.rng, OCCUPATIONS);
       const nm = randomName(occPick.r);
-      const face = pickFace(nm.r);
+      const face = pickFace(nm.r, state.survivors.map((s) => s.portrait));
       const pos = pick(face.r, TRAITS.filter((x) => x.kind === "pos"));
       const neg = pick(pos.r, TRAITS.filter((x) => x.kind === "neg"));
       const made = makeSurvivor(neg.r, {
@@ -398,19 +420,13 @@ export function createNewGame(input: CreateInput): GameState {
     if (n < extraHands) state = pushLog(state, t("log.bedsFull", { n: state.shelter.capacity }));
   }
   if (input.scenario === "late") state = applyLate(state);
+  state = { ...state, bands: rollBands(seed, state.shelter.locationId, state.survivors.map((s) => s.portrait)) };
   return state;
 }
 
 export function isDiscovered(state: GameState, id: string): boolean {
-  const loc = locById(id);
-  const ls = state.locations[id];
-  if (ls.discovered) return true;
   if (id === state.shelter.locationId) return true;
-  const home = locById(state.shelter.locationId);
-  if (home.neighbors.includes(id)) return true;
-  if (state.shelter.facilities.radio >= 1 && loc.region === home.region) return true;
-  if (state.shelter.facilities.radio >= 2) return true;
-  return false;
+  return !!state.locations[id]?.discovered;
 }
 
 export function canTravel(state: GameState, id: string): { ok: boolean; reason: string } {
@@ -463,7 +479,9 @@ function zoneChoices(state: GameState): Choice[] {
 }
 
 function choicesFor(state: GameState, mission: MissionState): Choice[] {
-  return zoneChoices({ ...state, mission });
+  const base = zoneChoices({ ...state, mission });
+  const extra = meetChoices(state).map((c) => ({ id: c.id, label: c.label, danger: c.danger }));
+  return extra.length ? [...extra, ...base] : base;
 }
 
 function beginZone(state: GameState, index: number): GameState {
@@ -636,7 +654,7 @@ function rollLoot(state: GameState, loud: boolean): { state: GameState; got: Par
     const scoutW = liveWeapon(scout);
     if (wep && scoutW.melee <= 2) nextState = autoWield(nextState, scout.id, wep);
   }
-  return { state: nextState, got };
+  return { state: maybeFindMag(nextState), got };
 }
 
 function maybeEncounter(state: GameState): GameState {
@@ -652,7 +670,7 @@ function maybeEncounter(state: GameState): GameState {
   r = occ.r;
   const nm = randomName(r);
   r = nm.r;
-  const face = pickFace(r);
+  const face = pickFace(r, takenFaces(state));
   r = face.r;
   const moodPick = pick(r, ["grateful", "wary", "hostile", "hurt"] as EncounterState["mood"][]);
   r = moodPick.r;
@@ -1028,6 +1046,7 @@ function doSearch(state: GameState, loud: boolean): GameState {
     loud ? 1 : 0,
   );
   next = bumpNoise(next, m.locationId, noiseAdd, loud ? 1 : 0);
+  next = applySearch(next, m.locationId, sk.scavenge);
   const prevScout = scout;
   next = grantSquadXpNoted(next, m.squadIds, loud ? "scavenge" : "stealth", loud ? 10 : 8);
   if (loud) next = grantSquadXpNoted(next, m.squadIds, "scavenge", 4);
@@ -1086,6 +1105,11 @@ function doSearch(state: GameState, loud: boolean): GameState {
 }
 
 export function missionChoice(state: GameState, choiceId: string): GameState {
+  const band = resolveBand(state, choiceId);
+  if (band) {
+    if (!band.mission) return band;
+    return { ...band, mission: { ...band.mission, choices: choicesFor(band, band.mission) } };
+  }
   const m = state.mission;
   if (!m) return state;
   if (m.phase === "fight") {
@@ -1379,8 +1403,12 @@ export function occupyHere(state: GameState): GameState {
     t("log.move", { old: tLoc(old.id), loc: tLoc(loc.id), state: t(`state.${loc.region}`), n: loc.occupyCapacity }),
   );
   for (const n of loc.neighbors) {
-    next = { ...next, locations: { ...next.locations, [n]: { ...next.locations[n], discovered: true } } };
+    if (!next.locations[n]?.discovered) continue;
   }
+  next = clearExposure(next);
+  next = stampMiles(next);
+  next = addIntelEach(next, id, 25);
+  next = pushLog(next, t("long.moved", { loc: tLoc(loc.id) }));
   if (loc.size === "metro" && !(state.mode === "sandbox" && state.sandbox?.chicagoWins === false)) {
     next = {
       ...next,
@@ -1475,6 +1503,10 @@ export function doseHerb(state: GameState, whoId: string, index: number, how: "p
   return useHerb(state, whoId, index, how);
 }
 
+export function repairMachine(state: GameState, id: FacilityId): GameState {
+  return fixMachine(state, id);
+}
+
 export function restNight(state: GameState, fromHome: boolean): GameState {
   if (state.ended) return state;
   let next: GameState = {
@@ -1482,10 +1514,16 @@ export function restNight(state: GameState, fromHome: boolean): GameState {
     day: state.day + 1,
     dayAP: state.maxAP ?? MAX_AP,
   };
+  const phaseLine = phaseNote(state.day, next.day, modeOf(next));
+  if (phaseLine) next = pushLog(next, phaseLine);
   next = tickAilments(next);
   const away = awayIds(next);
   const home = living(next).filter(
     (s) => !away.has(s.id) && (!next.mission || !next.mission.squadIds.includes(s.id) || fromHome),
+  );
+  next = tickWear(
+    next,
+    home.filter((s) => s.alive).map((s) => s.job),
   );
   const kitchen = next.shelter.facilities.kitchen;
   const waterLv = next.shelter.facilities.water;
@@ -1507,7 +1545,13 @@ export function restNight(state: GameState, fromHome: boolean): GameState {
   const thirsty = waterUsed < drink;
 
   let foodGain = 0;
-  let waterGain = bill.yield;
+  let waterGain = machineDown(next, "water") ? 0 : bill.yield;
+  if (phaseOf(next.day, modeOf(next)) === "season" && (next.shelter.facilities.water ?? 0) > 0) {
+    waterGain = 0;
+    next = pushLog(next, t("long.freeze"));
+  } else if (machineDown(next, "water") && (next.shelter.facilities.water ?? 0) > 0) {
+    next = pushLog(next, t("long.noWater"));
+  }
   let medUsed = 0;
   let barricade = next.shelter.barricade;
   let radioFind = false;
@@ -1515,9 +1559,9 @@ export function restNight(state: GameState, fromHome: boolean): GameState {
 
   for (const s of home) {
     if (!s.alive) continue;
-    const working = canWork(s) && s.job !== "rest";
-    const job = working ? s.job : "rest";
-    if (!working && s.job !== "rest") next = pushLog(next, t("log.lieDown", { name: s.name }));
+    const allowed = s.job === "rest" || s.job === "read" || canWork(s);
+    const job = allowed ? s.job : "rest";
+    if (!allowed && s.job !== "rest") next = pushLog(next, t("log.lieDown", { name: s.name }));
     let hp = s.hp;
     let hunger = s.hunger;
     let thirst = s.thirst;
@@ -1540,6 +1584,7 @@ export function restNight(state: GameState, fromHome: boolean): GameState {
     if (has(s, "highthirst")) thirstDelta = thirsty ? -50 : 12;
     thirst = clamp(thirst + thirstDelta, 0, 100);
 
+    let readWarm = false;
     if (job === "rest") {
       let restHp = 12;
       if (has(s, "slowhealer")) restHp = 6;
@@ -1553,10 +1598,24 @@ export function restNight(state: GameState, fromHome: boolean): GameState {
       if (has(s, "unfit") || has(s, "asthmatic")) restFat -= 8;
       fatigue = clamp(fatigue - restFat, 0, 100);
       morale = clamp(morale + 6, 0, 100);
+    } else if (job === "read") {
+      const titleId = (next.mags ?? [])[0]?.id;
+      const read = readOne(next);
+      next = read.state;
+      if (read.gain > 0 && titleId) {
+        const title = t(`mag.${titleId}`);
+        morale = clamp(morale + read.gain, 0, 100);
+        readWarm = true;
+        next = pushLog(next, t("mag.read", { name: s.name, title }));
+        if (read.gain <= 1) next = pushLog(next, t("mag.spent", { title }));
+      } else {
+        next = pushLog(next, t("mag.empty"));
+      }
+      fatigue = clamp(fatigue + 4, 0, 100);
     } else {
       fatigue = clamp(fatigue + 12 + (has(s, "asthmatic") ? 6 : 0), 0, 100);
     }
-    if (job === "farm" && garden > 0) {
+    if (job === "farm" && garden > 0 && !machineDown(next, "garden")) {
       const ffx = skillFx("farm", s.skills.farm);
       foodGain += Math.round(garden * ffx.farmMul) + ffx.extraCrop + (has(s, "gardener") ? 1 : 0);
       nextS = addSkillXp(nextS, "farm", 12);
@@ -1646,6 +1705,7 @@ export function restNight(state: GameState, fromHome: boolean): GameState {
       death = infected ? t("death.infect") : hunger <= 0 || thirst <= 0 ? t("death.starve") : t("death.wound");
     }
     morale = clamp(morale, 0, 100);
+    if (readWarm) morale = Math.max(morale, 18);
     next = mapSur(next, s.id, (x) => ({
       ...x,
       skills: nextS.skills,
@@ -1659,7 +1719,7 @@ export function restNight(state: GameState, fromHome: boolean): GameState {
       alive,
       death,
       daysIn: x.daysIn + 1,
-      job: working ? x.job : "rest",
+      job: allowed ? x.job : "rest",
     }));
     if (!alive) {
       next = salvageToStash(next, s);
@@ -1709,6 +1769,8 @@ export function restNight(state: GameState, fromHome: boolean): GameState {
     medicine: Math.max(0, next.resources.medicine - medUsed),
   };
   next = pushLog(next, t("log.water", { drink, yield: waterGain, n: next.resources.water }));
+  next = regrow(next);
+  next = tickBands(next);
   const rotLine = rotAt(modeOf(next));
   if (next.resources.food > rotLine) {
     const rot = Math.max(1, Math.ceil((next.resources.food - rotLine) * 0.07));
@@ -1717,7 +1779,9 @@ export function restNight(state: GameState, fromHome: boolean): GameState {
   }
   const stillLv = next.shelter.facilities.still ?? 0;
   const presser = home.find((s) => s.alive && canWork(s) && s.job === "press");
-  if (presser) {
+  if (presser && machineDown(next, "still")) {
+    next = pushLog(next, t("long.noStill"));
+  } else if (presser) {
     if ((next.stillCooldown ?? 0) > 0) {
       next = { ...next, stillCooldown: 0 };
       next = pushLog(next, t("log.press.wait", { name: presser.name }));
@@ -1743,18 +1807,12 @@ export function restNight(state: GameState, fromHome: boolean): GameState {
   next.shelter = { ...next.shelter, barricade };
 
   if (radioFind) {
-    const hidden = LOCATIONS.filter((l) => !next.locations[l.id].discovered);
-    if (hidden.length) {
-      const p = pick(next.rng, hidden);
-      next = { ...next, rng: p.r };
-      next.locations = { ...next.locations, [p.item.id]: { ...next.locations[p.item.id], discovered: true } };
-      next = pushLog(next, t("log.radioLoc", { loc: tLoc(p.item.id), state: t(`state.${p.item.region}`) }));
-    }
+    next = pushLog(next, t("long.radio"));
   }
   if (radioPerson && living(next).length < next.shelter.capacity) {
     const occ = pick(next.rng, OCCUPATIONS);
     const nm = randomName(occ.r);
-    const face = pickFace(nm.r);
+    const face = pickFace(nm.r, takenFaces(next));
     const pos = pick(face.r, TRAITS.filter((x) => x.kind === "pos"));
     const neg = pick(pos.r, TRAITS.filter((x) => x.kind === "neg"));
     const made = makeSurvivor(neg.r, {

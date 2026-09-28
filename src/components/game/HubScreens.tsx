@@ -14,10 +14,12 @@ import {
 import { t, tLoc, useT } from "@/game/i18n";
 import { useGame } from "@/game/store";
 import type { FacilityId, GameState, JobId, ResourceId, Survivor } from "@/game/types";
-import { herbsOf, ailmentsOf } from "@/game/herbs";
+import { herbsOf, ailmentsOf, rxFor } from "@/game/herbs";
+import { magsOf } from "@/game/magazines";
 import { AP_COST, WALL_REPAIR_MATS, apOf } from "@/game/v03";
 import { cn } from "@/lib/utils";
 import { LogList, Meter, Portrait, ResourceBar, Shell, TabBar, TopStatus } from "./chrome";
+import { SaveFileBar } from "./SaveFileBar";
 import { GearDoll, StashPanel } from "./GearPanel";
 import { SkillList, SkillNotices } from "./SkillPanel";
 
@@ -42,31 +44,104 @@ function HerbRow({ state }: { state: GameState }) {
   const dose = useGame((s) => s.dose);
   const people = living(state);
   const herbs = herbsOf(state);
-  const sick = people.filter((s) => ailmentsOf(s).length);
+  const sick = people.filter((s) => ailmentsOf(s).length || s.infected);
+  const home = people.filter((s) => !isAway(state, s.id));
+  const doc = home.reduce<Survivor | undefined>((best, s) => (!best || s.skills.medical > best.skills.medical ? s : best), undefined);
+  const med = doc?.skills.medical ?? 0;
   if (!sick.length && !herbs.length) return null;
+  const wanted = new Set<string>();
+  if (med >= 5) {
+    for (const s of sick) {
+      for (const a of ailmentsOf(s)) {
+        const rx = rxFor(a.id);
+        if (rx.how !== "rest") for (const id of rx.herbs) wanted.add(id);
+      }
+    }
+  }
   return (
     <div className="mb-4 space-y-2 rounded-md border border-border bg-surface px-3 py-2">
+      {doc ? <p className="text-[11px] leading-relaxed text-muted">{tt("herb.houseMed", { name: doc.name, n: med })}</p> : null}
       {sick.map((s) => (
-        <p key={s.id} className="text-xs text-hp">
-          {s.name} · {ailmentsOf(s).map((a) => tt(`herb.ail.${a.id}`)).join(" · ")}
-        </p>
+        <div key={s.id} className="space-y-1">
+          <p className="text-xs text-hp">
+            {s.name} · {ailmentsOf(s).map((a) => tt(`herb.ail.${a.id}`)).join(" · ")}
+            {s.infected ? ` · ${tt("herb.ail.bite")}` : ""}
+          </p>
+          {s.infected ? <p className="text-[11px] leading-relaxed text-muted">{tt("herb.rx.bite", { who: s.name })}</p> : null}
+          {med < 5 && ailmentsOf(s).length ? (
+            <p className="text-[11px] leading-relaxed text-muted">{tt("herb.rx.blind", { doc: doc?.name ?? s.name, n: med })}</p>
+          ) : null}
+          {med >= 5
+            ? ailmentsOf(s).map((a) => {
+                const rx = rxFor(a.id);
+                if (rx.how === "rest") {
+                  return (
+                    <p key={a.id} className="text-[11px] leading-relaxed text-muted">
+                      {tt("herb.rx.rest", { who: s.name, ail: tt(`herb.ail.${a.id}`) })}
+                    </p>
+                  );
+                }
+                const names = rx.herbs.map((id) => tt(`herb.id.${id}`)).join(tt("ui.comma"));
+                const stock = rx.herbs.some((id) => herbs.some((h) => h.known && h.id === id && h.qty > 0));
+                return (
+                  <p key={a.id} className="text-[11px] leading-relaxed">
+                    {tt("herb.rx.line", {
+                      who: s.name,
+                      ail: tt(`herb.ail.${a.id}`),
+                      doc: doc?.name ?? "",
+                      how: tt(rx.how === "poultice" ? "herb.poultice" : "herb.brew"),
+                      herbs: names,
+                      stock: tt(stock ? "herb.rx.stock" : "herb.rx.miss"),
+                    })}
+                    {a.id === "sepsis" ? ` ${tt(med >= 8 ? "herb.rx.clear" : "herb.rx.hold", { n: med })}` : ""}
+                  </p>
+                );
+              })
+            : null}
+        </div>
       ))}
       {herbs.map((h, i) => (
         <div key={`${h.id}-${h.known}-${i}`} className="flex flex-wrap items-center gap-2 text-xs">
-          <span>{h.known ? tt(`herb.id.${h.id}`) : tt("herb.unknown")} ×{h.qty}</span>
+          <span>
+            {h.known ? tt(`herb.id.${h.id}`) : tt("herb.unknown")} ×{h.qty}
+            {h.known && wanted.has(h.id) ? ` · ${tt("herb.rx.tag")}` : ""}
+          </span>
           {people.map((s) => (
             <span key={s.id} className="flex gap-1">
               <button type="button" className="h-8 rounded border border-border px-2" onClick={() => dose(s.id, i, "poultice")}>
-                {tt("herb.poultice")}
+                {tt("herb.poultice")} {s.name}
               </button>
               <button type="button" className="h-8 rounded border border-border px-2" onClick={() => dose(s.id, i, "brew")}>
-                {tt("herb.brew")}
+                {tt("herb.brew")} {s.name}
               </button>
             </span>
           ))}
         </div>
       ))}
+      <p className="text-[11px] leading-relaxed text-muted">{tt("herb.how")}</p>
+      {herbs.map((h) =>
+        h.known ? (
+          <p key={`how-${h.id}`} className="text-[11px] text-faint">
+            {tt(`herb.id.${h.id}`)} — {tt(`herb.how.${h.id}`)}
+          </p>
+        ) : null,
+      )}
       <p className="text-[11px] text-muted">{tt("herb.bite")}</p>
+    </div>
+  );
+}
+
+function MagRow({ state }: { state: GameState }) {
+  const tt = useT();
+  const mags = magsOf(state);
+  return (
+    <div className="mb-4 space-y-1 rounded-md border border-border bg-surface px-3 py-2">
+      <p className="text-[11px] leading-relaxed text-muted">{tt("mag.how")}</p>
+      <p className="text-xs">
+        {mags.length
+          ? mags.map((m) => `${tt(`mag.${m.id}`)}`).join(" · ")
+          : tt("mag.empty")}
+      </p>
     </div>
   );
 }
@@ -120,6 +195,7 @@ export function ShelterScreen({ state }: { state: GameState }) {
         </p>
       ) : null}
       <HerbRow state={state} />
+      <MagRow state={state} />
       <div className="mb-4 grid grid-cols-2 gap-2">
         <Button size="lg" className="w-full" onClick={() => setScreen("map")} disabled={ap < 1 || crushed.length === people.length}>
           {ap < 1 ? tt("ap.noneShort") : tt("ui.goMission")}
@@ -135,6 +211,9 @@ export function ShelterScreen({ state }: { state: GameState }) {
         >
           {tt("dispatch.open")}
         </Button>
+      </div>
+      <div className="mb-4">
+        <SaveFileBar />
       </div>
       {(state.dispatches ?? []).length ? (
         <ul className="mb-4 space-y-2">
@@ -374,7 +453,7 @@ function SurvivorCard({
           className="h-11 min-w-0 flex-1 rounded-md border border-border bg-surface-2 px-3 text-sm text-fg disabled:opacity-50"
         >
           {JOBS.map((j) => (
-            <option key={j.id} value={j.id} disabled={j.id !== "rest" && !canWork(s)}>
+            <option key={j.id} value={j.id} disabled={j.id !== "rest" && j.id !== "read" && !canWork(s)}>
               {tt(`job.${j.id}`)}
               {j.id !== "rest" && !canWork(s) ? tt("roster.moodNeed") : ""}
             </option>
@@ -443,6 +522,13 @@ export function BuildScreen({ state }: { state: GameState }) {
                   </div>
                   <p className="text-xs text-muted">{tt(`fac.${f.id}.blurb`)}</p>
                   <p className="mt-1 text-[11px] text-faint">{tt(`fac.${f.id}.effect`)}</p>
+                  {lv > 0 ? (
+                    <p className="mt-1 text-[11px] text-muted">
+                      {(state.halted ?? {})[f.id as FacilityId] ? tt("build.down") : tt("build.wear", { n: (state.wear ?? {})[f.id as FacilityId] ?? 0 })}
+                      {" · "}
+                      {tt("long.parts")} {(state.parts ?? 0)}
+                    </p>
+                  ) : null}
                   {!maxed ? (
                     <p className="mt-1 text-[11px] text-muted">
                       {tt("build.need")} {costText} · {tt("build.apCost", { n: AP_COST.build })}
@@ -464,6 +550,17 @@ export function BuildScreen({ state }: { state: GameState }) {
                         : costText}
                 </Button>
               </div>
+              {lv > 0 ? (
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  className="mt-2"
+                  disabled={(state.parts ?? 0) < 1 || state.resources.materials < 1}
+                  onClick={() => useGame.getState().repairMachine(f.id as FacilityId)}
+                >
+                  {tt("build.fix")}
+                </Button>
+              ) : null}
               <div className="mt-2 flex gap-1">
                 {Array.from({ length: f.max }).map((_, i) => (
                   <div

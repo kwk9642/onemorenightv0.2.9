@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import {
   CookingPot,
   Flame,
@@ -56,6 +56,9 @@ export function CreateScreen() {
   const [step, setStep] = useState(0);
   const [name, setName] = useState("Dale Hale");
   const [portrait, setPortrait] = useState("river");
+  const [faceData, setFaceData] = useState<string | undefined>();
+  const fileRef = useRef<HTMLInputElement>(null);
+  const [gender, setGender] = useState<"m" | "f" | "n">("n");
   const [occupation, setOccupation] = useState<OccupationId>("firefighter");
   const [traits, setTraits] = useState<TraitId[]>([]);
   const [alloc, setAlloc] = useState<Skills>(emptySkills());
@@ -79,6 +82,8 @@ export function CreateScreen() {
     setName(input.name);
     setOccupation(input.occupation);
     setPortrait(input.portrait);
+    setFaceData(input.faceData);
+    setGender(input.gender ?? "n");
     setTraits(withOccupationTraits(input.occupation, input.traits));
     setAlloc({ ...emptySkills(), ...input.alloc });
     setShelterId(input.shelterId);
@@ -114,7 +119,7 @@ export function CreateScreen() {
   };
 
   const start = () => {
-    newGame({ name, occupation, portrait, traits, alloc, shelterId });
+    newGame({ name, occupation, portrait, faceData, gender, traits, alloc, shelterId });
   };
 
   const titles = [tt("create.face"), tt("create.occ"), tt("create.traits"), tt("create.skills"), tt("create.shelter")];
@@ -159,6 +164,7 @@ export function CreateScreen() {
           <ResultCard
             name={name}
             portrait={portrait}
+            faceData={faceData}
             occupation={occupation}
             traits={traits}
             granted={granted}
@@ -174,18 +180,84 @@ export function CreateScreen() {
           <div className="space-y-4">
             <p className="text-sm text-muted">{tt("create.faceHint")}</p>
             <div className="flex items-end gap-3">
-              <Portrait portrait={portrait} name={name} tone={face.tone} className="h-36 w-28 shrink-0" />
+              <Portrait portrait={portrait} faceData={faceData} name={name} tone={face.tone} className="h-36 w-28 shrink-0" />
               <div className="min-w-0 flex-1 pb-1">
                 <div className="mb-1 text-[11px] tracking-wide text-muted">{tt("create.name")}</div>
                 <Input value={name} onChange={(e) => setName(e.target.value)} maxLength={24} />
               </div>
             </div>
+            <div className="flex gap-2">
+              {(["m", "f", "n"] as const).map((g) => (
+                <button
+                  key={g}
+                  type="button"
+                  onClick={() => setGender(g)}
+                  className={cn(
+                    "h-10 flex-1 rounded-md border text-sm",
+                    gender === g ? "border-accent bg-surface-2" : "border-border",
+                  )}
+                >
+                  {tt(`create.${g}`)}
+                </button>
+              ))}
+            </div>
+            <button
+              type="button"
+              onClick={() => fileRef.current?.click()}
+              className="h-11 w-full rounded-md border border-accent bg-surface text-sm"
+            >
+              {tt("create.upload")}
+            </button>
+            <input
+              ref={fileRef}
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              className="hidden"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = () => {
+                  const img = new Image();
+                  img.onload = () => {
+                    const canvas = document.createElement("canvas");
+                    canvas.width = 96;
+                    canvas.height = 128;
+                    const ctx = canvas.getContext("2d");
+                    if (!ctx) return;
+                    const scale = Math.max(96 / img.width, 128 / img.height);
+                    const w = img.width * scale;
+                    const h = img.height * scale;
+                    ctx.drawImage(img, (96 - w) / 2, (128 - h) / 2, w, h);
+                    setFaceData(canvas.toDataURL("image/jpeg", 0.72));
+                    setPortrait("upload");
+                  };
+                  img.src = String(reader.result ?? "");
+                };
+                reader.readAsDataURL(file);
+              }}
+            />
             <div className="grid grid-cols-4 gap-2">
+              {faceData ? (
+                <button
+                  type="button"
+                  onClick={() => setPortrait("upload")}
+                  className={cn(
+                    "overflow-hidden rounded-md border",
+                    portrait === "upload" ? "border-accent ring-1 ring-accent" : "border-border",
+                  )}
+                >
+                  <img src={faceData} alt="" className="aspect-[3/4] h-auto w-full object-cover" />
+                </button>
+              ) : null}
               {FACES.map((f) => (
                 <button
                   key={f.id}
                   type="button"
-                  onClick={() => setPortrait(f.id)}
+                  onClick={() => {
+                    setPortrait(f.id);
+                    setFaceData(undefined);
+                  }}
                   className={cn(
                     "overflow-hidden rounded-md border",
                     portrait === f.id ? "border-accent ring-1 ring-accent" : "border-border",
@@ -201,7 +273,7 @@ export function CreateScreen() {
         {mode === "wizard" && step === 1 ? (
           <div className="space-y-2">
             <div className="mb-3 flex items-center gap-3">
-              <Portrait portrait={portrait} name={name} tone={face.tone} className="h-16 w-12 shrink-0" />
+              <Portrait portrait={portrait} faceData={faceData} name={name} tone={face.tone} className="h-16 w-12 shrink-0" />
               <div className="min-w-0">
                 <div className="font-display tracking-wide">{name}</div>
                 <p className="text-sm text-muted">{tt("create.occHint")}</p>
@@ -264,7 +336,7 @@ export function CreateScreen() {
         {mode === "wizard" && step === 2 ? (
           <div className="space-y-5">
             <div className="flex items-center gap-3">
-              <Portrait portrait={portrait} name={name} tone={face.tone} className="size-16 shrink-0" />
+              <Portrait portrait={portrait} faceData={faceData} name={name} tone={face.tone} className="size-16 shrink-0" />
               <div className="min-w-0">
                 <div className="font-display tracking-wide">{name}</div>
                 <div className="text-xs text-muted">
@@ -400,7 +472,7 @@ export function CreateScreen() {
               </button>
             ))}
             <div className="flex items-center gap-3 rounded-md border border-border bg-surface p-2">
-              <Portrait portrait={portrait} name={name} tone={face.tone} className="h-14 w-11 shrink-0" />
+              <Portrait portrait={portrait} faceData={faceData} name={name} tone={face.tone} className="h-14 w-11 shrink-0" />
               <p className="text-xs text-faint">
                 {name} · {tt(`occ.${occ.id}`)} · {traits.map((id) => tt(`trait.${id}`)).join(" / ") || tt("create.noTrait")} · {tt(`sh.${shelter.id}`)}
               </p>
@@ -445,6 +517,7 @@ export function CreateScreen() {
 function ResultCard({
   name,
   portrait,
+  faceData,
   occupation,
   traits,
   granted,
@@ -456,6 +529,7 @@ function ResultCard({
 }: {
   name: string;
   portrait: string;
+  faceData?: string;
   occupation: OccupationId;
   traits: TraitId[];
   granted: TraitId[];
@@ -475,7 +549,7 @@ function ResultCard({
   return (
     <div className="ash-prose space-y-4">
       <div className="flex gap-4">
-        <Portrait portrait={portrait} name={name} tone={face.tone} className="h-44 w-32 shrink-0" />
+        <Portrait portrait={portrait} faceData={faceData} name={name} tone={face.tone} className="h-44 w-32 shrink-0" />
         <div className="min-w-0 flex-1 pt-1">
           <div className="font-display text-2xl tracking-wide">{name}</div>
           <div className="mt-1 text-sm text-muted">

@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { asset } from "@/game/asset";
 import { locById } from "@/game/data";
 import { living } from "@/game/engine";
+import { bandLabel } from "@/game/longrun";
 import { tLoc, useT } from "@/game/i18n";
 import { useGame } from "@/game/store";
 import type { GameState } from "@/game/types";
@@ -21,7 +22,7 @@ export function MissionScreen({ state }: { state: GameState }) {
   const bagN = Object.values(m.bag).reduce((a, b) => a + b, 0);
   const ap = apOf(state);
   const max = state.maxAP ?? 6;
-  const band = threatBand(ls.noiseToday ?? m.noise);
+  const met = state.meet ? (state.bands ?? []).find((b) => b.id === state.meet?.band) : undefined;
 
   return (
     <Shell>
@@ -41,7 +42,7 @@ export function MissionScreen({ state }: { state: GameState }) {
               {tt("ui.noise")} {ls.noiseToday ?? m.noise}
             </div>
             <div>
-              {tt("threat.label")} {tt(`threat.${band}`)}
+              {tt("threat.label")} {tt(`threat.${threatBand(ls.noiseToday ?? m.noise)}`)}
             </div>
             <div>
               {tt("ui.z")} {ls.zombies} · {tt("ui.bag")} {bagN}
@@ -59,6 +60,18 @@ export function MissionScreen({ state }: { state: GameState }) {
         <div className="absolute inset-0 bg-gradient-to-t from-bg to-transparent" />
       </div>
       <div className="min-h-0 flex-1 overflow-y-auto px-4 py-4">
+        {met?.face ? (
+          <div className="mb-3 space-y-2">
+            <div className="flex items-center gap-3">
+              <Portrait portrait={met.face} name={bandLabel(met.id)} className="h-24 w-16 shrink-0" />
+              <div>
+                <p className="text-sm leading-relaxed text-fg">{bandLabel(met.id)}</p>
+                <p className="text-[11px] tracking-wide text-muted">{tt(`long.stance.${met.stance}`)}</p>
+              </div>
+            </div>
+            <p className="text-sm leading-relaxed text-muted">{tt(`dip.stance.${met.stance}`)}</p>
+          </div>
+        ) : null}
         <p key={m.promptBody} className="ash-prose font-serif text-[1.05rem] leading-[1.65] text-fg">
           {m.promptBody}
         </p>

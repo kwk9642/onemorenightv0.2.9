@@ -81,7 +81,7 @@ export type TraitId =
 
 export type SkillId = "combat" | "stealth" | "scavenge" | "medical" | "build" | "farm" | "cook";
 
-export type JobId = "rest" | "cook" | "farm" | "guard" | "repair" | "tend" | "radio" | "craft" | "press";
+export type JobId = "rest" | "cook" | "farm" | "guard" | "repair" | "tend" | "radio" | "craft" | "press" | "read";
 
 export type FacilityId =
   | "beds"
@@ -167,6 +167,8 @@ export interface Survivor {
   occupation: OccupationId;
   traits: TraitId[];
   portrait: string;
+  faceData?: string;
+  gender?: "m" | "f" | "n";
   skills: Skills;
   skillXp: Skills;
   skillBase: Skills;
@@ -209,6 +211,10 @@ export interface LocationState {
   alertLevel: number;
   infection?: number;
   baseZombies?: number;
+  searchPct?: number;
+  intel?: number;
+  miles?: number;
+  heard?: boolean;
 }
 
 export interface Choice {
@@ -264,6 +270,8 @@ export interface CreateInput {
   name: string;
   occupation: OccupationId;
   portrait: string;
+  faceData?: string;
+  gender?: "m" | "f" | "n";
   traits: TraitId[];
   alloc: Partial<Skills>;
   shelterId: string;
@@ -344,4 +352,11 @@ export interface GameState {
   sandbox?: SandboxOpts;
   stillCooldown: number;
   herbs?: import("./herbs").HerbStack[];
+  mags?: import("./magazines").MagStack[];
+  parts?: number;
+  wear?: Partial<Record<FacilityId, number>>;
+  halted?: Partial<Record<FacilityId, boolean>>;
+  bands?: import("./longrun").Band[];
+  meet?: { band: import("./longrun").BandId; locId: string } | null;
+  metDay?: number;
 }

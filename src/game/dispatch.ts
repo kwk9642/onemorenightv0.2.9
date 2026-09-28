@@ -28,7 +28,7 @@ import {
   startingMorale,
 } from "./growth";
 import { t, tLoc, tResBits } from "./i18n";
-import { addHerb, knowsOnSight, rollHerb } from "./herbs";
+import { addHerb, herbCount, nameByDoctor, rollHerb } from "./herbs";
 import { chance, pick, range, uid } from "./rng";
 import type {
   DispatchFocus,
@@ -45,6 +45,7 @@ import type {
   WeaponId,
 } from "./types";
 import { AP_COST, apOf } from "./v03";
+import { addIntelOne } from "./longrun";
 
 export const DISPATCH_TASKS: DispatchTask[] = ["herbs", "supplies", "forage", "auto"];
 export const DISPATCH_MAX = 2;
@@ -91,6 +92,9 @@ export function awayIds(state: GameState): Set<string> {
   const ids = new Set<string>();
   for (const p of state.dispatches ?? []) {
     for (const id of p.memberIds) ids.add(id);
+  }
+  for (const b of state.bands ?? []) {
+    if (b.envoyId) ids.add(b.envoyId);
   }
   return ids;
 }
@@ -339,26 +343,21 @@ function hiddenLocs(state: GameState) {
 }
 
 function discoverOne(state: GameState): { state: GameState; name: string } {
-  const hidden = hiddenLocs(state);
-  if (!hidden.length) return { state, name: "" };
-  const p = pick(state.rng, hidden);
-  return {
-    name: tLoc(p.item.id),
-    state: {
-      ...state,
-      rng: p.r,
-      locations: { ...state.locations, [p.item.id]: { ...state.locations[p.item.id], discovered: true } },
-    },
-  };
+  return { state, name: "" };
 }
 
-function makeFound(r0: number): { r: number; s: Survivor; extra: GearItem[] } {
+function makeFound(state: GameState, r0: number): { r: number; s: Survivor; extra: GearItem[] } {
   const occ = pick(r0, OCCUPATIONS);
   const nm = pick(occ.r, FIRST_NAMES);
   const ln = pick(nm.r, LAST_NAMES);
   const pos = pick(ln.r, TRAITS.filter((x) => x.kind === "pos"));
   const neg = pick(pos.r, TRAITS.filter((x) => x.kind === "neg"));
-  const face = pick(neg.r, FACES);
+  const used = [
+    ...state.survivors.filter((s) => s.alive && !s.faceData).map((s) => s.portrait),
+    ...(state.bands ?? []).map((b) => b.face).filter((id): id is string => !!id),
+  ];
+  const free = FACES.filter((f) => !used.includes(f.id));
+  const face = pick(neg.r, free.length ? free : FACES);
   const traits = withOccupationTraits(occ.item.id, [pos.item.id, neg.item.id]);
   const skills = composeSkills(occById(occ.item.id as OccupationId).skills, traits.map(traitById));
   const hp = clamp(occById(occ.item.id as OccupationId).hp, 50, 140);
@@ -513,6 +512,15 @@ function resolveOne(state: GameState, party: DispatchParty): GameState {
     return pushLog(next, t("dispatch.log.delay", { names, loc: destName }));
   }
 
+  const fromId = next.locations[party.destId] ? party.destId : next.shelter.locationId;
+  if (ev === "note") {
+    next = addIntelOne(next, fromId, 100);
+  } else {
+    const bite = range(next.rng, 8, 36);
+    next = { ...next, rng: bite.r };
+    next = addIntelOne(next, fromId, bite.n);
+  }
+
   let loot = bag();
   for (const s of folks) {
     const focus = focusOf(s, party.task);
@@ -520,10 +528,13 @@ function resolveOne(state: GameState, party: DispatchParty): GameState {
     const rolledLoot = lootFor(focus, score, next.rng, ev === "lucky" ? 1.5 : ev === "empty" ? 0 : 1);
     next = { ...next, rng: rolledLoot.r };
     if (focus === "herbs") {
-      const herb = rollHerb(next.day, next.rng);
-      next = { ...next, rng: herb.r };
-      const known = folks.some(knowsOnSight);
-      next = addHerb(next, herb.id, known, 1);
+      const known = s.skills.medical >= 3 || s.skills.farm >= 3;
+      const n = herbCount(s);
+      for (let i = 0; i < n; i++) {
+        const herb = rollHerb(next.day, next.rng);
+        next = { ...next, rng: herb.r };
+        next = addHerb(next, herb.id, known, 1);
+      }
     }
     loot = addBag(loot, rolledLoot.bag);
     if (party.task !== "auto") {
@@ -536,10 +547,13 @@ function resolveOne(state: GameState, party: DispatchParty): GameState {
     }
   }
 
-  const dropParty = () => ({
-    ...next,
-    dispatches: (next.dispatches ?? []).filter((p) => p.id !== party.id),
-  });
+  const dropParty = () => {
+    next = nameByDoctor({
+      ...next,
+      dispatches: (next.dispatches ?? []).filter((p) => p.id !== party.id),
+    });
+    return next;
+  };
 
   const takeLoot = (mul = 1) => {
     const got: Resources = {
@@ -683,7 +697,7 @@ function resolveOne(state: GameState, party: DispatchParty): GameState {
         t("dispatch.log.personFull", { names, loc: destName, loot: tResBits(got) || t("dispatch.nothing") }),
       );
     }
-    const found = makeFound(next.rng);
+    const found = makeFound(next, next.rng);
     next = {
       ...next,
       rng: found.r,
@@ -710,7 +724,7 @@ function resolveOne(state: GameState, party: DispatchParty): GameState {
 
   if (ev === "greenhouse") {
     loot = addBag(loot, { food: 2, medicine: 1 });
-    const known = folks.some(knowsOnSight);
+    const known = folks.some((s) => s.skills.medical >= 3 || s.skills.farm >= 3);
     next = addHerb(next, "plantain", known, 2);
     next = addHerb(next, "mint", known, 1);
     const got = takeLoot(1);

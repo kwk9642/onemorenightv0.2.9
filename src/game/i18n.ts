@@ -3,6 +3,11 @@ import { whyEn, whyJa, whyKo, whyZh } from "./why";
 import { v021En, v021Ja, v021Ko, v021Zh } from "./v021Copy";
 import { v022En, v022Ja, v022Ko, v022Zh } from "./v022Copy";
 import { v023En, v023Ja, v023Ko, v023Zh } from "./v023Copy";
+import { v024En, v024Ja, v024Ko, v024Zh } from "./v024Copy";
+import { longEn, longJa, longKo, longZh } from "./longCopy";
+import { atlasEn, atlasJa, atlasKo, atlasZh } from "./atlasCopy";
+import { guideEn, guideJa, guideKo, guideZh } from "./guideCopy";
+import { verEn, verJa, verKo, verZh } from "./verCopy";
 import { skillEn, skillJa, skillKo, skillZh } from "./skillCopy";
 import { dispatchEn, dispatchJa, dispatchKo, dispatchZh } from "./dispatchCopy";
 import { logEn, logJa, logKo, logZh } from "./logCopy";
@@ -3593,10 +3598,10 @@ const helpKo: Record<string, string> = {
 };
 
 const DICT: Record<Locale, Record<string, string>> = {
-  zh: { ...zh, ...extraZh, ...v03Zh, ...mapZh, ...helpZh, ...whyZh, ...skillZh, ...dispatchZh, ...logZh, ...v021Zh, ...v022Zh, ...v023Zh },
-  ja: { ...ja, ...extraJa, ...v03Ja, ...mapJa, ...helpJa, ...whyJa, ...skillJa, ...dispatchJa, ...logJa, ...v021Ja, ...v022Ja, ...v023Ja },
-  en: { ...en, ...extraEn, ...v03En, ...mapEn, ...helpEn, ...whyEn, ...skillEn, ...dispatchEn, ...logEn, ...v021En, ...v022En, ...v023En },
-  ko: { ...ko, ...extraKo, ...v03Ko, ...mapKo, ...helpKo, ...whyKo, ...skillKo, ...dispatchKo, ...logKo, ...v021Ko, ...v022Ko, ...v023Ko },
+  zh: { ...zh, ...extraZh, ...v03Zh, ...mapZh, ...helpZh, ...whyZh, ...skillZh, ...dispatchZh, ...logZh, ...v021Zh, ...v022Zh, ...v023Zh, ...v024Zh, ...longZh, ...atlasZh, ...guideZh, ...verZh },
+  ja: { ...ja, ...extraJa, ...v03Ja, ...mapJa, ...helpJa, ...whyJa, ...skillJa, ...dispatchJa, ...logJa, ...v021Ja, ...v022Ja, ...v023Ja, ...v024Ja, ...longJa, ...atlasJa, ...guideJa, ...verJa },
+  en: { ...en, ...extraEn, ...v03En, ...mapEn, ...helpEn, ...whyEn, ...skillEn, ...dispatchEn, ...logEn, ...v021En, ...v022En, ...v023En, ...v024En, ...longEn, ...atlasEn, ...guideEn, ...verEn },
+  ko: { ...ko, ...extraKo, ...v03Ko, ...mapKo, ...helpKo, ...whyKo, ...skillKo, ...dispatchKo, ...logKo, ...v021Ko, ...v022Ko, ...v023Ko, ...v024Ko, ...longKo, ...atlasKo, ...guideKo, ...verKo },
 };
 
 export function tRoom(name: string) {

@@ -17,6 +17,7 @@ import {
   resolveEncounter,
   restNight,
   repairWall as applyRepairWall,
+  repairMachine as applyRepairMachine,
   doseHerb,
   startMission,
   unequipSlot,
@@ -24,11 +25,12 @@ import {
 } from "./engine";
 import { canMission } from "./growth";
 import { canStartDispatch, isAway, startDispatch } from "./dispatch";
-import { clearSave, loadSave, writeSave } from "./save";
+import { clearSave, loadSave, writeSave, acceptSave } from "./save";
 import { click, ok, setBgm, setMuted, unlockAudio, warn } from "./audio";
 import { useShop } from "./shop";
 import type { CreateInput, DispatchTask, EquipSlot, FacilityId, GameState, GearItem, JobId, PlayMode, Resources, SandboxOpts } from "./types";
 import { DEFAULT_SANDBOX } from "./mode";
+import type { ScenarioId } from "./scenarios";
 
 function persist(s: GameState): GameState {
   const log = s.log ?? [];
@@ -51,11 +53,11 @@ interface GameStore {
   logOpen: boolean;
   menu: "title" | "create" | "shop" | "mode";
   draftMode: PlayMode;
-  draftLate: boolean;
+  draftScenario: ScenarioId | null;
   draftSandbox: SandboxOpts;
   openMode: () => void;
   setDraftMode: (mode: PlayMode) => void;
-  setDraftLate: (on: boolean) => void;
+  setDraftScenario: (id: ScenarioId) => void;
   setDraftSandbox: (patch: Partial<SandboxOpts>) => void;
   muted: boolean;
   boot: () => void;
@@ -73,6 +75,7 @@ interface GameStore {
   sendDispatch: (ids: string[], task: DispatchTask) => void;
   newGame: (input: CreateInput) => void;
   continueGame: () => void;
+  adoptSave: (raw: unknown) => boolean;
   abandon: () => void;
   setScreen: (screen: GameState["screen"]) => void;
   setSquad: (ids: string[]) => void;
@@ -86,6 +89,7 @@ interface GameStore {
   kick: (id: string) => void;
   upgrade: (id: FacilityId) => void;
   repairWall: () => void;
+  repairMachine: (id: FacilityId) => void;
   sleep: () => void;
   dose: (whoId: string, index: number, how: "poultice" | "brew") => void;
   toggleMute: () => void;
@@ -110,7 +114,7 @@ export const useGame = create<GameStore>((set, get) => ({
   logOpen: false,
   menu: "title",
   draftMode: "normal",
-  draftLate: false,
+  draftScenario: null,
   draftSandbox: { ...DEFAULT_SANDBOX },
   muted: false,
   boot: () => {
@@ -133,7 +137,7 @@ export const useGame = create<GameStore>((set, get) => ({
     set({ menu: "mode", logOpen: false, dispatchOpen: false });
   },
   setDraftMode: (mode) => set({ draftMode: mode }),
-  setDraftLate: (on) => set({ draftLate: on }),
+  setDraftScenario: (id) => set({ draftScenario: get().draftScenario === id ? null : id }),
   setDraftSandbox: (patch) => set({ draftSandbox: { ...get().draftSandbox, ...patch } }),
   openCreate: () => {
     unlockAudio();
@@ -183,7 +187,7 @@ export const useGame = create<GameStore>((set, get) => ({
   newGame: (input) => {
     unlockAudio();
     ok();
-    const run = persist(createNewGame({ ...input, mode: get().draftMode, sandbox: get().draftSandbox, scenario: get().draftLate ? "late" : null }));
+    const run = persist(createNewGame({ ...input, mode: get().draftMode, sandbox: get().draftSandbox, scenario: get().draftScenario }));
     set({ run, hasSave: true, savePeek: peekOf(run), menu: "title", muted: run.muted, help: false, logOpen: false, dispatchOpen: false });
   },
   continueGame: () => {
@@ -192,6 +196,13 @@ export const useGame = create<GameStore>((set, get) => ({
     const run = loadSave();
     if (run) set({ run, hasSave: true, savePeek: peekOf(run), muted: !!run.muted, help: false, dispatchOpen: false, logOpen: false });
     else set({ hasSave: false, savePeek: null, logOpen: false });
+  },
+  adoptSave: (raw) => {
+    const run = acceptSave(raw);
+    if (!run) return false;
+    const next = persist(run);
+    set({ run: next, hasSave: true, savePeek: peekOf(next), muted: !!next.muted, help: false, dispatchOpen: false, logOpen: false, menu: "title" });
+    return true;
   },
   abandon: () => {
     clearSave();
@@ -287,6 +298,12 @@ export const useGame = create<GameStore>((set, get) => ({
     if (!run) return;
     ok();
     set({ run: persist(applyRepairWall(run)) });
+  },
+  repairMachine: (id) => {
+    const run = get().run;
+    if (!run) return;
+    ok();
+    set({ run: persist(applyRepairMachine(run, id)) });
   },
   sleep: () => {
     const run = get().run;

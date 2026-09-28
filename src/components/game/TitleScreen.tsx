@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import { Volume2, VolumeX } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { unlockAudio } from "@/game/audio";
+import { EDITION } from "@/game/edition";
 import { asset } from "@/game/asset";
 import { getLocale, tLoc, TIP_COUNT, useT } from "@/game/i18n";
 import { useGame } from "@/game/store";
 import { LangSwitch, Shell } from "./chrome";
+import { SaveFileBar } from "./SaveFileBar";
 
 function rollTip(except?: number) {
   let n = Math.floor(Math.random() * TIP_COUNT);
@@ -75,6 +77,7 @@ export function TitleScreen({ muted }: { muted: boolean }) {
             >
               {tt("ui.ash")}
             </p>
+            <p className="max-w-[22rem] text-sm leading-relaxed text-fg/80">{tt(`edition.${EDITION}Note`)}</p>
             <button
               type="button"
               onClick={() => setTip((n) => rollTip(n))}
@@ -108,6 +111,7 @@ export function TitleScreen({ muted }: { muted: boolean }) {
                 {tt("log.openBtn")}
               </Button>
             </div>
+            <SaveFileBar />
           </div>
         </div>
       </div>

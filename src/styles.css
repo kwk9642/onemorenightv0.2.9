@@ -37,6 +37,14 @@
     background: var(--color-bg);
     color: var(--color-fg);
     -webkit-font-smoothing: antialiased;
+    overscroll-behavior: none;
+    touch-action: manipulation;
+  }
+
+  input,
+  textarea,
+  select {
+    font-size: 16px;
   }
 
   button:not(:disabled),

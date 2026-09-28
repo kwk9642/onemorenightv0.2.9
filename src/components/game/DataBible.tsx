@@ -2,13 +2,14 @@ import { useMemo, useState } from "react";
 import { FACILITIES, JOBS, LOCATIONS, OCCUPATIONS, TRAITS, sizeLabel } from "@/game/data";
 import { SKILL_KEYS, skillBoostLine } from "@/game/growth";
 import { GEAR, gearStatBits } from "@/game/gear";
+import { EDITION, WEB_STATE_LIST } from "@/game/edition";
 import { getLocale, t, tLoc, useT } from "@/game/i18n";
 import { cn } from "@/lib/utils";
 
 export const BIBLE_TABS = ["play", "skills", "locations", "occupations", "traits", "gear", "facilities", "jobs", "rules"] as const;
 export type BibleTab = (typeof BIBLE_TABS)[number];
 
-const PLAY = ["goal", "save", "ap", "mission", "dispatch", "search", "fight", "skills", "night", "house", "occupy", "gear", "win"] as const;
+const PLAY = ["edition", "goal", "save", "modes", "ap", "mission", "map", "dispatch", "search", "fight", "zombies", "herbs", "magazines", "bands", "diplomacy", "skills", "night", "house", "wear", "occupy", "gear", "win"] as const;
 const RULES = ["ap", "search", "fight", "extract", "night", "raid", "build", "occupy", "dispatch"] as const;
 
 function Card({ title, body, meta }: { title: string; body?: string; meta?: string }) {
@@ -38,10 +39,15 @@ export function DataBible({ onClose }: { onClose?: () => void }) {
   const [q, setQ] = useState("");
   const needle = q.trim().toLowerCase();
 
-  const play = useMemo(
-    () => PLAY.map((id) => ({ id, title: tt(`bible.play.${id}`), body: tt(`bible.play.${id}.body`) })),
-    [tt, loc],
-  );
+  const play = useMemo(() => {
+    const states = WEB_STATE_LIST.map((id) => tt(`state.${id}`)).join(loc === "en" ? ", " : "、");
+    const editionKey = `edition.${EDITION}`;
+    return PLAY.map((id) =>
+      id === "edition"
+        ? { id, title: tt(`${editionKey}Title`), body: tt(`${editionKey}Body`, { states }) }
+        : { id, title: tt(`bible.play.${id}`), body: tt(`bible.play.${id}.body`) },
+    );
+  }, [tt, loc]);
 
   let cards: { key: string; title: string; meta?: string; body?: string }[] = [];
   if (tab === "play") {

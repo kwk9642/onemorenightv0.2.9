@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useT } from "@/game/i18n";
 import { useGame } from "@/game/store";
 import type { PlayMode } from "@/game/types";
+import { SCENARIOS } from "@/game/scenarios";
 import { Shell } from "./chrome";
 
 const MODES: PlayMode[] = ["casual", "normal", "extinct", "sandbox"];
@@ -10,47 +12,73 @@ export function ModeScreen() {
   const tt = useT();
   const mode = useGame((s) => s.draftMode);
   const box = useGame((s) => s.draftSandbox);
-  const late = useGame((s) => s.draftLate);
-  const setLate = useGame((s) => s.setDraftLate);
+  const scenario = useGame((s) => s.draftScenario);
+  const setScenario = useGame((s) => s.setDraftScenario);
   const setMode = useGame((s) => s.setDraftMode);
   const patch = useGame((s) => s.setDraftSandbox);
   const openCreate = useGame((s) => s.openCreate);
   const openTitle = useGame((s) => s.openTitle);
+  const [page, setPage] = useState<"root" | "scenarios">("root");
+  const picked = scenario ? SCENARIOS.indexOf(scenario) : -1;
 
   return (
     <Shell>
       <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto px-5 py-6">
-        <h1 className="font-serif text-3xl">{tt("mode.title")}</h1>
-        <div className="grid gap-2">
-          {MODES.map((id) => (
-            <button
-              key={id}
-              type="button"
-              onClick={() => setMode(id)}
-              className={
-                mode === id
-                  ? "rounded-md border border-accent bg-surface-2 px-3 py-3 text-left"
-                  : "rounded-md border border-border bg-surface px-3 py-3 text-left"
-              }
-            >
-              <div className="font-display tracking-wide">{tt(`mode.${id}`)}</div>
-              <p className="mt-1 text-xs leading-relaxed text-muted">{tt(`mode.${id}.body`)}</p>
-            </button>
-          ))}
-        </div>
-        <button
-          type="button"
-          onClick={() => setLate(!late)}
-          className={
-            late
-              ? "rounded-md border border-hp bg-surface-2 px-3 py-3 text-left"
-              : "rounded-md border border-border bg-surface px-3 py-3 text-left"
-          }
-        >
-          <div className="font-display tracking-wide">{tt("mode.late")}</div>
-          <p className="mt-1 text-xs leading-relaxed text-muted">{tt("mode.late.body")}</p>
-        </button>
-        {mode === "sandbox" ? (
+        <h1 className="font-serif text-3xl">{page === "scenarios" ? tt("mode.scenarios") : tt("mode.title")}</h1>
+        {page === "scenarios" ? (
+          <div className="grid gap-2">
+            {SCENARIOS.map((id, i) => (
+              <button
+                key={id}
+                type="button"
+                onClick={() => setScenario(id)}
+                className={
+                  scenario === id
+                    ? "rounded-md border border-hp bg-surface-2 px-3 py-3 text-left"
+                    : "rounded-md border border-border bg-surface px-3 py-3 text-left"
+                }
+              >
+                <div className="font-display tracking-wide">
+                  {i + 1}. {tt(`mode.${id}`)}
+                </div>
+                <p className="mt-1 text-xs leading-relaxed text-muted">{tt(`mode.${id}.body`)}</p>
+              </button>
+            ))}
+          </div>
+        ) : (
+          <>
+            <div className="grid gap-2">
+              {MODES.map((id) => (
+                <button
+                  key={id}
+                  type="button"
+                  onClick={() => setMode(id)}
+                  className={
+                    mode === id
+                      ? "rounded-md border border-accent bg-surface-2 px-3 py-3 text-left"
+                      : "rounded-md border border-border bg-surface px-3 py-3 text-left"
+                  }
+                >
+                  <div className="font-display tracking-wide">{tt(`mode.${id}`)}</div>
+                  <p className="mt-1 text-xs leading-relaxed text-muted">{tt(`mode.${id}.body`)}</p>
+                </button>
+              ))}
+              <button
+                type="button"
+                onClick={() => setPage("scenarios")}
+                className={
+                  scenario
+                    ? "rounded-md border border-hp bg-surface-2 px-3 py-3 text-left"
+                    : "rounded-md border border-border bg-surface px-3 py-3 text-left"
+                }
+              >
+                <div className="font-display tracking-wide">{tt("mode.scenarios")}</div>
+                <p className="mt-1 text-xs leading-relaxed text-muted">
+                  {picked >= 0 ? `${picked + 1}. ${tt(`mode.${scenario}`)}` : tt("mode.scenarios.body")}
+                </p>
+              </button>
+            </div>
+            {mode === "sandbox" ? (
           <div className="space-y-3 rounded-md border border-border bg-surface p-3 text-sm">
             <label className="flex items-center justify-between gap-3">
               <span>{tt("mode.hands")}</span>
@@ -101,9 +129,11 @@ export function ModeScreen() {
             </label>
           </div>
         ) : null}
+          </>
+        )}
         <p className="text-xs leading-relaxed text-muted">{tt("mode.note")}</p>
         <div className="mt-auto flex gap-2 pt-2">
-          <Button variant="secondary" className="flex-1" onClick={openTitle}>
+          <Button variant="secondary" className="flex-1" onClick={page === "scenarios" ? () => setPage("root") : openTitle}>
             {tt("mode.back")}
           </Button>
           <Button className="flex-1" onClick={openCreate}>

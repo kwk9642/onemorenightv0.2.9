@@ -98,12 +98,12 @@ export function AshApp() {
 
   if (menu === "shop") return <ShopScreen />;
   const bible = help ? (
-    <div className="fixed inset-0 z-50 bg-bg">
+    <div className="fixed inset-0 z-[80] bg-bg">
       <DataBible onClose={closeHelp} />
     </div>
   ) : null;
   const logSheet = logOpen ? (
-    <div className="fixed inset-0 z-50 bg-bg">
+    <div className="fixed inset-0 z-[80] bg-bg">
       <DevLogSheet onClose={closeLog} />
     </div>
   ) : null;

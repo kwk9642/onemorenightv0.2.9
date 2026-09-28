@@ -122,6 +122,7 @@ export function padV03(state: GameState): GameState {
     mode: state.mode ?? "normal",
     stillCooldown: state.stillCooldown ?? 0,
     herbs: state.herbs ?? [],
+    mags: state.mags ?? [],
     scenario: state.scenario ?? null,
     shelter: state.shelter
       ? {

@@ -23,6 +23,160 @@ const L = (zh: string, en: string, ja: string, ko: string): Record<Locale, strin
 
 export const DEVLOG: DevLogEntry[] = [
   {
+    id: "0.2.8",
+    version: "0.2.8",
+    date: "2026-09-28",
+    title: L(
+      "v0.2.8　路程、屋子、路上的人",
+      "v0.2.8  Roads, the house, and people on them",
+      "v0.2.8　道、家、道の人",
+      "v0.2.8　길, 집, 길 위의 사람",
+    ),
+    kicker: L("公開更新", "Public update", "公開更新", "공개 업데이트"),
+    sections: [
+      {
+        heading: L("位置要情報滿了才入圖", "A place appears when the intel is full", "位置は情報が満杯になってから", "위치는 정보가 차야 들어온다"),
+        body: L(
+          "開局只看得見屋子和近處幾個鎮。下一個鎮有自己的情報，到 100% 才在地圖上出現，並寫著離你幾英里。大約 190 英里以外，現在加不到情報。委任回來隨機加一截。搜索撿到海報，一個近處地名直接補滿。搬進清空的據點，每個夠近、還沒入圖的鄰鎮加 25%。電台不把遠處的城畫出來。完整版五十個州都有鎮。網頁版只開二十個州，從肯塔基走到芝加哥，再加上南邊和東邊的鄰州。阿拉斯加、夏威夷和西岸在安卓版和 Steam 版。",
+          "At the start you see the house and a few towns close by. The next town has its own intel. It appears at 100%, with the miles from you. Past about 190 miles you cannot add intel yet. A dispatch adds a random slice. A poster found while searching fills one nearby name. Moving into a cleared site adds 25% to each nearby town still off the map. The radio does not draw distant cities. The full version has towns in all fifty states. The web version opens twenty, from Kentucky to Chicago and the states south and east of that. Alaska, Hawaii, and the west coast are on Android and Steam.",
+          "最初に見えるのは家と近い町だけ。次の町は自分の情報を持ち、100% で地図に入り、何マイルかを書く。およそ 190 マイルより先は、今は情報を足せない。派遣の帰りはランダムに一区切り。搜索でポスターを拾うと、近い地名の一つが満杯になる。掃いた地点へ移ると、十分近くてまだ入っていない隣町がそれぞれ 25%。無線は遠い都市を描かない。完全版は五十州に町がある。ウェブは二十州で、ケンタッキーからシカゴ、その南と東。アラスカ、ハワイ、西海岸は Android 版と Steam 版。",
+          "처음에는 집과 가까운 마을만 보인다. 다음 마을은 자기 정보가 있고, 100%가 되면 지도에 들어오며 몇 마일인지 적힌다. 약 190마일을 넘으면 지금은 정보를 더하지 못한다. 파견이 돌아오면 무작위로 한 토막. 수색에서 포스터를 주우면 가까운 지명 하나가 찬다. 치운 거점으로 이사하면, 충분히 가깝고 아직 안 들어온 이웃이 각각 25%. 무전기는 먼 도시를 그리지 않는다. 완전판은 쉰 개 주에 마을이 있다. 웹은 스무 개 주, 켄터키에서 시카고와 그 남쪽, 동쪽이다. 알래스카, 하와이, 서해안은 안드로이드와 Steam이다.",
+        ),
+      },
+      {
+        heading: L("屋子每晚都在耗", "The house wears every night", "家は毎夜減る", "집은 매일 밤 닳는다"),
+        body: L(
+          "蓋好的設施每晚增加耗損。有人做對應的工作，加得少。沒人管，加得多。到滿就停機，那一台不再產水、煮飯或收訊。修好要 1 建材、1 零件，再花一格行動。零件在店、倉、車站、鎮中心搜索時有機會撿到。日子分三段。正常大約第 15 晚進入稀薄，第 31 晚進入這個季節。休閒更晚，滅絕更早。這個季節裡集水器凍住，當晚不產水，沒人管的機器也耗得更快。",
+          "A built facility gains wear every night. The matching job adds less. No one on that job adds more. At full wear it halts, and that machine no longer makes water, cooks, or receives. Fixing it takes 1 material, 1 part, and one action. Parts can turn up when you search a shop, a warehouse, a station, or a town center. The days have three stretches. On Normal, about night 15 is the thin stretch and about night 31 is the season. Casual is later. Extinct is earlier. In that season the collector freezes, that night makes no water, and untended machines wear faster.",
+          "建てた施設は毎夜減る。対応する仕事があれば少ない。誰もいなければ多い。満タンで停止し、水も飯も受信もしない。直すには建材 1、部品 1、行動 1。部品は店、倉、駅、町の中心の搜索で出ることがある。日は三つ。通常はおよそ 15 日目から薄い時期、31 日目からこの季節。気楽は遅く、絶滅は早い。その季節は集水器が凍り、その夜は水が出ず、放っておいた機械も減りが速い。",
+          "지은 시설은 매일 밤 닳는다. 맞는 일을 하면 적게 더하고, 아무도 없으면 많이 더한다. 가득 차면 멈추고, 그 기계는 물도 밥도 수신도 안 한다. 고치려면 자재 1, 부품 1, 행동 한 칸. 부품은 가게, 창고, 역, 마을 한가운데를 수색할 때 나올 수 있다. 날은 세 구간이다. 보통은 대략 15일째에 옅은 구간, 31일째에 이 계절. 캐주얼은 더 늦고 절멸은 더 이르다. 그 계절에는 집수기가 얼고, 그날 밤은 물이 안 나오며, 돌보지 않은 기계도 더 빨리 닳는다.",
+        ),
+      },
+      {
+        heading: L("每一局二十四股活人", "Twenty-four groups each run", "一局に二十四の群れ", "한 판에 스물네 패"),
+        body: L(
+          "開局那一州有兩股，鄰州各一股，其餘在別的州。沒走到那一州就碰不上。第一次見面是中立。讓路可以變友好，搶或動手就變敵對。友好之後可以請他們說下一個鎮、用東西交換、派一個人去幫他們守一夜，或請他們三天內幫你守屋。敵對而且已經把你家問到 100，才找得到屋子，牆低就可能拆停掉的機器。你把屋子搬走，他們這份進度清掉，不再知道新位子。他們自己搬走，你也不再知道他們去了哪。兩股之間會自己談妥或決裂。你沒見過、鎮也還沒入圖，日誌不寫，事情仍會發生。",
+          "Two groups start in your state, one in each neighboring state, and the rest farther away. You do not meet them until you reach that state. The first meeting is neutral. Yielding the road can make them friendly. Taking or fighting makes them hostile. After that you can ask them to name the next town, trade, send one person to help them hold for a night, or ask them to help hold your house for three days. A hostile group finds the house only after the questioning reaches 100. A low wall can mean a halted machine. If you move, that progress is wiped and they do not know the new house. If they move, you do not know where they went. Two groups can make terms or split on their own. If you have not met them and the town is not on the map, the log stays quiet. It still happens.",
+          "開始の州に二つ、隣州に一つ、残りは遠い州。その州に着くまで会わない。最初は中立。道を譲れば友好になり得る。奪うか手を出せば敵対。友好のあと、次の町を聞き、物を換え、一人を一夜送り、三日家を守らせることができる。敵対が家を 100 まで聞いて、初めて家を見つけられる。壁が低ければ止まった機械を壊し得る。家を移せばその進捗は消え、新しい場所は知られない。相手が移れば、行き先は分からない。二つの群れは自分たちで話したり決裂したりする。会っておらず町も地図になければ、日誌は黙る。出来事は起きる。",
+          "시작한 주에 둘, 이웃 주에 하나, 나머지는 먼 주. 그 주에 닿기 전에는 만나지 않는다. 첫 만남은 중립. 길을 양보하면 우호가 될 수 있다. 빼앗거나 손을 대면 적대. 우호가 된 뒤, 다음 마을을 묻고, 물건을 바꾸고, 한 사람을 하룻밤 보내고, 사흘 동안 집을 지키게 할 수 있다. 적대는 집을 100까지 캐물어야 찾을 수 있다. 벽이 낮으면 멈춘 기계를 뜯을 수 있다. 집을 옮기면 그 진행은 지워지고 새 자리는 모른다. 그들이 이사하면 어디로 갔는지 모른다. 두 패는 스스로 이야기하거나 틀어진다. 만난 적 없고 마을도 지도에 없으면 일지는 잠잠하다. 일은 그래도 일어난다.",
+        ),
+      },
+      {
+        heading: L("草藥怎麼認，雜誌做什麼", "How herbs are named, and what a magazine does", "薬草の見分けと、雑誌の仕事", "약초를 아는 법, 잡지가 하는 일"),
+        body: L(
+          "採藥才帶草，採集只帶食物。株數看農耕、搜刮、醫療裡最高的那個：三級以內一株，四到七是兩株，八到十是三株。醫療或農耕到 3，採的人認得。不然是未識的草，回到家裡，有醫療 3 以上的人就鑑定。用藥看家裡最高醫療。到 5，病況下面寫方子：敷還是泡、哪幾株。開放傷口和惡化要敷車前、蓍或黃金印章。家裡醫療 8 以上才會清掉惡化，6 到 7 多半只壓一晚。熱病泡紫錐花或接骨木，這兩味第 8 晚才有。僵屍創沒有草可對。雜誌任何地點、任何職業都能撿到，只加情緒。閱讀讓人不會因為情緒過低而出不了門。同一本讀三次就散了。",
+          "Herbs come from the Herbs task. Forage is food. The count uses the highest of Farm, Scavenge, and Medical: one stem through 3, two from 4 to 7, three from 8 to 10. Medical or Farm at 3, and the picker names them. Otherwise they come home unnamed, and someone at the house with Medical 3 or higher names them. A dose uses the best Medical at home. At 5 the sickness line writes poultice or brew, and which plants. An open wound and a wound gone bad want plantain, yarrow, or goldenseal as a poultice. Medical 8 or higher at home clears the bad wound. At 6 or 7 it usually only holds a night. Fever wants coneflower or elder, brewed, and those two appear on night 8. The bite has no herb. A magazine can be found at any place by any occupation, and it only raises mood. Reading keeps a person from being locked indoors by mood. The same copy falls apart on the third read.",
+          "採薬だけが草を持ち帰る。採集は食料。本数は農耕・蒐集・医療のいちばん高い方。3 までは一本、4 から 7 は二本、8 から 10 は三本。医療か農耕が 3 なら、採った者が名を付ける。そうでなければ未識別で、家に医療 3 以上がいれば鑑定する。薬は家の最高医療で見る。5 で、病の下に貼るか煎じるか、どの草かを書く。開いた傷と悪化は車前、蓍、ゴールドシールを貼る。家の医療が 8 以上で悪化は消える。6 から 7 はたいてい一晩。熱は紫錐花か接骨木を煎じ、この二種は 8 日目から。噛み傷に草はない。雑誌はどの地点でもどの職業でも拾え、情緒だけ足す。読書は、情緒が低くて出られない状態を避ける。同じ一冊は三度で散る。",
+          "채약만 풀을 가져온다. 채집은 식량. 포기 수는 농사, 수색, 의료 가운데 가장 높은 것. 3까지는 한 포기, 4에서 7은 두 포기, 8에서 10은 세 포기. 의료나 농사가 3이면 캔 사람이 이름을 붙인다. 아니면 이름 없는 풀이고, 집에 의료 3 이상이 있으면 감별한다. 약은 집의 가장 높은 의료로 본다. 5가 되면 병 아래에 붙일지 달일지, 어느 풀인지를 적는다. 열린 상처와 악화는 질경이, 서양톱풀, 골든씰을 붙인다. 집의 의료가 8 이상이면 악화가 걷힌다. 6에서 7은 대개 하룻밤. 열은 콘플라워나 엘더를 달이고, 그 둘은 8일부터 나온다. 물림에는 풀이 없다. 잡지는 어느 장소, 어느 직업이든 주울 수 있고, 기분만 올린다. 읽기는 기분 때문에 못 나가는 상태를 피하게 한다. 같은 한 권은 세 번이면 흩어진다.",
+        ),
+      },
+      {
+        heading: L("一百張臉，進度可以存成檔案", "A hundred faces, and a file you can keep", "百の顔と、残せるファイル", "백 개의 얼굴, 남길 수 있는 파일"),
+        body: L(
+          "選人有一百張。勢力和路上遇見的人從這裡面抽，避開家裡已經在用的臉。自己上傳的照片不佔這一百張。瀏覽器裡的進度跟網址綁在一起，換一次上傳就可能讀不到。主畫面和屋子裡可以另存到本機，檔名帶著天數。新版本用「從本機讀取」把檔選回去。天數、人、屋子、倉庫和已經找到的鎮都在。檔裡沒有的新鎮和勢力會補上，不會清成第一天。",
+          "The face picker has one hundred pictures. Groups and people met on the road draw from them, and skip a face already in the house. A picture you upload is not one of the hundred. Progress kept only in the browser is tied to the address, and a new upload can make it unreadable. The title screen and the house can save a file named with the day. On the new version, Load a file brings it back. The day, the people, the house, the stores, and towns already found stay. Towns and groups the file did not have are filled in. The run is not reset to day one.",
+          "顔は百枚。群れと道で会う人はここから引き、家ですでに使っている顔は避ける。自分で上げた写真はこの百枚に入らない。ブラウザだけの進捗は住所に縛られ、アップロードを替えると読めなくなることがある。題名と家でファイルに保存できる。名前に日数が入る。新しい版で「ファイルから読む」。日数、人、家、倉庫、すでに見つけた町は残る。ファイルに無い新しい町と群れは埋める。一日目には戻さない。",
+          "얼굴은 백 장이다. 무리와 길에서 만나는 사람은 여기서 뽑고, 집에서 이미 쓰는 얼굴은 피한다. 직접 올린 사진은 이 백 장에 들어가지 않는다. 브라우저에만 둔 진행은 주소에 묶여, 업로드를 바꾸면 못 읽을 수 있다. 첫 화면과 집에서 파일로 남길 수 있다. 이름에 날짜가 들어간다. 새 판에서 「파일에서 읽기」로 되돌린다. 날짜, 사람, 집, 창고, 이미 찾은 마을은 그대로다. 파일에 없던 새 마을과 무리는 채운다. 첫날로 되돌리지 않는다.",
+        ),
+      },
+      {
+        heading: L("手機", "Phones", "電話", "전화기"),
+        body: L(
+          "畫面維持直向。點文字框時，系統不會把整頁放大。底部按鈕讓出手機的圓角和手勢列。安卓可以裝 APK，裝好之後進度留在這個 App 裡，更新同一個 App 不會因為換網址而消失。iPhone 要在 Mac 上用 Xcode 封成安裝包，才能送 App Store。這台打包機器沒有 Mac，所以 iOS 工程在一起，安裝包要你在自己的 Mac 上編。",
+          "The screen stays portrait. Tapping a text field does not zoom the whole page. The bottom buttons leave room for the phone's corners and the gesture bar. Android installs from an APK. Once it is installed, progress stays inside that app, and updating the same app does not lose it because an address changed. An iPhone build has to be archived in Xcode on a Mac before it can go to the App Store. This machine has no Mac, so the iOS project is included and the installable package has to be built on your Mac.",
+          "画面は縦のまま。文字欄を押してもページ全体は拡大しない。下のボタンは角とジェスチャーバーを空ける。Android は APK で入る。入ったあとの進捗はそのアプリの中に残り、同じアプリを更新しても住所が変わったせいで消えない。iPhone は Mac の Xcode で包んでから App Store に出せる。この機械に Mac はない。iOS の工程は同梱し、インストール包は自分の Mac で作る。",
+          "화면은 세로로 둔다. 글칸을 눌러도 페이지 전체가 확대되지 않는다. 아래 단추는 모서리와 제스처 막대를 비운다. 안드로이드는 APK로 설치한다. 설치한 뒤의 진행은 그 앱 안에 남고, 같은 앱을 업데이트해도 주소가 바뀌어 사라지지 않는다. 아이폰은 Mac의 Xcode로 묶어야 App Store에 올릴 수 있다. 이 기계에는 Mac이 없다. iOS 공정은 같이 두고, 설치 파일은 자신의 Mac에서 만든다.",
+        ),
+      },
+    ],
+  },
+  {
+    id: "0.2.7",
+    version: "0.2.7",
+    date: "2026-09-27",
+    title: L(
+      "v0.2.7　醫生會寫方子",
+      "v0.2.7  The doctor writes it down",
+      "v0.2.7　医者が処方を書く",
+      "v0.2.7　의사가 처방을 적는다",
+    ),
+    kicker: L("公開更新", "Public update", "公開更新", "공개 업데이트"),
+    sections: [
+      {
+        heading: L("玩家實際碰到的", "What players ran into", "プレイヤーが踏んだこと", "플레이어가 밟은 것"),
+        body: L(
+          "有人把醫療、搜刮、農耕都點到 10，派出去採藥，回來還是一株。沒有醫療的人帶回來的是未識的草。醫療 10 拿去敷惡化，日誌連續三天只寫「壓住一晚，清不掉」，不寫用了哪一株，也不寫病人到底缺什麼。所以分不出是草用錯，還是數字不夠。這一版改的就是這三件事。僵屍創仍然無藥。",
+          "People put Medical, Scavenge, and Farm at 10, sent them for herbs, and still got one stem. Anyone without Medical came home with an unnamed plant. Medical 10 on a wound gone bad produced the same line for three days: held one night, not a cure. The log never named the plant, and never said what the patient needed. You could not tell a wrong herb from a low number. This build is those three things. The bite still has no herb.",
+          "医療も蒐集も農耕も 10 にして採薬に出したのに、戻るのは一本。医療がない者は未識別の草。医療 10 で悪化を貼っても、三日とも「一晩押さえた。消えない」。どの草か、患者に何が要るか、書かない。草が違うのか数字が足りないのか分からない。この版はその三つ。噛み傷は今も薬がない。",
+          "의료, 수색, 농사를 전부 10으로 두고 채약을 보내도 한 포기였다. 의료가 없는 사람은 이름 없는 풀을 가져왔다. 의료 10으로 악화를 붙여도 사흘 내내 「하룻밤 눌렀다. 없애지 못한다」. 어느 풀인지, 환자에게 무엇이 필요한지 안 적었다. 풀이 틀린 건지 숫자가 모자란 건지 알 수 없었다. 이 판은 그 세 가지다. 물림은 여전히 약이 없다.",
+        ),
+      },
+      {
+        heading: L("帶回來幾株，誰認得", "How many, and who can name them", "何本持ち帰るか、誰が名を付けるか", "몇 포기, 누가 이름을 붙이나"),
+        body: L(
+          "株數看這個人的農耕、搜刮、醫療裡最高的那個。0 到 3 是一株，4 到 7 是兩株，8 到 10 是三株。三株是抽三次，不是同一株複製。搜刮只增加株數，不負責認藥。醫療或農耕達到 3，採的人當場認得。兩邊都不到 3，先標未識。回到庇護所時，只要家裡有醫療達到 3 的人在（留在家，或跟著這趟回來），立刻把未識的草對上名字，日誌寫是誰鑑定的。醫生還在另一趟路上，這把草先保持未識，等他回來或當晚結帳再鑑定。沒人鑑定就拿去泡，仍然會吐。",
+          "The count uses the highest of that person's Farm, Scavenge, and Medical. 0–3 is one stem, 4–7 is two, 8–10 is three. Three means three draws, not one plant copied. Scavenge adds stems and does not name anything. Medical or Farm at 3, and the picker names them on the spot. Under 3 on both, they come home unnamed. When the party is back, anyone at the house with Medical 3 or higher — the one who stayed, or the one who just walked in — names the unnamed plants. The log says who. If the doctor is still out on another trip, the plants stay unnamed until they return, or until that night's tally. Brew an unnamed plant and you are still sick from it.",
+          "本数はその人の農耕・蒐集・医療のいちばん高い方。0 から 3 は一本、4 から 7 は二本、8 から 10 は三本。三本は三回引くので、同じ草の複製ではない。蒐集は本数だけで、名は付けない。医療か農耕が 3 なら、採ったその場で分かる。両方 3 未満なら、いったん未識別。庇護所に戻ったとき、家に医療 3 以上の者がいれば（残っていた者でも、この旅から戻った者でも）すぐに名を付ける。日誌に誰が鑑定したか書く。医者が別の旅の途中なら、戻るかその夜の締めまで未識別のまま。鑑定前に煎じれば、今も吐く。",
+          "포기 수는 그 사람의 농사, 수색, 의료 가운데 가장 높은 것. 0에서 3은 한 포기, 4에서 7은 두 포기, 8에서 10은 세 포기. 세 포기는 세 번 뽑는 것이지 같은 풀의 복제가 아니다. 수색은 포기 수만 늘리고 이름은 안 붙인다. 의료나 농사가 3이면 캔 자리에서 알아본다. 둘 다 3 미만이면 일단 이름 없음. 피난처로 돌아오면, 집에 의료 3 이상인 사람이 있으면（남아 있던 사람이든, 이 길에서 막 돌아온 사람이든）바로 이름을 붙인다. 일지에 누가 감별했는지 적는다. 의사가 다른 길에 아직 있으면, 돌아오거나 그날 밤 정산까지 이름 없는 채로 둔다. 감별 전에 달이면 여전히 토한다.",
+        ),
+      },
+      {
+        heading: L("用藥看家裡的醫生，日誌要寫明白", "The dose uses the doctor at home, and the log has to say so", "薬は家の医者で見る。日誌は明記する", "약은 집의 의사로 본다. 일지는 분명히"),
+        body: L(
+          "舊版用藥只看被敷的那個人。病人自己醫療 6，家裡醫生 10，日誌仍按 6 寫清不掉。現在看家裡最高醫療，人要在家，不看出門的人。草藥那一欄會寫現在是誰的幾級。按鈕上寫人名，敷誰、泡誰分得開。對的敷藥是車前、蓍、黃金印章。家裡醫療 8 到 10，開放傷口和已經惡化的都會清掉。6 到 7 大約一半清掉，否則只壓一晚，日誌寫還沒到 8。5 以下連壓都壓不住。熱病和異變熱要泡紫錐花或接骨木，紫錐花和接骨木第 8 晚才出現。惡水泡薄荷，肺熱泡松針。用錯會寫草名、病名、以及該敷還是該泡。敷和泡不能換。",
+          "The old dose looked only at the person you clicked. A patient at Medical 6 and a doctor at 10 still logged the 6, so it never cleared. A dose now uses the best Medical of someone at the house, not someone still on the road. The herb row names who, and what rank. The buttons name the person, so poultice and brew are not anonymous. The right poultice is plantain, yarrow, or goldenseal. At 8–10 an open wound and a wound gone bad both clear. At 6–7 about half of the bad wounds clear; the rest hold one night, and the log says you are not at 8 yet. Under 5 it does not even hold. Fever and mutant heat want coneflower or elder, brewed, and those two plants only show from night 8. Flux wants mint. The chest wants pine. A miss names the plant, the sickness, and whether it should have been a poultice or a brew. The two do not swap.",
+          "旧版は貼られた本人の医療だけを見た。患者が 6 で家の医者が 10 でも、日誌は 6 として消えないと書いた。今は家にいる者の最高医療を見る。まだ旅の途中の者は数えない。薬草の欄に、今だれの何級かを書く。ボタンに人名があるので、だれに貼り、だれに飲ませるか分かる。正しい貼り薬は車前、蓍、ゴールドシール。家の医療が 8 から 10 なら、開いた傷も悪化も消える。6 から 7 は悪化のおよそ半分が消え、残りは一晩。日誌に、まだ 8 ではないと書く。5 未満は押さえられない。熱と異変熱は紫錐花か接骨木を煎じる。この二種は 8 日目から。悪水は薄荷、肺は松。間違いには草の名、病の名、貼るべきか煎じるべきかを書く。貼ると煎じるは替わらない。",
+          "옛 판은 약을 바른 그 사람의 의료만 보았다. 환자가 6이고 집의 의사가 10이어도 일지는 6으로 적어 없애지 못했다. 지금은 집에 있는 사람 가운데 가장 높은 의료를 본다. 아직 길에 있는 사람은 세지 않는다. 약초 칸에 지금 누구의 몇 급인지 적는다. 단추에 이름이 있어, 누구에게 붙이고 누구에게 달이는지 갈린다. 맞는 붙이기는 질경이, 서양톱풀, 골든씰. 집의 의료가 8에서 10이면 열린 상처와 악화 모두 걷힌다. 6에서 7은 악화의 약 절반이 걷히고, 나머지는 하룻밤. 일지에 아직 8이 아니라고 적는다. 5 미만은 누르지도 못한다. 열과 변이열은 콘플라워나 엘더를 달인다. 그 둘은 8일부터 나온다. 악수는 박하, 폐는 솔잎. 틀리면 풀 이름, 병 이름, 붙여야 하는지 달여야 하는지를 적는다. 둘은 바꾸지 못한다.",
+        ),
+      },
+      {
+        heading: L("方子寫在病況下面", "The script sits under the sickness", "処方は病の下に書く", "처방은 병 아래에"),
+        body: L(
+          "家裡最高醫療不到 5，病況底下只寫還寫不出方。到了 5，每一條病都寫三件事：誰的什麼病、敷還是泡、哪幾株。家裡已經有的，那一株旁邊標「方子」。沒有的，寫派人採藥，不要派採集。開放傷口和惡化是敷車前、蓍或黃金印章。熱病和異變熱是泡紫錐花或接骨木。惡水是泡薄荷。肺熱是泡松針。醒著和認錯沒有草，休息，情緒用雜誌，不要亂泡。僵屍創單獨寫：醫生寫不出方，任何草都沒用。惡化會再加一句：醫療到 8，敷對會清掉；不到 8，多半只壓一晚。",
+          "If the best Medical at home is under 5, the sickness line only says they cannot write a script yet. At 5, every illness gets three facts: whose sickness, poultice or brew, and which plants. A plant you already have is marked script. One you do not have says to dispatch Herbs, not Forage. An open wound and a wound gone bad want a poultice of plantain, yarrow, or goldenseal. Fever and mutant heat want coneflower or elder, brewed. Flux wants mint. The chest wants pine. Wakeful and a wrong-plant stomach have no herb: rest, and a magazine for mood. Do not brew at random. The bite is its own line. No script. No herb touches it. A wound gone bad adds one more sentence: at 8 the right poultice clears it; under 8 it usually only holds a night.",
+          "家の最高医療が 5 未満なら、病の下には、まだ処方を書けない、とだけ出す。5 に届くと、一つの病に三つ書く。だれの何の病か、貼るか煎じるか、どの草か。家にある草には「処方」と付ける。ないときは、採薬を派れ、採集ではない、と書く。開いた傷と悪化は車前、蓍、ゴールドシールを貼る。熱と異変熱は紫錐花か接骨木を煎じる。悪水は薄荷。肺は松。眠れなさと思い違いは草がない。休む。情緒は雑誌。適当に煎じない。噛み傷は別の一行。処方はない。どの草も無効。悪化にはもう一文。医療 8 なら正しい貼り薬で消える。8 未満はたいてい一晩。",
+          "집의 최고 의료가 5 미만이면, 병 아래에는 아직 처방을 못 쓴다고만 나온다. 5가 되면 병마다 세 가지를 적는다. 누구의 무슨 병인지, 붙일지 달일지, 어느 풀인지. 집에 있는 풀에는 「처방」을 붙인다. 없으면 채약을 보내라, 채집이 아니라고 적는다. 열린 상처와 악화는 질경이, 서양톱풀, 골든씰을 붙인다. 열과 변이열은 콘플라워나 엘더를 달인다. 악수는 박하. 폐는 솔잎. 깨어 있음과 잘못 삼킨 것은 풀이 없다. 쉰다. 기분은 잡지. 함부로 달이지 마라. 물림은 따로 한 줄. 처방이 없다. 어떤 풀도 안 듣는다. 악화에는 한 문장을 더한다. 의료 8이면 맞는 붙이기로 걷힌다. 8 미만은 대개 하룻밤.",
+        ),
+      },
+    ],
+  },
+  {
+    id: "0.2.4",
+    version: "0.2.4",
+    date: "2026-09-27",
+    title: L("v0.2.4　先把情緒翻回來", "v0.2.4  Read before you walk", "v0.2.4　先に頁を捲る", "v0.2.4　먼저 페이지를 넘긴다"),
+    kicker: L("公開更新", "Public update", "公開更新", "공개 업데이트"),
+    sections: [
+      {
+        heading: L("情緒死鎖", "The mood lock", "情緒の行き止まり", "기분 막힘"),
+        body: L(
+          "滅絕加上已經晚了，情緒太低就出不了門，休息補不回。這一版加閱讀。雜誌任何地點、任何職業都能撿到，不設稀有。只加情緒。已經晚了開局給兩本，工作預設閱讀。讀過的人過夜後情緒不會掉回鎖死線以下。",
+          "Extinct plus Already late locked you indoors, and rest did not pay the mood back. Reading is a night job. Magazines drop on any search for any occupation. No rare tier. Mood only. Already late starts with two, job set to Read. A reader does not wake below the lock.",
+          "絶滅と「もう遅い」で外に出られず、休息では戻らなかった。読書を足す。雑誌はどこでも誰でも。希少なし。情緒だけ。開局二冊。",
+          "절멸과 이미 늦었다는 밖으로 못 나가고 휴식으로 안 돌아왔다. 읽기를 넣는다. 잡지는 어디서나 누구든. 희귀 없음. 기분만. 시작 두 권.",
+        ),
+      },
+      {
+        heading: L("草藥怎麼來", "How herbs arrive", "薬草の入り方", "약초가 오는 길"),
+        body: L(
+          "據點寫明：採藥不是採集。前七晚五味。農耕決定好不好認，醫療決定藥濃不濃。畦要等溫室。道具旁都寫取得途徑。",
+          "The house now says: Herbs is not Forage. Five plants for seven nights. Farm names, Medical doses. Beds wait on the greenhouse. Items say how they are found.",
+          "採薬は採集ではない。七晩は五味。農耕は見分け、医療は濃さ。畝は温室待ち。",
+          "채약은 채집이 아니다. 이레는 다섯 맛. 농사는 이름, 의료는 농도. 이랑은 온실.",
+        ),
+      },
+      {
+        heading: L("沒動的", "Left alone", "動かさない", "그대로"),
+        body: L(
+          "工場、藍圖、傳奇、相片仍關。六格、鄰居免油、油桶、裝備不加技能等級，都不改。",
+          "Workshop, blueprints, legend sets, portraits stay off. Six actions, neighbour fuel, the still, and gear ranks stay as they were.",
+          "工房、藍図、伝説、写真は閉じたまま。",
+          "공방, 청사진, 전설, 사진은 그대로.",
+        ),
+      },
+    ],
+  },
+  {
     id: "0.2.3",
     version: "0.2.3",
     date: "2026-09-24",
@@ -50,10 +204,10 @@ export const DEVLOG: DevLogEntry[] = [
       {
         heading: L("已經晚了", "Already late", "もう遅い", "이미 늦었다"),
         body: L(
-          "難度旁邊多一張情境，不是第五種難度。職業自訂。第 8 晚醒來，牆低、糧少、帶傷帶熱。不是僵屍感染。芝加哥仍是終點。通關會註明。",
-          "A card beside the modes, not a fifth difficulty. Your job is yours. Night 8, low wall, little food, wound and fever. Not the bite. Chicago is still the end. A win is marked.",
-          "難易度の横の一枚。第五ではない。8日目、低い壁、少ない糧、傷と熱。噛み傷ではない。勝ちはシカゴ。",
-          "난이도 옆의 카드. 다섯 번째가 아니다. 8일, 낮은 벽, 적은 양식, 상처와 열. 물림이 아니다. 승리는 시카고.",
+          "情境模式的第 1 關。職業自訂。第 8 晚醒來，牆低、糧少、帶傷帶熱。不是僵屍感染。芝加哥仍是終點。通關會註明。",
+          "Chapter 1 of Scenarios. Your job is yours. Night 8, low wall, little food, wound and fever. Not the bite. Chicago is still the end. A win is marked.",
+          "状況モードの第1関。職業は自分で。8日目、低い壁、少ない糧、傷と熱。噛み傷ではない。勝ちはシカゴ。",
+          "상황 모드 1장. 직업은 직접. 8일, 낮은 벽, 적은 양식, 상처와 열. 물림이 아니다. 승리는 시카고.",
         ),
       },
     ],

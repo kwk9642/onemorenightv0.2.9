@@ -6,6 +6,7 @@ import { fuelCost } from "@/game/mode";
 import { infectionWord } from "@/game/zombies";
 import { isAway } from "@/game/dispatch";
 import { bondOf, canMission, moodLabel, relationOf, squadRelationBonus } from "@/game/growth";
+import { EDITION } from "@/game/edition";
 import { tLoc, useT } from "@/game/i18n";
 import { useGame } from "@/game/store";
 import type { GameState } from "@/game/types";
@@ -30,7 +31,8 @@ export function MapScreen({ state }: { state: GameState }) {
         <ResourceBar state={state} />
       </div>
       <div className="min-h-0 flex-1 overflow-hidden px-3">
-        <p className="mb-2 text-xs leading-relaxed text-muted">{tt("map.hint")}</p>
+        <p className="mb-2 text-xs leading-relaxed text-muted">{tt(`edition.${EDITION}Note`)}</p>
+        <p className="mb-2 text-xs leading-relaxed text-muted">{tt("dist.rule")}</p>
         {blocked ? (
           <p className="mb-2 rounded-md border border-hp/40 bg-surface px-3 py-2 text-xs text-hp">{tt("map.block")}</p>
         ) : null}
@@ -59,7 +61,7 @@ export function MapScreen({ state }: { state: GameState }) {
                 <span>
                   {tLoc(loc.id)}
                   <span className="ml-2 text-[11px] text-muted">
-                    {sizeLabel(loc.size)} · {tt(`state.${loc.region}`)}
+                    {sizeLabel(loc.size)} · {tt(`state.${loc.region}`)} · {tt("long.miles", { n: ls.miles ?? 0 })}
                   </span>
                 </span>
                 <span className="text-[11px] tabular-nums text-muted">

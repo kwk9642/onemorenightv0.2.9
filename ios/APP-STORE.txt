@@ -1,0 +1,13 @@
+One More Night v0.2.8 — iOS
+
+This folder is the Xcode project. It cannot be archived on Linux.
+On a Mac, with an Apple Developer account:
+
+1. Install Xcode.
+2. Open ios/App/App.xcworkspace if CocoaPods created it, otherwise ios/App/App.xcodeproj.
+3. If the plugins are missing, from the project root run: npm install && npx cap sync ios
+4. Set the signing team to your Apple Developer team.
+5. Bundle id is com.onemorenight.game. Keep it. Changing it makes the phone treat the update as a different app and drops the save kept inside the app.
+6. Product > Archive, then Distribute App > App Store Connect.
+7. The screen is portrait. The status bar is dark. Text fields stay at 16px so iOS does not zoom the page.
+8. Players who already have a browser save should use Load a file. A save kept inside this app stays when you ship the next build with the same bundle id.

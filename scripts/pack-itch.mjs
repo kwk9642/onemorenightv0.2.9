@@ -6,7 +6,7 @@ import { join } from "node:path";
 const root = process.cwd();
 const stage = join(root, "itch-public");
 const outDir = join(root, "dist-itch");
-const zipName = "one-more-night-v0.2.3.zip";
+const zipName = "one-more-night-v0.2.8.zip";
 const zipPath = join(root, "public", zipName);
 
 const page = spawnSync(process.execPath, ["scripts/write-itch-page.mjs"], {
@@ -34,13 +34,13 @@ rmSync(join(stage, "art/gear/wear"), { recursive: true, force: true });
 
 writeFileSync(
   join(stage, "README.txt"),
-  "One More Night v0.2.3\nUpload this ZIP as-is on itch.io (HTML). Do not unzip and re-zip.\nThe in-game Dev log is the itch description. Copy it from the title screen, or paste itch-page.md.\n",
+  "One More Night v0.2.8\nUpload this ZIP as-is on itch.io (HTML). Do not unzip and re-zip.\nBefore you replace an old build, download the save file from the title screen.\n",
 );
 
 const build = spawnSync("npx", ["vite", "build", "--config", "vite.itch.config.ts"], {
   cwd: root,
   stdio: "inherit",
-  env: process.env,
+  env: { ...process.env, VITE_EDITION: process.env.VITE_EDITION || "web" },
 });
 if (build.status !== 0) process.exit(build.status ?? 1);
 
@@ -55,7 +55,7 @@ dest = ${JSON.stringify(zipPath)}
 os.makedirs(os.path.dirname(dest), exist_ok=True)
 if os.path.exists(dest):
     os.remove(dest)
-skip = {"one-more-night-v0.1.zip", "one-more-night-v0.2.zip", "one-more-night-v0.2.1.zip", "one-more-night-v0.2.2.zip", "one-more-night-v0.2.3.zip"}
+skip = {"one-more-night-v0.1.zip", "one-more-night-v0.2.zip", "one-more-night-v0.2.1.zip", "one-more-night-v0.2.2.zip", "one-more-night-v0.2.3.zip", "one-more-night-v0.2.4.zip", "one-more-night-v0.2.5.zip", "one-more-night-v0.2.6.zip", "one-more-night-v0.2.7.zip", "one-more-night-v0.2.8.zip"}
 n = 0
 with zipfile.ZipFile(dest, "w", zipfile.ZIP_DEFLATED) as z:
     for dirpath, dirnames, filenames in os.walk(root):

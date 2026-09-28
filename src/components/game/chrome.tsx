@@ -19,12 +19,14 @@ import { cn } from "@/lib/utils";
 export function Portrait({
   survivor,
   portrait,
+  faceData,
   name,
   tone,
   className,
 }: {
   survivor?: Survivor;
   portrait?: string;
+  faceData?: string;
   name?: string;
   tone?: string;
   className?: string;
@@ -33,7 +35,7 @@ export function Portrait({
   const face = faceById(key);
   const frame = useShop((s) => s.frame);
   const label = (survivor?.name ?? name ?? "?").slice(0, 1);
-  const img = face.src;
+  const img = survivor?.faceData || faceData || (key === "upload" ? "" : face.src);
   const bg = tone ?? face.tone ?? (survivor ? occById(survivor.occupation).tone : "#3a3a3c");
   return (
     <div
@@ -47,7 +49,7 @@ export function Portrait({
       style={img ? undefined : { background: bg }}
     >
       {img ? (
-        <img src={asset(img)} alt="" className="h-full w-full object-cover" />
+        <img src={img.startsWith("data:") || img.startsWith("blob:") ? img : asset(img)} alt="" className="h-full w-full object-cover" />
       ) : (
         <div className="flex h-full w-full items-center justify-center">
           <span className="font-display text-2xl tracking-wide text-fg/80">{label}</span>

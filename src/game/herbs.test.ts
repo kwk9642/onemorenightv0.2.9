@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { createNewGame, doseHerb, restNight } from "./engine.ts";
-import { potency } from "./herbs.ts";
+import { herbCount, knowsOnSight, potency } from "./herbs.ts";
 
 const input = {
   name: "Lin",
@@ -19,6 +19,12 @@ describe("v0.2.3 herbs", () => {
     assert.equal(potency(4), 1.0);
     assert.equal(potency(6), 1.2);
     assert.equal(potency(9), 1.4);
+    const picker = { skills: { farm: 10, medical: 0, scavenge: 0 } } as never;
+    assert.equal(herbCount(picker), 3);
+    assert.equal(knowsOnSight(picker), true);
+    const blind = { skills: { farm: 0, medical: 0, scavenge: 10 } } as never;
+    assert.equal(knowsOnSight(blind), false);
+    assert.equal(herbCount(blind), 3);
   });
 
   it("late scenario starts hurt on night 8 without the bite", () => {
