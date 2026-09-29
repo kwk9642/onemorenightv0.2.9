@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useT } from "@/game/i18n";
-import { downloadSave, loadSave } from "@/game/save";
+import { downloadSave, loadSave, writeSave } from "@/game/save";
 import { useGame } from "@/game/store";
 
 export function SaveFileBar() {
@@ -18,8 +18,9 @@ export function SaveFileBar() {
       setMsg(tt("save.none"));
       return;
     }
+    if (run) writeSave(run);
     downloadSave(state);
-    setMsg(tt("save.wrote", { n: state.day }));
+    setMsg(tt("save.wrote"));
   };
 
   return (

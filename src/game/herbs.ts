@@ -97,6 +97,8 @@ export function rollHerb(day: number, r0: number): { r: number; id: HerbId } {
 }
 
 export function knowsOnSight(s: Survivor): boolean {
+  const traits = s.traits ?? [];
+  if (traits.includes("herbalism") || traits.includes("gardener") || traits.includes("firstaid")) return true;
   return s.skills.medical >= 3 || s.skills.farm >= 3;
 }
 
@@ -106,7 +108,7 @@ export function nameByDoctor(state: GameState): GameState {
   for (const p of state.dispatches ?? []) {
     for (const id of p.memberIds) away.add(id);
   }
-  const doctor = state.survivors.find((s) => s.alive && !away.has(s.id) && s.skills.medical >= 3);
+  const doctor = state.survivors.find((s) => s.alive && !away.has(s.id) && knowsOnSight(s));
   if (!doctor) return state;
   const herbs = herbsOf(state);
   if (!herbs.some((h) => !h.known)) return state;

@@ -41,6 +41,7 @@ export type TraitId =
   | "wakeful"
   | "catseyes"
   | "firstaid"
+  | "herbalism"
   | "dextrous"
   | "lighteater"
   | "lowthirst"

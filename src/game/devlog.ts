@@ -23,6 +23,65 @@ const L = (zh: string, en: string, ja: string, ko: string): Record<Locale, strin
 
 export const DEVLOG: DevLogEntry[] = [
   {
+    id: "0.2.9",
+    version: "0.2.9",
+    date: "2026-09-30",
+    title: L(
+      "v0.2.9　草藥、水源、角色與進度",
+      "v0.2.9  Herbs, water, characters, and the save",
+      "v0.2.9　薬草、水、人物、進行",
+      "v0.2.9　약초, 물, 인물, 진행",
+    ),
+    kicker: L("公開更新", "Public update", "公開更新", "공개 업데이트"),
+    sections: [
+      {
+        heading: L("草藥學", "Herbalism", "薬草学", "약초학"),
+        body: L(
+          "草藥學是一項特質，選取時扣除六點，不限職業。具備草藥學、園丁或急救的人，採回藥草即可辨明品名，並知道何者宜外敷、何者宜煎服。醫術或農藝達到三級，亦能當下辨明。採藥的人若都不具備上述條件，帶回來的是未辨明的草。此時只要屋內有人符合條件，便可代為鑑定；人若仍在外面，須等其歸來。鑑定只確定品名，不代替用藥。煎服尚未辨明的草，飲用者當夜中毒，不能外出。",
+          "Herbalism is a trait. It costs six points, and any occupation may take it. A person with Herbalism, Gardener, or First Aid names a plant as soon as it is picked, and knows which to press on a wound and which to brew. Medical or Farm at 3 does the same. If no one on the trip can name them, the plants come home unnamed. Anyone who meets those conditions and is inside the house can name them; someone still outside must return first. Naming a plant is not the same as treating with it. Brewing a plant that still has no name poisons the drinker for that night, and they cannot leave.",
+          "薬草学は特質である。六点を要し、職業は問わない。薬草学、園芸、応急のいずれかを持つ者は、採ったその場で品名が分かり、外用と煎じを区別できる。医術か農が三段でも、その場で分かる。同行にその条件が無いとき、持ち帰った草は未鑑定である。家の中に条件を満たす者がいれば、代わりに鑑定できる。まだ外にいる者は、戻るまで待たねばならない。鑑定は品名を定めるだけで、投薬そのものではない。未鑑定のまま煎じて飲めば、その夜は毒に当たり、外へ出られない。",
+          "약초학은 특질이다. 여섯 점이 들며, 직업은 가리지 않는다. 약초학, 정원사, 응급 가운데 하나를 가진 사람은 채집하는 자리에서 이름을 알고, 외용과 달임을 가린다. 의술이나 농사가 3단이어도 그 자리에서 안다. 함께 나간 사람 가운데 그 조건이 없으면, 가져온 풀은 아직 이름이 없다. 집 안에 조건을 갖춘 사람이 있으면 대신 감별할 수 있다. 밖에 있는 사람은 돌아올 때까지 기다려야 한다. 감별은 이름만 정할 뿐, 투약 자체가 아니다. 이름이 없는 풀을 달여 마시면 그날 밤 중독되어 나가지 못한다.",
+        ),
+      },
+      {
+        heading: L("設施停用", "A halted facility", "施設の停止", "시설의 정지"),
+        body: L(
+          "設施的損耗積滿之後即停止運轉，不再產水、炊煮或接收電台。停用期間，庇護所主畫面以紅字標出該設施的名稱，並註明未經修復則沒有產出。設施一頁的同一行亦以紅字顯示。修復仍須消耗建材一份、零件一件，並佔用一格行動。",
+          "When a facility's wear is full, it stops. It no longer draws water, cooks, or receives. While it is stopped, the shelter screen names it in red and states that it produces nothing until it is repaired. The same line on the facility page is red. Repair still costs one material, one part, and one action.",
+          "施設の損耗が満ちると運転を止め、水も炊事も受信もしない。停止中、避難所の主画面はその名称を赤字で示し、修理するまで産出がないと記す。施設の頁の同じ行も赤字である。修理はこれまでどおり、建材一つ、部品一つ、行動一枠を要する。",
+          "시설의 마모가 차면 가동이 멈추고, 물도 취사도 수신도 하지 않는다. 정지 중에는 은신처 주 화면에 그 이름을 붉은 글씨로 표시하고, 수리하기 전에는 산출이 없다고 적는다. 시설 쪽의 같은 줄도 붉다. 수리는 전과 같이 자재 하나, 부품 하나, 행동 한 칸이 든다.",
+        ),
+      },
+      {
+        heading: L("集水器結冰", "The cistern in cold weather", "集水器の凍結", "집수기의 결빙"),
+        body: L(
+          "進入嚴寒季節之後，集水器會結冰。無人看護時，一級當晚不產水，二級只產一半。當夜若有人擔任看護，且此人仍能工作，則不論等級，產量與平日相同。集水器升至三級時，即使無人看護，亦照常產水。遷居不能解凍。寒冷屬於季節，不屬於某一處房屋。設備若已因損耗停止，須先修復，其後才計結冰。日誌會註明：改派看護，或將集水器升至三級。",
+          "In the cold season the cistern freezes. With no one on Tend, the first stage yields no water that night, and the second stage yields half. If someone who can still work is on Tend that night, every stage yields the ordinary amount. At the third stage the cistern yields the ordinary amount even with no one watching it. Moving house does not thaw it. The cold belongs to the season, not to one building. A facility already stopped by wear must be repaired before the freeze is reckoned. The log states the choice: assign Tend, or raise the cistern to the third stage.",
+          "厳寒の季節に入ると、集水器は凍る。看護が無いとき、一段はその夜水を出さず、二段は半分だけ出す。その夜、まだ働ける者が看護についていれば、段を問わず平日と同じ量が出る。三段まで上げれば、誰も見ていなくても平日と同じ量が出る。移居しても解けない。寒さは季節のものであり、ある一軒のものではない。損耗で止まっている設備は、先に修理してから凍結を数える。日誌には、看護に付けるか、三段まで上げるかを記す。",
+          "혹한의 계절에 들면 집수기가 언다. 간호가 없을 때, 1단은 그날 밤 물을 내지 않고 2단은 절반만 낸다. 그날 밤 아직 일할 수 있는 사람이 간호를 맡으면, 단수와 관계없이 평일과 같은 양이 나온다. 3단까지 올리면, 아무도 보지 않아도 평일과 같은 양이 나온다. 이사한다고 풀리지 않는다. 추위는 계절의 일이며, 어느 한 집의 일이 아니다. 마모로 이미 멈춘 시설은 먼저 수리한 뒤에 결빙을 센다. 일지에는 간호로 바꾸거나 3단까지 올리라고 적는다.",
+        ),
+      },
+      {
+        heading: L("角色建立", "Making a character", "人物の作成", "인물 작성"),
+        body: L(
+          "角色建立時，技能點須結算為零，始得開始。部分職業開局即帶負分。點數為負時，不能離開特質一頁。選取缺點補足差額，或取消優點，使點數不低於零，才能進入技能分配。技能一頁須將剩餘點數全部分配完畢，餘額恰好為零，才能選擇起始庇護所。隨機生成的角色亦先補足負分，再把餘點分配進技能。餘額不是零，開始一鍵不能使用。",
+          "A character cannot begin until the skill points settle at zero. Some occupations open in debt. While the total is negative, the trait page does not continue. A flaw makes up the difference, or a perk is removed, and the total must be zero or higher before the points can be assigned. On the skill page every remaining point must be assigned, and the remainder must be exactly zero, before a starting shelter can be chosen. A character made at random is settled the same way: the debt is paid, then the spare points are assigned. If the remainder is not zero, the control that begins the game does not run.",
+          "人物を作るとき、技能点はゼロに精算してから始められる。職業によっては最初から負である。負のあいだは特質の頁を離れられない。欠点で差額を補うか、利点を外し、ゼロ以上になってから配分に進む。技能の頁では残りをすべて振り、残高がちょうどゼロになってから、最初の避難所を選ぶ。無作為に作った人物も、先に負を補い、余りを技能へ振る。残高がゼロでなければ、始める操作は使えない。",
+          "인물을 만들 때 기술 점수는 영으로 결산한 뒤에야 시작할 수 있다. 직업에 따라 처음부터 마이너스인 경우가 있다. 마이너스인 동안에는 특질 쪽에서 나갈 수 없다. 단점으로 차액을 메우거나 장점을 빼서 영 이상이 된 뒤에 배분으로 간다. 기술 쪽에서는 남은 점수를 모두 배분하고, 잔액이 정확히 영이 된 뒤에 처음의 은신처를 고른다. 무작위로 만든 인물도 먼저 마이너스를 메운 다음 남은 점수를 기술에 넣는다. 잔액이 영이 아니면 시작은 쓸 수 없다.",
+        ),
+      },
+      {
+        heading: L("進度", "The save", "進行", "진행"),
+        body: L(
+          "每台裝置只保存一份最新進度，每次過夜之後覆寫。繼續遊戲所讀取的，是當前的庇護所、當前的日期與當前的人員，沒有按日期選取的清單。匯出的檔名固定為 one-more-night-save.json，內容即這一份進度的副本，供更換裝置或更換版本之用。無法讀取的檔案不會改動現有進度。舊檔若含有多日紀錄，只保留日期最晚的一日。版本更新時，缺少的欄位以預設值補上；日期、人員、庇護所與倉庫不會回到第一天。",
+          "Each device keeps a single latest save, and overnight overwrites it. Continue reads the present shelter, the present day, and the present people. There is no list of days to choose from. The exported file is always named one-more-night-save.json. It is a copy of that save, for another device or another build. A file that cannot be read does not alter the save already on the device. If an older file contains more than one day, only the latest day is kept. When the build changes, missing fields are filled with their defaults. The day, the people, the shelter, and the stores are not returned to the first day.",
+          "各端末は最新の進行を一つだけ保存し、夜が明けるたびに上書きする。つづきから読むのは、今の避難所、今の日付、今の人員であり、日付を選ぶ一覧はない。書き出すファイル名は one-more-night-save.json で固定し、内容はこの進行の写しである。別の端末や別の版へ移すためのものである。読めないファイルは、端末にある進行を変えない。古いファイルに複数の日が入っていれば、日付がいちばん新しい一日だけを残す。版が変わったとき、足りない欄は既定の値で埋める。日付、人員、避難所、倉庫は初日には戻さない。",
+          "각 기기는 최신 진행 하나만 두며, 밤이 지날 때마다 덮어쓴다. 이어하기가 읽는 것은 지금의 은신처, 지금의 날짜, 지금의 사람들이다. 날짜를 고르는 목록은 없다. 내보내는 파일 이름은 one-more-night-save.json으로 고정되며, 내용은 이 진행의 사본이다. 다른 기기나 다른 판으로 옮기기 위한 것이다. 읽지 못한 파일은 기기에 있는 진행을 바꾸지 않는다. 옛 파일에 여러 날이 들어 있으면 날짜가 가장 늦은 하루만 남긴다. 판이 바뀌면 없는 칸은 기본값으로 채운다. 날짜, 사람들, 은신처, 창고는 첫날로 되돌리지 않는다.",
+        ),
+      },
+    ],
+  },
+  {
     id: "0.2.8",
     version: "0.2.8",
     date: "2026-09-28",

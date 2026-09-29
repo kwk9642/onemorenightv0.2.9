@@ -119,6 +119,7 @@ export function CreateScreen() {
   };
 
   const start = () => {
+    if (left !== 0 || !shelterId) return;
     newGame({ name, occupation, portrait, faceData, gender, traits, alloc, shelterId });
   };
 
@@ -127,8 +128,8 @@ export function CreateScreen() {
     if (step === 0) return !!portrait && !!name.trim();
     if (step === 1) return !!occupation;
     if (step === 2) return pool >= 0;
-    if (step === 3) return left >= 0;
-    return !!shelterId;
+    if (step === 3) return left === 0;
+    return !!shelterId && left === 0;
   }, [step, portrait, name, occupation, pool, left, shelterId]);
 
   return (
@@ -441,6 +442,8 @@ export function CreateScreen() {
                 );
               })}
             </ul>
+            {left > 0 ? <p className="text-xs text-hp">{tt("create.spendAll")}</p> : null}
+            {left < 0 ? <p className="text-xs text-hp">{tt("create.needPoints")}</p> : null}
           </div>
         ) : null}
 
@@ -478,6 +481,8 @@ export function CreateScreen() {
               </p>
             </div>
             {hasSave ? <p className="text-xs text-hunger">{tt("create.overwrite")}</p> : null}
+            {left < 0 ? <p className="text-xs text-hp">{tt("create.needPoints")}</p> : null}
+            {left > 0 ? <p className="text-xs text-hp">{tt("create.spendAll")}</p> : null}
           </div>
         ) : null}
       </div>
@@ -496,7 +501,7 @@ export function CreateScreen() {
             >
               {tt("create.tweak")}
             </Button>
-            <Button className="w-full" size="lg" onClick={start}>
+            <Button className="w-full" size="lg" disabled={left !== 0} onClick={start}>
               {tt("ui.enter")}
             </Button>
           </div>
@@ -505,7 +510,7 @@ export function CreateScreen() {
             {tt("ui.next")}
           </Button>
         ) : (
-          <Button className="w-full" size="lg" onClick={start}>
+          <Button className="w-full" size="lg" disabled={!canNext} onClick={start}>
             {tt("ui.enter")}
           </Button>
         )}
@@ -560,10 +565,10 @@ function ResultCard({
           </div>
           <p className="mt-2 text-xs leading-relaxed text-muted">{tt(`occ.${occupation}.desc`)}</p>
           <div className="mt-3 flex flex-wrap gap-2 text-[11px]">
-            <span className={cn("rounded-sm border border-border px-2 py-1 tabular-nums", occ.pool < 0 ? "text-hp" : "text-muted")}>
-              {tt("create.points", { n: fmtPool(occ.pool) })}
+            <span className={cn("rounded-sm border border-border px-2 py-1 tabular-nums", pool < 0 || left !== 0 ? "text-hp" : "text-muted")}>
+              {tt("create.points", { n: fmtPool(pool) })}
             </span>
-            <span className="rounded-sm border border-border px-2 py-1 text-muted">
+            <span className={cn("rounded-sm border border-border px-2 py-1 tabular-nums", left !== 0 ? "text-hp" : "text-muted")}>
               {tt("create.leftOver", { n: left })}
             </span>
             <span className="rounded-sm border border-border px-2 py-1 text-muted">{tt(`sh.${shelter.id}`)}</span>
@@ -642,7 +647,8 @@ function ResultCard({
           <div className="absolute bottom-2 left-3 text-sm">{tt(`sh.${shelter.id}`)}</div>
         </div>
       </div>
-      {pool < 0 ? <p className="text-xs text-hp">{tt("create.needPoints")}</p> : null}
+      {left < 0 ? <p className="text-xs text-hp">{tt("create.needPoints")}</p> : null}
+      {left > 0 ? <p className="text-xs text-hp">{tt("create.spendAll")}</p> : null}
     </div>
   );
 }

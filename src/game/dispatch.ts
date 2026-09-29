@@ -28,7 +28,7 @@ import {
   startingMorale,
 } from "./growth";
 import { t, tLoc, tResBits } from "./i18n";
-import { addHerb, herbCount, nameByDoctor, rollHerb } from "./herbs";
+import { addHerb, herbCount, knowsOnSight, nameByDoctor, rollHerb } from "./herbs";
 import { chance, pick, range, uid } from "./rng";
 import type {
   DispatchFocus,
@@ -533,7 +533,7 @@ function resolveOne(state: GameState, party: DispatchParty): GameState {
     const rolledLoot = lootFor(focus, score, next.rng, ev === "lucky" ? 1.5 : ev === "empty" ? 0 : 1);
     next = { ...next, rng: rolledLoot.r };
     if (focus === "herbs") {
-      const known = s.skills.medical >= 3 || s.skills.farm >= 3;
+      const known = knowsOnSight(s);
       const n = herbCount(s);
       for (let i = 0; i < n; i++) {
         const herb = rollHerb(next.day, next.rng);
@@ -729,7 +729,7 @@ function resolveOne(state: GameState, party: DispatchParty): GameState {
 
   if (ev === "greenhouse") {
     loot = addBag(loot, { food: 2, medicine: 1 });
-    const known = folks.some((s) => s.skills.medical >= 3 || s.skills.farm >= 3);
+    const known = folks.some((s) => knowsOnSight(s));
     next = addHerb(next, "plantain", known, 2);
     next = addHerb(next, "mint", known, 1);
     const got = takeLoot(1);

@@ -200,6 +200,19 @@ export function ShelterScreen({ state }: { state: GameState }) {
           ))}
         </div>
       ) : null}
+      {(() => {
+        const down = FACILITIES.filter(
+          (f) => (state.shelter.facilities[f.id as FacilityId] ?? 0) > 0 && (state.halted ?? {})[f.id as FacilityId],
+        );
+        if (!down.length) return null;
+        return (
+          <div className="mb-3 space-y-1 rounded-md border border-hp/40 bg-surface px-3 py-2 text-xs text-hp">
+            {down.map((f) => (
+              <p key={f.id}>{tt("hub.halted", { name: tt(`fac.${f.id}`) })}</p>
+            ))}
+          </div>
+        );
+      })()}
       <HerbRow state={state} />
       <MagRow state={state} />
       <div className="mb-4 grid grid-cols-2 gap-2">
@@ -529,7 +542,7 @@ export function BuildScreen({ state }: { state: GameState }) {
                   <p className="text-xs text-muted">{tt(`fac.${f.id}.blurb`)}</p>
                   <p className="mt-1 text-[11px] text-faint">{tt(`fac.${f.id}.effect`)}</p>
                   {lv > 0 ? (
-                    <p className="mt-1 text-[11px] text-muted">
+                    <p className={`mt-1 text-[11px] ${(state.halted ?? {})[f.id as FacilityId] ? "text-hp" : "text-muted"}`}>
                       {(state.halted ?? {})[f.id as FacilityId] ? tt("build.down") : tt("build.wear", { n: (state.wear ?? {})[f.id as FacilityId] ?? 0 })}
                       {" · "}
                       {tt("long.parts")} {(state.parts ?? 0)}

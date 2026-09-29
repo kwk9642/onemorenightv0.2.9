@@ -11,6 +11,7 @@ import {
   TRAITS,
   locById,
   occById,
+  poolOf,
   traitById,
   withOccupationTraits,
 } from "./data";
@@ -34,6 +35,7 @@ import {
   noteSkillUps,
   relationOf,
   skillFx,
+  SKILL_KEYS,
   startingMorale,
   xpGainLine,
 } from "./growth";
@@ -234,6 +236,30 @@ export function randomCreate(r0 = (Date.now() ^ Math.floor(Math.random() * 1e9))
   r = neg.r;
   const sh = pick(r, START_SHELTERS);
   r = sh.r;
+  let traits = withOccupationTraits(occ.item.id, [pos.item.id, neg.item.id]);
+  let guard = 0;
+  while (poolOf(occ.item.id, traits) < 0 && guard < 16) {
+    const more = TRAITS.filter((x) => x.kind === "neg" && !traits.includes(x.id));
+    if (!more.length) {
+      traits = traits.filter((id) => traitById(id).kind !== "pos");
+      break;
+    }
+    const add = pick(r, more);
+    r = add.r;
+    traits = withOccupationTraits(occ.item.id, [...traits, add.item.id]);
+    guard += 1;
+  }
+  const alloc = emptySkills();
+  let spare = poolOf(occ.item.id, traits);
+  const innate = occ.item.skills;
+  while (spare > 0) {
+    const open = SKILL_KEYS.filter((k) => (innate[k] ?? 0) + (alloc[k] ?? 0) < 10);
+    if (!open.length) break;
+    const k = pick(r, open);
+    r = k.r;
+    alloc[k.item] = (alloc[k.item] ?? 0) + 1;
+    spare -= 1;
+  }
   const nm = randomName(r);
   r = nm.r;
   const face = pickFace(r);
@@ -244,8 +270,8 @@ export function randomCreate(r0 = (Date.now() ^ Math.floor(Math.random() * 1e9))
       name: nm.name,
       occupation: occ.item.id,
       portrait: face.item.id,
-      traits: [pos.item.id, neg.item.id],
-      alloc: {},
+      traits,
+      alloc,
       shelterId: sh.item.id,
     },
   };
@@ -1547,10 +1573,20 @@ export function restNight(state: GameState, fromHome: boolean): GameState {
 
   let foodGain = 0;
   let waterGain = machineDown(next, "water") ? 0 : bill.yield;
-  if (phaseOf(next.day, modeOf(next)) === "season" && (next.shelter.facilities.water ?? 0) > 0) {
-    waterGain = 0;
-    next = pushLog(next, t("long.freeze"));
-  } else if (machineDown(next, "water") && (next.shelter.facilities.water ?? 0) > 0) {
+  const lvWater = next.shelter.facilities.water ?? 0;
+  const thawing = home.some((s) => s.alive && canWork(s) && s.job === "tend");
+  if (phaseOf(next.day, modeOf(next)) === "season" && lvWater > 0 && !machineDown(next, "water")) {
+    if (thawing || lvWater >= 3) {
+      /* a tender on the cistern, or a third stage, keeps the pipe open */
+    } else if (lvWater >= 2) {
+      const cut = Math.max(1, Math.floor(waterGain / 2));
+      waterGain = cut;
+      next = pushLog(next, t("long.freezeSoft"));
+    } else {
+      waterGain = 0;
+      next = pushLog(next, t("long.freeze"));
+    }
+  } else if (machineDown(next, "water") && lvWater > 0) {
     next = pushLog(next, t("long.noWater"));
   }
   let medUsed = 0;

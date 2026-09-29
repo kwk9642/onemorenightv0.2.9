@@ -1,5 +1,6 @@
 import { SAVE_KEY, SAVE_VERSION, TRAITS, occById, traitById } from "./data";
 import { composeSkills, emptySkills } from "./growth";
+import { t } from "./i18n";
 import { rollBands } from "./longrun";
 import type { GameState, Survivor } from "./types";
 import { padV03 } from "./v03";
@@ -21,11 +22,34 @@ function padSurvivor(s: Survivor): Survivor {
   };
 }
 
+function unwrap(raw: unknown): { body: unknown; collapsed: boolean } {
+  if (!raw || typeof raw !== "object") return { body: raw, collapsed: false };
+  const box = raw as { game?: string; state?: unknown; days?: Record<string, unknown> };
+  const inner = box.game === "one-more-night" && box.state ? box.state : raw;
+  if (!inner || typeof inner !== "object") return { body: inner, collapsed: false };
+  const days = (inner as { days?: Record<string, unknown> }).days;
+  const hasPeople = Array.isArray((inner as GameState).survivors);
+  if (!hasPeople && days && typeof days === "object") {
+    let best = -1;
+    let pick: unknown = null;
+    for (const [k, v] of Object.entries(days)) {
+      const fromKey = Number(k);
+      const day = Number.isFinite(fromKey) ? fromKey : Number((v as { day?: number })?.day ?? 0);
+      if (day >= best) {
+        best = day;
+        pick = v;
+      }
+    }
+    return { body: pick, collapsed: true };
+  }
+  return { body: inner, collapsed: false };
+}
+
 export function acceptSave(raw: unknown): GameState | null {
   try {
-    if (!raw || typeof raw !== "object") return null;
-    const box = raw as { game?: string; state?: unknown };
-    const data = (box.game === "one-more-night" && box.state ? box.state : raw) as GameState;
+    const { body, collapsed } = unwrap(raw);
+    if (!body || typeof body !== "object") return null;
+    const data = body as GameState;
     if (!data || !Array.isArray(data.survivors) || !data.shelter?.locationId) return null;
     data.survivors = data.survivors.map(padSurvivor);
     data.bonds = data.bonds ?? {};
@@ -54,6 +78,9 @@ export function acceptSave(raw: unknown): GameState | null {
       padded.screen = padded.ended ? "end" : "shelter";
     }
     if (padded.ended) padded.screen = "end";
+    if (collapsed) {
+      padded.log = [{ day: padded.day, text: t("save.keptDay") }, ...(padded.log ?? [])].slice(0, 80);
+    }
     return padded;
   } catch {
     return null;
@@ -85,16 +112,21 @@ export function writeSave(state: GameState) {
 }
 
 export function serializeSave(state: GameState): string {
-  return JSON.stringify({ game: "one-more-night", save: SAVE_VERSION, state });
+  return JSON.stringify({
+    game: "one-more-night",
+    save: SAVE_VERSION,
+    savedAt: new Date().toISOString(),
+    state,
+  });
 }
 
-export function saveFileName(state: GameState): string {
-  return `one-more-night-day-${state.day}.json`;
+export function saveFileName(): string {
+  return "one-more-night-save.json";
 }
 
 export async function downloadSave(state: GameState) {
   const text = serializeSave(state);
-  const name = saveFileName(state);
+  const name = saveFileName();
   if (await shareNative(name, text)) return;
   const blob = new Blob([text], { type: "application/json" });
   const url = URL.createObjectURL(blob);
